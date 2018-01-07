@@ -14,11 +14,6 @@ NICK = "riboture"                                       # your Twitch username, 
 PASS = "oauth:fv7eg2w31t8fslccflit2506ej3gkx"           # your Twitch OAuth token
 CHAN = "#ridgure"                                       # the channel you want to join
 RATE = 20/30                                            # messages per second
-PATT = [
-    r"swear",
-    # ...
-    r"some_pattern", r"fuck", r"balls"
-]
 
 s = socket.socket()
 s.connect((HOST, PORT))
@@ -27,6 +22,12 @@ s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
 
 
+def add():
+    test = data.split()[4:]
+    makingNumbers = [int(i) for i in test]
+    addingNumbers = sum(makingNumbers)
+    everythingTogether = ' + '.join(map(str, makingNumbers)) + ' = ' + str(addingNumbers)
+    return everythingTogether
 
 def multiply():
     test = data.split()[4:]
@@ -35,7 +36,7 @@ def multiply():
     for x in makingNumbers:
         total *= x
     everythingTogether = ' * '.join(map(str, makingNumbers)) + ' = ' + str(total)
-    return message(everythingTogether)
+    return everythingTogether
 
 
 
@@ -49,35 +50,31 @@ while True:
     data = response.strip("\r\n")
     if response == "PING :tmi.twitch.tv\r\n":
         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
-    if "!social" in data:
+    if "!test" in data.lower():
+        message(data)
+    if "!social" in data.lower():
         message("Add me on Facebook: fb.com/Ridgure")
         message("Add me on Facebook: Twitter.com/RigidStructure")
         message("Add me on Facebook: Instagram.com/Ridgure")
-    if "!Social" in data:
+    if "!facebook" in data.lower():
         message("Add me on Facebook: fb.com/Ridgure")
+    if "!twitter" in data.lower():
         message("Add me on Facebook: Twitter.com/RigidStructure")
-        message("Add me on Facebook: Instagram.com/Ridgure")
-    if "!facebook" in data:
-        message("Add me on Facebook: fb.com/Ridgure")
-    if "!twitter" in data:
-        message("Add me on Facebook: Twitter.com/RigidStructure")
-    if "!instagram" in data:
+    if "!instagram" in data.lower():
         message("Add me on Facebook: Instagram.com/RigidStructure")
-    if "!Facebook" in data:
-        message("Add me on Facebook: fb.com/Ridgure")
-    if "!Twitter" in data:
-        message("Add me on Facebook: Twitter.com/RigidStructure")
-    if "!Instagram" in data:
-        message("Add me on Facebook: Instagram.com/Ridgure")
-    if "!multiply" in data:
-        message(multiply())
+    if "!multiply" in data.lower():
+        try:
+            message(multiply())
+        except:
+            message ("Multiplication failed")
+    if "!add" in data.lower():
+        try:
+            message(add())
+        except:
+            message ("Addition failed")
     else:
         username = re.search(r"\w+", response).group(0) # return the entire match
         message = CHAT_MSG.sub("", response)
         print(username + ": " + message)
-        for pattern in PATT:
-            if re.match(pattern, message):
-                ban(s, username)
-                break
         sleep(0.1)
 

@@ -21,6 +21,14 @@ s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
 s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
 
+def randomEmote():
+    emote = "Kappa"
+    return emote
+
+def sender():
+    m = re.search(':(.+?)!', data)
+    sender= m.group(1)
+    return sender
 
 def add():
     test = data.split()[4:]
@@ -62,6 +70,10 @@ while True:
         message("Add me on Facebook: Twitter.com/RigidStructure")
     if "!instagram" in data.lower():
         message("Add me on Facebook: Instagram.com/RigidStructure")
+    if "!raid" in data.lower():
+        message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+    if "!smile" in data.lower():
+        message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
     if "!multiply" in data.lower():
         try:
             message(multiply())
@@ -77,6 +89,3 @@ while True:
         message = CHAT_MSG.sub("", response)
         print(username + ": " + message)
         sleep(0.1)
-
-test
-

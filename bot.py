@@ -78,6 +78,8 @@ while True:
     if "!smile" in data.lower():
         try:
             message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
+        except IndexError:
+            message("Remember to smile at someone!")
         except Exception,e:
             message ("Smile failed")
             message (str(e))

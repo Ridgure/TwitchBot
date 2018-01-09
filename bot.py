@@ -4,6 +4,7 @@
 
 import re
 import socket
+import random
 from time import sleep
 
 # network functions go here
@@ -22,8 +23,10 @@ s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
 
 def randomEmote():
-    emote = "Kappa"
-    return emote
+    emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
+    randomNumber = random.randint(0, len(emotes))
+    randomEmote = emotes[randomNumber]
+    return randomEmote
 
 def sender():
     m = re.search(':(.+?)!', data)
@@ -73,7 +76,11 @@ while True:
     if "!raid" in data.lower():
         message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
     if "!smile" in data.lower():
-        message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
+        try:
+            message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
+        except Exception,e:
+            message ("Smile failed")
+            message (str(e))
     if "!multiply" in data.lower():
         try:
             message(multiply())

@@ -5,6 +5,7 @@
 import re
 import socket
 import random
+import datetime
 from time import sleep
 
 # network functions go here
@@ -75,6 +76,10 @@ while True:
         message("Add me on Facebook: Instagram.com/RigidStructure")
     if "!raid" in data.lower():
         message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+    if "!pack" in data.lower():
+        message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
+    if "!time" in data.lower():
+        message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " CET")
     if "!smile" in data.lower():
         try:
             message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())

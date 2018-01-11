@@ -50,6 +50,9 @@ def multiply():
     everythingTogether = ' * '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
 
+User_ID_ridgure = "106586349"
+User_ID_riboture = "109949586"
+url = "https://api.twitch.tv/helix/streams?user_id=106586349"
 
 
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
@@ -62,25 +65,25 @@ while True:
     data = response.strip("\r\n")
     if response == "PING :tmi.twitch.tv\r\n":
         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
-    if "!test" in data.lower():
+    if "!test" in data.lower().split()[3]:
         message(data)
-    if "!social" in data.lower():
+    if "!social" in data.lower().split()[3]:
         message("Add me on Facebook: fb.com/Ridgure")
         message("Add me on Facebook: Twitter.com/RigidStructure")
         message("Add me on Facebook: Instagram.com/Ridgure")
-    if "!facebook" in data.lower():
+    if "!facebook" in data.lower().split()[3]:
         message("Add me on Facebook: fb.com/Ridgure")
-    if "!twitter" in data.lower():
+    if "!twitter" in data.lower().split()[3]:
         message("Add me on Facebook: Twitter.com/RigidStructure")
-    if "!instagram" in data.lower():
+    if "!instagram" in data.lower().split()[3]:
         message("Add me on Facebook: Instagram.com/RigidStructure")
-    if "!raid" in data.lower():
+    if "!raid" in data.lower().split()[3]:
         message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
-    if "!pack" in data.lower():
+    if "!pack" in data.lower().split()[3]:
         message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
-    if "!time" in data.lower():
+    if "!time" in data.lower().split()[3]:
         message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " CET")
-    if "!smile" in data.lower():
+    if "!smile" in data.lower().split()[3]:
         try:
             message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
         except IndexError:
@@ -88,12 +91,12 @@ while True:
         except Exception,e:
             message ("Smile failed")
             message (str(e))
-    if "!multiply" in data.lower():
+    if "!multiply" in data.lower().split()[3]:
         try:
             message(multiply())
         except:
             message ("Multiplication failed")
-    if "!add" in data.lower():
+    if "!add" in data.lower().split()[3]:
         try:
             message(add())
         except:

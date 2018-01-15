@@ -5,6 +5,7 @@
 import re
 import socket
 import random
+import requests
 import datetime
 from time import sleep
 
@@ -52,8 +53,15 @@ def multiply():
 
 User_ID_ridgure = "106586349"
 User_ID_riboture = "109949586"
-url = "https://api.twitch.tv/helix/streams?user_id=106586349"
+Client_ID = "7cvp1bezng3ypb8bosyzosl3fcgb5ra"
+Client_Secret = "gf4y8h01lffer7w0msjcnakdbstlfv"
 
+def uptime():
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
+#    url = "https://api.twitch.tv/kraken/channels/" + User_ID_riboture
+    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+    response = requests.get(url, headers=params).json()
+    print response
 
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
@@ -65,6 +73,8 @@ while True:
     data = response.strip("\r\n")
     if response == "PING :tmi.twitch.tv\r\n":
         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+    if "!commands" in data.lower().split()[3]:
+        message("My current commands are !social, !pack, !oclock, !smile, !multipy and !add")
     if "!test" in data.lower().split()[3]:
         message(data)
     if "!social" in data.lower().split()[3]:
@@ -81,8 +91,11 @@ while True:
         message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
     if "!pack" in data.lower().split()[3]:
         message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
-    if "!time" in data.lower().split()[3]:
-        message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " CET")
+    if "!oclock" in data.lower().split()[3]:
+        message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " o'clock" + " CET")
+    if "!uptime" in data.lower().split()[3]:
+        uptime()
+        message("Uptime is supposed to be displayed here")
     if "!smile" in data.lower().split()[3]:
         try:
             message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())

@@ -57,11 +57,11 @@ Client_ID = "7cvp1bezng3ypb8bosyzosl3fcgb5ra"
 Client_Secret = "gf4y8h01lffer7w0msjcnakdbstlfv"
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
-#    url = "https://api.twitch.tv/kraken/channels/" + User_ID_riboture
+    url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
     response = requests.get(url, headers=params).json()
     print response
+    print response['total']
 
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
@@ -79,8 +79,8 @@ while True:
         message(data)
     if "!social" in data.lower().split()[3]:
         message("Add me on Facebook: fb.com/Ridgure")
-        message("Add me on Facebook: Twitter.com/RigidStructure")
-        message("Add me on Facebook: Instagram.com/Ridgure")
+        message("Add me on Twitter: Twitter.com/RigidStructure")
+        message("Add me on Instagram: Instagram.com/Ridgure")
     if "!facebook" in data.lower().split()[3]:
         message("Add me on Facebook: fb.com/Ridgure")
     if "!twitter" in data.lower().split()[3]:

@@ -56,12 +56,19 @@ User_ID_riboture = "109949586"
 Client_ID = "7cvp1bezng3ypb8bosyzosl3fcgb5ra"
 Client_Secret = "gf4y8h01lffer7w0msjcnakdbstlfv"
 
-def uptime():
+def followers():
     url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
     response = requests.get(url, headers=params).json()
     print response
-    print response['total']
+    Total =  response['total']
+    print Total
+
+def uptime():
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
+    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+    response = requests.get(url, headers=params).json()
+    print response
 
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
@@ -118,4 +125,5 @@ while True:
         username = re.search(r"\w+", response).group(0) # return the entire match
         message = CHAT_MSG.sub("", response)
         print(username + ": " + message)
+        print data
         sleep(0.1)

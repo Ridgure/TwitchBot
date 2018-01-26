@@ -102,20 +102,71 @@ def uptime():
 
     print LiveInformation['type']
     if LiveInformation['type'] == "live":
-        message("Stream is live")
+        try:
+            message("Stream is live")
+            return "live"
+        except IndexError:
+             pass
     else:
         message("Stream is offline")
+        return "offline"
+
+
+def liveOrNot():
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
+    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+    response = requests.get(url, headers=params).json()
+    LiveInformation = response['data'][0]
+    # print response
+    # returns
+    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'},
+    # u'data': [{
+        # u'user_id': u'109949586',
+        # u'language': u'no',
+        # u'title': u'',
+        # u'community_ids': [],
+        # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
+        # u'game_id': u'',
+        # u'started_at': u'2018-01-22T07:09:44Z',
+        # u'type': u'live',
+        # u'id': u'27355247712',
+        # u'viewer_count': 1}
+    # ]}
+    print LiveInformation['type']
+    if LiveInformation['type'] == "live":
+        try:
+            return "live"
+        except IndexError:
+             pass
+    else:
+        return "offline"
+
+def setValue(val):
+    global globalVal
+    valueChanged= g_val != val
+    if valueChanged:
+        liveOrNot()
+    globalVal = val
+    if valueChanged:
+        liveOrNot()
+    #This is called a setter function. Do more research. This might be the key to p
 
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 while True:
 
     def message(msg):
-        s.send("PRIVMSG " + CHAN + " :" + msg + "\n")
+        try:
+            s.send("PRIVMSG " + CHAN + " :" + msg + "\n")
+        except IndexError:
+            pass
     response = s.recv(1024).decode("utf-8")
     data = response.strip("\r\n")
     if response == "PING :tmi.twitch.tv\r\n":
-        s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+        try:
+            s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+        except IndexError:
+             pass
     if "!commands" in data.lower().split()[3]:
         try:
             message("My current commands are !social, !pack, !oclock, !smile, !multipy and !add")
@@ -163,10 +214,20 @@ while True:
             message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " o'clock" + " CET")
         except IndexError:
             pass
+    if "!shout" in data.lower().split()[3]:
+        try:
+            message("Check out this awesome streamer over at Twitch.tv/" + data.split()[4])
+        except IndexError:
+            pass
     if "!uptime" in data.lower().split()[3]:
         try:
-            followers()
+            uptime()
             message("Uptime is supposed to be displayed here")
+        except IndexError:
+            pass
+    if liveOrNot() == "live":
+        try:
+            message("Stream just went live")
         except IndexError:
             pass
     if "!smile" in data.lower().split()[3]:

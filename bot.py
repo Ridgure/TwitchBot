@@ -113,33 +113,33 @@ def uptime():
 
 
 def liveOrNot():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
-    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
-    response = requests.get(url, headers=params).json()
-    LiveInformation = response['data'][0]
-    # print response
-    # returns
-    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'},
-    # u'data': [{
-        # u'user_id': u'109949586',
-        # u'language': u'no',
-        # u'title': u'',
-        # u'community_ids': [],
-        # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
-        # u'game_id': u'',
-        # u'started_at': u'2018-01-22T07:09:44Z',
-        # u'type': u'live',
-        # u'id': u'27355247712',
-        # u'viewer_count': 1}
-    # ]}
-    print LiveInformation['type']
-    if LiveInformation['type'] == "live":
-        try:
+    try:
+        url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
+        params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+        response = requests.get(url, headers=params).json()
+        LiveInformation = response['data'][0]
+        # print response
+        # returns
+        # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'},
+        # u'data': [{
+            # u'user_id': u'109949586',
+            # u'language': u'no',
+            # u'title': u'',
+            # u'community_ids': [],
+            # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
+            # u'game_id': u'',
+            # u'started_at': u'2018-01-22T07:09:44Z',
+            # u'type': u'live',
+            # u'id': u'27355247712',
+            # u'viewer_count': 1}
+        # ]}
+        print LiveInformation['type']
+        if LiveInformation['type'] == "live":
             return "live"
-        except IndexError:
-             pass
-    else:
-        return "offline"
+        else:
+            return "offline"
+    except IndexError:
+        pass
 
 def setValue(val):
     global globalVal
@@ -155,116 +155,122 @@ CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 while True:
 
-    def message(msg):
-        try:
-            s.send("PRIVMSG " + CHAN + " :" + msg + "\n")
-        except IndexError:
-            pass
-    response = s.recv(1024).decode("utf-8")
-    data = response.strip("\r\n")
-    if response == "PING :tmi.twitch.tv\r\n":
-        try:
-            s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
-        except IndexError:
-             pass
-    if "!commands" in data.lower().split()[3]:
-        try:
-            message("My current commands are !social, !pack, !oclock, !smile, !multipy and !add")
-        except IndexError:
-            pass
-    if "!test" in data.lower().split()[3]:
-        try:
-           message(data)
-        except IndexError:
-            pass
-    if "!social" in data.lower().split()[3]:
-        try:
-            message("Add me on Facebook: fb.com/Ridgure")
-            message("Add me on Twitter: Twitter.com/RigidStructure")
-            message("Add me on Instagram: Instagram.com/Ridgure")
-        except IndexError:
-            pass
-    if "!facebook" in data.lower().split()[3]:
-        try:
-            message("Add me on Facebook: fb.com/Ridgure")
-        except IndexError:
-            pass
-    if "!twitter" in data.lower().split()[3]:
-        try:
-            message("Add me on Facebook: Twitter.com/RigidStructure")
-        except IndexError:
-            pass
-    if "!instagram" in data.lower().split()[3]:
-        try:
-            message("Add me on Facebook: Instagram.com/RigidStructure")
-        except IndexError:
-            pass
-    if "!raid" in data.lower().split()[3]:
-        try:
-            message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
-        except IndexError:
-            pass
-    if "!pack" in data.lower().split()[3]:
-        try:
-            message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
-        except IndexError:
-            pass
-    if "!oclock" in data.lower().split()[3]:
-        try:
-            message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " o'clock" + " CET")
-        except IndexError:
-            pass
-    if "!shout" in data.lower().split()[3]:
-        try:
-            message("Check out this awesome streamer over at Twitch.tv/" + data.split()[4])
-        except IndexError:
-            pass
-    if "!uptime" in data.lower().split()[3]:
-        try:
-            uptime()
-            message("Uptime is supposed to be displayed here")
-        except IndexError:
-            pass
-    if liveOrNot() == "live":
-        try:
-            message("Stream just went live")
-        except IndexError:
-            pass
-    if "!smile" in data.lower().split()[3]:
-        try:
-            message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
-        except IndexError:
-            message("Remember to smile at someone!")
-        except Exception,e:
-            message ("Smile failed")
-            message (str(e))
-    if "!multiply" in data.lower().split()[3]:
-        try:
-            message(multiply())
-        except IndexError:
-            pass
-        except Exception,e:
-            message ("Multiplication failed")
-            message (str(e))
-    if "!divide" in data.lower().split()[3]:
-        try:
-            message(divide())
-        except IndexError:
-            pass
-        except Exception, e:
-            message("Division failed")
-            message(str(e))
-    if "!add" in data.lower().split()[3]:
-        try:
-            message(add())
-        except IndexError:
-            pass
-        except Exception, e:
-            message("Addition failed")
-            message(str(e))
-    else:
-        username = re.search(r"\w+", response).group(0) # return the entire match
-        message = CHAT_MSG.sub("", response)
-        print(username + ": " + message)
-        print data
-        sleep(0.1)
+    try:
+        def message(msg):
+            try:
+                s.send("PRIVMSG " + CHAN + " :" + msg + "\n")
+            except IndexError:
+                pass
+        response = s.recv(1024).decode("utf-8")
+        data = response.strip("\r\n")
+        if response == "PING :tmi.twitch.tv\r\n":
+            try:
+                s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+            except IndexError:
+                 pass
+        if "!commands" in data.lower().split()[3]:
+            try:
+                message("My current commands are !social, !pack, !oclock, !smile, !multipy and !add")
+            except IndexError:
+                pass
+        if "!test" in data.lower().split()[3]:
+            try:
+               message(data)
+            except IndexError:
+                pass
+        if "!social" in data.lower().split()[3]:
+            try:
+                message("Add me on Facebook: fb.com/Ridgure")
+                message("Add me on Twitter: Twitter.com/RigidStructure")
+                message("Add me on Instagram: Instagram.com/Ridgure")
+            except IndexError:
+                pass
+        if "!facebook" in data.lower().split()[3]:
+            try:
+                message("Add me on Facebook: fb.com/Ridgure")
+            except IndexError:
+                pass
+        if "!twitter" in data.lower().split()[3]:
+            try:
+                message("Add me on Facebook: Twitter.com/RigidStructure")
+            except IndexError:
+                pass
+        if "!instagram" in data.lower().split()[3]:
+            try:
+                message("Add me on Facebook: Instagram.com/RigidStructure")
+            except IndexError:
+                pass
+        if "!raid" in data.lower().split()[3]:
+            try:
+                message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+            except IndexError:
+                pass
+        if "!pack" in data.lower().split()[3]:
+            try:
+                message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
+            except IndexError:
+                pass
+        if "!oclock" in data.lower().split()[3]:
+            try:
+                message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " o'clock" + " CET")
+            except IndexError:
+                pass
+        if "!shout" in data.lower().split()[3]:
+            try:
+                message("Check out this awesome streamer over at Twitch.tv/" + data.split()[4])
+            except IndexError:
+                pass
+        if "!uptime" in data.lower().split()[3]:
+            try:
+                uptime()
+                message("Uptime is supposed to be displayed here")
+            except IndexError:
+                pass
+        if liveOrNot() == "live":
+            try:
+                message("Stream just went live")
+            except IndexError:
+                pass
+        if "!smile" in data.lower().split()[3]:
+            try:
+                message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
+            except IndexError:
+                message("Remember to smile at someone!")
+            except Exception,e:
+                message ("Smile failed")
+                message (str(e))
+        if "!multiply" in data.lower().split()[3]:
+            try:
+                message(multiply())
+            except IndexError:
+                pass
+            except Exception,e:
+                message ("Multiplication failed")
+                message (str(e))
+        if "!divide" in data.lower().split()[3]:
+            try:
+                message(divide())
+            except IndexError:
+                pass
+            except Exception, e:
+                message("Division failed")
+                message(str(e))
+        if "!add" in data.lower().split()[3]:
+            try:
+                message(add())
+            except IndexError:
+                pass
+            except Exception, e:
+                message("Addition failed")
+                message(str(e))
+        else:
+            username = re.search(r"\w+", response).group(0) # return the entire match
+            message = CHAT_MSG.sub("", response)
+            print(username + ": " + message)
+            print data
+            sleep(0.1)
+    except IndexError:
+        pass
+    except Exception, e:
+        print "An error just occurred"
+        print str(e)

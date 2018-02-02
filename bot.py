@@ -24,6 +24,67 @@ s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
 s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
 
+#This is me trying to make a getter setter function for uptime
+#I feel however like this is just a way to change a global variable. I just want to detect that change...
+#Maybe I do have to use the super complicated observer pattern?
+# the observer pattern seems to be a type of getter setter?
+
+class Square(object):
+    def __init__(self, uptime):
+        self._uptime = uptime
+
+    @property
+    def uptime(self):
+        return self._uptime
+
+    @uptime.setter
+    def uptime(self, value):
+        self._uptime = value
+
+    @uptime.deleter
+    def uptime(self):
+        del self._uptime
+
+class GlobalWealth(object):
+    def __init__(self):
+        self._global_wealth = 10.0
+        self._observers = []
+
+    @property
+    def global_wealth(self):
+        return self._global_wealth
+
+    @global_wealth.setter
+    def global_wealth(self, value):
+        self._global_wealth = value
+        for callback in self._observers:
+            print('announcing change')
+            callback(self._global_wealth)
+
+    def bind_to(self, callback):
+        print('bound')
+        self._observers.append(callback)
+
+
+class Person(object):
+    def __init__(self, data):
+        self.wealth = 1.0
+        self.data = data
+        self.data.bind_to(self.update_how_happy)
+        self.happiness = self.wealth / self.data.global_wealth
+
+    def update_how_happy(self, global_wealth):
+        self.happiness = self.wealth / global_wealth
+
+
+if __name__ == '__main__':
+    data = GlobalWealth()
+    p = Person(data)
+    print(p.happiness)
+    data.global_wealth = 1.0
+    print(p.happiness)
+
+
 def randomEmote():
     emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
     randomNumber = random.randint(0, len(emotes))
@@ -262,6 +323,15 @@ while True:
                 pass
             except Exception, e:
                 message("Addition failed")
+                message(str(e))
+        if "!wealth" in data.lower().split()[3]:
+            try:
+                GlobalWealth = int(data.split()[4])
+                message(Person)
+            except IndexError:
+                pass
+            except Exception, e:
+                message("wealth failed")
                 message(str(e))
         else:
             username = re.search(r"\w+", response).group(0) # return the entire match

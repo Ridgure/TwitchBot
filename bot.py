@@ -24,6 +24,7 @@ s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
 s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
 
+
 def randomEmote():
     emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
     randomNumber = random.randint(0, len(emotes))
@@ -59,6 +60,12 @@ def divide():
         total /= x
     everythingTogether = ' / '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
+
+def lick():
+    over = " over and "
+    randomNumber = random.randint(1, 30)
+    licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
+    return licks
 
 User_ID_ridgure = "106586349"
 User_ID_riboture = "109949586"
@@ -170,7 +177,7 @@ while True:
                  pass
         if "!commands" in data.lower().split()[3]:
             try:
-                message("My current commands are !social, !pack, !oclock, !smile, !multipy and !add")
+                message("My current commands are !social, !pack, !oclock, !smile, !timemeout, !multipy and !add")
             except IndexError:
                 pass
         if "!test" in data.lower().split()[3]:
@@ -220,6 +227,29 @@ while True:
                 message("Check out this awesome streamer over at Twitch.tv/" + data.split()[4])
             except IndexError:
                 pass
+        if "!lick" in data.lower().split()[3]:
+            try:
+                message(sender() + " licks " + data.split()[4] + lick())
+            except IndexError:
+                pass
+        if "!bellyrub" in data.lower().split()[3]:
+            try:
+                message(sender() + " rubs " + data.split()[4] + "'s belly " + lick())
+            except IndexError:
+                pass
+        if "cobble" in data.lower().split()[2:]:
+            try:
+                message("Eww not cobble!")
+            except IndexError:
+                pass
+        if "!timemeout" in data.lower().split()[3]:
+            try:
+                ## time out KBiglair ##
+                message("/timeout " + sender() + " " + data.split()[4])
+                message("Timed out " + sender() + " for " + data.split()[4] + " seconds")
+            except IndexError:
+                message("Add amount of seconds you want to be timed out after command")
+                pass
         if "!uptime" in data.lower().split()[3]:
             try:
                 uptime()
@@ -267,7 +297,7 @@ while True:
             username = re.search(r"\w+", response).group(0) # return the entire match
             message = CHAT_MSG.sub("", response)
             print(username + ": " + message)
-            print data
+            print response
             sleep(0.1)
     except IndexError:
         pass

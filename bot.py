@@ -7,16 +7,8 @@ import socket
 import random
 import requests
 import datetime
+from config import *
 from time import sleep
-
-# network functions go here
-
-HOST = "irc.twitch.tv"                                  # the Twitch IRC server
-PORT = 6667                                             # always use port 6667!
-NICK = "riboture"                                       # your Twitch username, lowercase
-PASS = "oauth:8qw7v2bn8pa8r69q53k91ycv9u4vi3"           # your Twitch OAuth token
-CHAN = "#ridgure"                                       # the channel you want to join
-RATE = 20/30                                            # messages per second
 
 s = socket.socket()
 s.connect((HOST, PORT))
@@ -125,11 +117,6 @@ def lick():
     randomNumber = random.randint(1, 30)
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
-
-User_ID_ridgure = "106586349"
-User_ID_riboture = "109949586"
-Client_ID = "7cvp1bezng3ypb8bosyzosl3fcgb5ra"
-Client_Secret = "gf4y8h01lffer7w0msjcnakdbstlfv"
 
 def followers():
     url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure

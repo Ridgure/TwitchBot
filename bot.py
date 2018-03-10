@@ -291,9 +291,7 @@ while True:
         if "!timemeout" in data.lower().split()[3]:
             try:
                 ## time out KBiglair ##
-                message("/timeout " + sender() + " " + data.split()[4])
-                message("Timed out " + sender() + " for " + data.split()[4] + " seconds")
-                if 0 < int(data.split()[4]) < 1801:
+                if 0 < int(data.split()[4]) < 3601:
                     message("/timeout " + sender() + " " + data.split()[4])
                     message("Timed out " + sender() + " for " + data.split()[4] + " seconds")
                 elif int(data.split()[4]) < 0:

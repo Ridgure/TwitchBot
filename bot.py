@@ -356,6 +356,25 @@ while True:
         else:
             username = re.search(r"\w+", response).group(0) # return the entire match
             message = CHAT_MSG.sub("", response)
+            try:
+                f = open("Output.txt", "a")
+                f.write(username + ": " + message)
+                f.close()
+                f = open("Output.txt", "r")
+                lines = f.readlines()
+                f.close()
+                f = open("Output.txt", "w")
+                displayedLines = 20
+                if len(lines) > displayedLines:
+                    backlog = len(lines) - displayedLines
+                    f.truncate()
+                    f.writelines(lines[backlog:len(lines)])
+                    f.close()
+                else:
+                    f.writelines(lines)
+                    f.close()
+            except:
+                pass
             print(username + ": " + message)
             print response
             sleep(0.1)

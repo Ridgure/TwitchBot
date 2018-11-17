@@ -8,7 +8,6 @@ import random
 import requests
 import datetime
 import math
-import pytz
 from config import *
 from time import sleep
 
@@ -137,6 +136,83 @@ def followers():
     Total =  response['total']
     print Total
 
+def followage():
+    url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure
+    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+    response = requests.get(url, headers=params).json()
+    data = response['data']
+
+    # I still have to figure out how to get the correct number into the following array
+    print data[1]
+    ### returns
+    # {
+    # u'to_id': u'106586349',
+    # u'followed_at': u'2018-09-14T01:17:27Z',
+    # u'from_name': u'kilderine',
+    # u'to_name': u'Ridgure',
+    # u'from_id': u'255046721'
+    # }
+    testFollower = data[1]
+
+    # follow date
+    m = re.search('(.+?)T', testFollower['followed_at'])
+    followDate = m.group(1).encode('ascii', 'ignore')
+    m = re.search('(.+?)-', followDate)
+    followYear = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.+?)-', followDate)
+    followMonth = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', followDate)
+    followDay = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', followDay)
+    followDay = m.group(1).encode('ascii', 'ignore')
+
+    #follow time
+    m = re.search('T(.+?)Z', testFollower['followed_at'])
+    followTime = m.group(1).encode('ascii', 'ignore')
+    m = re.search('(.+?):', followTime)
+    followHour = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.+?):', followTime)
+    followMinute = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.*)', followTime)
+    followSecond = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.*)', followSecond)
+    followSecond = m.group(1).encode('ascii', 'ignore')
+
+    #current date
+    currentDate = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+    m = re.search('(.+?)-', currentDate)
+    currentYear = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.+?)-', currentDate)
+    currentMonth = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', currentDate)
+    currentDay = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', currentDay)
+    currentDay = m.group(1).encode('ascii', 'ignore')
+
+    #current time
+    currentTime = datetime.datetime.utcnow().strftime("%H:%M:%S")
+    m = re.search('(.+?):', currentTime)
+    currentHour = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.+?):', currentTime)
+    currentMinute = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.*)', currentTime)
+    currentSecond = m.group(1).encode('ascii', 'ignore')
+    m = re.search(':(.*)', currentSecond)
+    currentSecond = m.group(1).encode('ascii', 'ignore')
+    print currentHour, currentMinute, currentSecond
+
+
+    followDate = datetime.date(int(followYear), int(followMonth), int(followDay))
+    followDateTime = datetime.datetime.combine(followDate, datetime.time(int(followHour), int(followMinute), int(followSecond), 0,  tzinfo=None))
+    currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
+    currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
+    deltaDate = currentDateTime - followDateTime
+    deltaHours = int(math.floor(deltaDate.seconds / 3600))
+    deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
+    deltaSeconds = int(deltaDate.seconds - (deltaHours * 3600) - (deltaMinutes * 60))
+    return "Last follow was on: " + str(followDateTime) + " GMT-0 and has been following the channel for " + str(deltaDate.days) + " days, " + str(deltaHours) + " hours, " + str(deltaMinutes) + " minutes and " + str(deltaSeconds) + " seconds"
+
+
 def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
@@ -188,9 +264,8 @@ def uptime():
     finishDay = m.group(1).encode('ascii', 'ignore')
     m = re.search('-(.*)', finishDay)
     finishDay = m.group(1).encode('ascii', 'ignore')
-    date = datetime.date
-    d1 = date(int(startYear), int(startMonth), int(startDay))
-    d2 = date(int(finishYear), int(finishMonth), int(finishDay))
+    d1 = datetime.date(int(startYear), int(startMonth), int(startDay))
+    d2 = datetime.date(int(finishYear), int(finishMonth), int(finishDay))
     delta = d2 - d1
     if delta.days == 1:
         totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (24 * 60)
@@ -326,6 +401,14 @@ while True:
                 message(uptime())
             except IndexError:
                 print "Uptime failed"
+        if "!fc" in data.lower().split()[3]:
+            try:
+                message(followage())
+            except IndexError:
+                pass
+            except Exception,e:
+                message ("followage failed")
+                message (str(e))
         if "!smile" in data.lower().split()[3]:
             try:
                 message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())

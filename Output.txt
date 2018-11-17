@@ -1,3 +1,4 @@
+:tmi.twitch.tv 003 riboture :This server is rather new
 :tmi.twitch.tv 004 riboture :-
 :tmi.twitch.tv 375 riboture :-
 :tmi.twitch.tv 372 riboture :You are in a maze of twisty passages, all alike.
@@ -5,7 +6,7 @@
 riboture: :riboture!riboture@riboture.tmi.twitch.tv JOIN #ridgure
 :riboture.tmi.twitch.tv 353 riboture = #ridgure :riboture
 :riboture.tmi.twitch.tv 366 riboture #ridgure :End of /NAMES list
-ridgure: !uptime
+ridgure: !fc
 tmi: :tmi.twitch.tv 001 riboture :Welcome, GLHF!
 :tmi.twitch.tv 002 riboture :Your host is tmi.twitch.tv
 :tmi.twitch.tv 003 riboture :This server is rather new
@@ -16,5 +17,4 @@ tmi: :tmi.twitch.tv 001 riboture :Welcome, GLHF!
 riboture: :riboture!riboture@riboture.tmi.twitch.tv JOIN #ridgure
 :riboture.tmi.twitch.tv 353 riboture = #ridgure :riboture
 :riboture.tmi.twitch.tv 366 riboture #ridgure :End of /NAMES list
-ridgure: !uptime
-ridgure: !uptime
+ridgure: !fc

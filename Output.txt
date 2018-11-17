@@ -1,20 +1,20 @@
-ridgure: !demolish
-swedenboy_gaming: me is back
-ridgure: !house
-ridgure: !door
-ridgure: !window
-ridgure: !windows
-ridgure: !demolish
-ridgure: !house
-ridgure: !windows
-ridgure: !door
-ridgure: !demolish
-kbigliar: !wall
-ridgure: !house
-ridgure: !windows
-ridgure: !door
-ridgure: Demolish
-ridgure: !Demolish
-ridgure: !house
-ridgure: !windows
-kbigliar: !boom
+:tmi.twitch.tv 004 riboture :-
+:tmi.twitch.tv 375 riboture :-
+:tmi.twitch.tv 372 riboture :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 riboture :>
+riboture: :riboture!riboture@riboture.tmi.twitch.tv JOIN #ridgure
+:riboture.tmi.twitch.tv 353 riboture = #ridgure :riboture
+:riboture.tmi.twitch.tv 366 riboture #ridgure :End of /NAMES list
+ridgure: !uptime
+tmi: :tmi.twitch.tv 001 riboture :Welcome, GLHF!
+:tmi.twitch.tv 002 riboture :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 riboture :This server is rather new
+:tmi.twitch.tv 004 riboture :-
+:tmi.twitch.tv 375 riboture :-
+:tmi.twitch.tv 372 riboture :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 riboture :>
+riboture: :riboture!riboture@riboture.tmi.twitch.tv JOIN #ridgure
+:riboture.tmi.twitch.tv 353 riboture = #ridgure :riboture
+:riboture.tmi.twitch.tv 366 riboture #ridgure :End of /NAMES list
+ridgure: !uptime
+ridgure: !uptime

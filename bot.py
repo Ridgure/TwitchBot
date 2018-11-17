@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 # bot.py
 
 import re
@@ -7,8 +7,13 @@ import socket
 import random
 import requests
 import datetime
+import math
+import pytz
 from config import *
 from time import sleep
+
+
+date = datetime.date.today()
 
 s = socket.socket()
 s.connect((HOST, PORT))
@@ -133,66 +138,81 @@ def followers():
     print Total
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
     response = requests.get(url, headers=params).json()
-    LiveInformation = response['data'][0]
+    StreamStart = response['data'][0]
     # print response
     # returns
-    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'},
-    # u'data': [{
+    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'}, u'data': [{
         # u'user_id': u'109949586',
-        # u'language': u'no',
-        # u'title': u'',
+        # u'language': u'',
+        # u'title': u'This is the title',
+        # u'type': u'live',
+        # u'tag_ids': None,
         # u'community_ids': [],
         # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
-        # u'game_id': u'',
-        # u'started_at': u'2018-01-22T07:09:44Z',
-        # u'type': u'live',
-        # u'id': u'27355247712',
-        # u'viewer_count': 1}
+        # u'game_id': u'0',
+        # u'started_at': u'2018-11-16T11:04:29Z',
+        # u'user_name': u'',
+        # u'id': u'31261236144',
+        # u'viewer_count': 0}
     # ]}
+    m = re.search('T(.+?):', StreamStart['started_at'])
+    startHours = m.group(1)
+    m = re.search(':(.+?):', StreamStart['started_at'])
+    startMinutes = m.group(1)
+    finishTime = datetime.datetime.utcnow().strftime("%H:%M")
+    m = re.search('(.+?):', finishTime)
+    finishHours = m.group(1)
+    m = re.search(':(.*)', finishTime)
+    finishMinutes = m.group(1)
+    totalStartMinutes = (int(startHours) * 60) + int(startMinutes)
+    totalFinishMinutes = (int(finishHours) * 60) + int(finishMinutes)
+    m = re.search('(.+?)T', StreamStart['started_at'])
+    startDate = m.group(1).encode('ascii', 'ignore')
+    m = re.search('(.+?)-', startDate)
+    startYear = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.+?)-', startDate)
+    startMonth = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', startDate)
+    startDay = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', startDay)
+    startDay = m.group(1).encode('ascii', 'ignore')
+    finishDate = str(datetime.datetime.utcnow().strftime("%Y-%m-%d"))
+    m = re.search('(.+?)-', finishDate)
+    finishYear = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.+?)-', finishDate)
+    finishMonth = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', finishDate)
+    finishDay = m.group(1).encode('ascii', 'ignore')
+    m = re.search('-(.*)', finishDay)
+    finishDay = m.group(1).encode('ascii', 'ignore')
+    date = datetime.date
+    d1 = date(int(startYear), int(startMonth), int(startDay))
+    d2 = date(int(finishYear), int(finishMonth), int(finishDay))
+    delta = d2 - d1
+    if delta.days == 1:
+        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (24 * 60)
+        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
+    if delta.days == 2:
+        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (48 * 60)
+        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
+    if delta.days == 3:
+        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (72 * 60)
+        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
+    if delta.days == 0:
+        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes)
+        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
 
-    print LiveInformation['type']
-    if LiveInformation['type'] == "live":
-        try:
-            message("Stream is live")
-            return "live"
-        except IndexError:
-             pass
-    else:
-        message("Stream is offline")
-        return "offline"
-
-
-def liveOrNot():
-    try:
-        url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture
-        params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
-        response = requests.get(url, headers=params).json()
-        LiveInformation = response['data'][0]
-        # print response
-        # returns
-        # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'},
-        # u'data': [{
-            # u'user_id': u'109949586',
-            # u'language': u'no',
-            # u'title': u'',
-            # u'community_ids': [],
-            # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
-            # u'game_id': u'',
-            # u'started_at': u'2018-01-22T07:09:44Z',
-            # u'type': u'live',
-            # u'id': u'27355247712',
-            # u'viewer_count': 1}
-        # ]}
-        print LiveInformation['type']
-        if LiveInformation['type'] == "live":
-            return "live"
-        else:
-            return "offline"
-    except IndexError:
-        pass
 
 def setValue(val):
     global globalVal
@@ -303,15 +323,9 @@ while True:
                 pass
         if "!uptime" in data.lower().split()[3]:
             try:
-                uptime()
-                message("Uptime is supposed to be displayed here")
+                message(uptime())
             except IndexError:
-                pass
-        if liveOrNot() == "live":
-            try:
-                message("Stream just went live")
-            except IndexError:
-                pass
+                print "Uptime failed"
         if "!smile" in data.lower().split()[3]:
             try:
                 message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
@@ -376,7 +390,7 @@ while True:
             except:
                 pass
             print(username + ": " + message)
-            print response
+###            print response
             sleep(0.1)
     except IndexError:
         pass

@@ -123,94 +123,104 @@ def lick():
     return licks
 
 def followers():
-    url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure
+    url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
-    response = requests.get(url, headers=params).json()
-    print response
-    #returns
+    responseFirst100 = requests.get(url100, headers=params).json()
+    global pagination
+
+    pagination = responseFirst100['pagination']['cursor']
+    totalFollowers = responseFirst100['total']
+    followerList = responseFirst100['data']
+
+    # making a list of all the followers
+    for i in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
+        url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
+        response = requests.get(url200, headers=params).json()
+        pagination = response['pagination']['cursor']
+        followerList = followerList + response['data']
+
+    global followerList
+    return followerList
+
+    # print response
+    # returns
     #{u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjoiMTUxNDI1NDE4NzA4NTAyMDAwMCJ9'},
         # u'total': 421,
     # u'data': [
         # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T20:11:57Z', u'from_id': u'163393705'},
         # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
-    Total =  response['total']
-    print Total
 
-def followage():
-    url = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure
-    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
-    response = requests.get(url, headers=params).json()
-    data = response['data']
+def followAgeAll():
 
-    # I still have to figure out how to get the correct number into the following array
-    print data[1]
-    ### returns
-    # {
-    # u'to_id': u'106586349',
-    # u'followed_at': u'2018-09-14T01:17:27Z',
-    # u'from_name': u'kilderine',
-    # u'to_name': u'Ridgure',
-    # u'from_id': u'255046721'
-    # }
-    testFollower = data[1]
+    followAgeList = [[] for i in range(len(followerList))]
+    global followAgeList
 
-    # follow date
-    m = re.search('(.+?)T', testFollower['followed_at'])
-    followDate = m.group(1).encode('ascii', 'ignore')
-    m = re.search('(.+?)-', followDate)
-    followYear = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.+?)-', followDate)
-    followMonth = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', followDate)
-    followDay = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', followDay)
-    followDay = m.group(1).encode('ascii', 'ignore')
+    for i in xrange(len(followerList)):
 
-    #follow time
-    m = re.search('T(.+?)Z', testFollower['followed_at'])
-    followTime = m.group(1).encode('ascii', 'ignore')
-    m = re.search('(.+?):', followTime)
-    followHour = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.+?):', followTime)
-    followMinute = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.*)', followTime)
-    followSecond = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.*)', followSecond)
-    followSecond = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?)T', followerList[i]['followed_at'])
+        followDate = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?)-', followDate)
+        followYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', followDate)
+        followMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', followDate)
+        followDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', followDay)
+        followDay = m.group(1).encode('ascii', 'ignore')
 
-    #current date
-    currentDate = datetime.datetime.utcnow().strftime("%Y-%m-%d")
-    m = re.search('(.+?)-', currentDate)
-    currentYear = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.+?)-', currentDate)
-    currentMonth = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', currentDate)
-    currentDay = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', currentDay)
-    currentDay = m.group(1).encode('ascii', 'ignore')
+        #follow time
+        m = re.search('T(.+?)Z', followerList[i]['followed_at'])
+        followTime = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?):', followTime)
+        followHour = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.+?):', followTime)
+        followMinute = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', followTime)
+        followSecond = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', followSecond)
+        followSecond = m.group(1).encode('ascii', 'ignore')
 
-    #current time
-    currentTime = datetime.datetime.utcnow().strftime("%H:%M:%S")
-    m = re.search('(.+?):', currentTime)
-    currentHour = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.+?):', currentTime)
-    currentMinute = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.*)', currentTime)
-    currentSecond = m.group(1).encode('ascii', 'ignore')
-    m = re.search(':(.*)', currentSecond)
-    currentSecond = m.group(1).encode('ascii', 'ignore')
-    print currentHour, currentMinute, currentSecond
+        #current date
+        currentDate = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+        m = re.search('(.+?)-', currentDate)
+        currentYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', currentDate)
+        currentMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', currentDate)
+        currentDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', currentDay)
+        currentDay = m.group(1).encode('ascii', 'ignore')
+
+        #current time
+        currentTime = datetime.datetime.utcnow().strftime("%H:%M:%S")
+        m = re.search('(.+?):', currentTime)
+        currentHour = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.+?):', currentTime)
+        currentMinute = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', currentTime)
+        currentSecond = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', currentSecond)
+        currentSecond = m.group(1).encode('ascii', 'ignore')
 
 
-    followDate = datetime.date(int(followYear), int(followMonth), int(followDay))
-    followDateTime = datetime.datetime.combine(followDate, datetime.time(int(followHour), int(followMinute), int(followSecond), 0,  tzinfo=None))
-    currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
-    currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
-    deltaDate = currentDateTime - followDateTime
-    deltaHours = int(math.floor(deltaDate.seconds / 3600))
-    deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
-    deltaSeconds = int(deltaDate.seconds - (deltaHours * 3600) - (deltaMinutes * 60))
-    return "Last follow was on: " + str(followDateTime) + " GMT-0 and has been following the channel for " + str(deltaDate.days) + " days, " + str(deltaHours) + " hours, " + str(deltaMinutes) + " minutes and " + str(deltaSeconds) + " seconds"
+        followDate = datetime.date(int(followYear), int(followMonth), int(followDay))
+        followDateTime = datetime.datetime.combine(followDate, datetime.time(int(followHour), int(followMinute), int(followSecond), 0,  tzinfo=None))
+        currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
+        currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
+        deltaDate = currentDateTime - followDateTime
+        deltaHours = int(math.floor(deltaDate.seconds / 3600))
+        deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
+        deltaSeconds = int(deltaDate.seconds - (deltaHours * 3600) - (deltaMinutes * 60))
+
+        followAgeList[i].insert(0, str(deltaDate))
+        followAgeList[i].insert(1, deltaDate.days)
+        followAgeList[i].insert(2, deltaHours)
+        followAgeList[i].insert(3, deltaMinutes)
+        followAgeList[i].insert(4, deltaSeconds)
+        followAgeList[i].insert(5, deltaDate.seconds)
+        followAgeList[i].insert(6, followDateTime)
+
+    return followAgeList
 
 
 def uptime():
@@ -288,17 +298,6 @@ def uptime():
         uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
         return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
 
-
-def setValue(val):
-    global globalVal
-    valueChanged= g_val != val
-    if valueChanged:
-        liveOrNot()
-    globalVal = val
-    if valueChanged:
-        liveOrNot()
-    #This is called a setter function. Do more research. This might be the key to p
-
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 while True:
@@ -323,9 +322,12 @@ while True:
                 pass
         if "!test" in data.lower().split()[3]:
             try:
-               message(data)
+                message(followAgeAll())
             except IndexError:
                 pass
+            except Exception, e:
+                message("Division failed")
+                message(str(e))
         if "!social" in data.lower().split()[3]:
             try:
                 message("Add me on Facebook: fb.com/Ridgure")
@@ -403,28 +405,68 @@ while True:
                 print "Uptime failed"
         if "!fc" in data.lower().split()[3]:
             try:
-                message(followage())
+                # get the user
+                if len(data.lower().split()) == 4:
+                    user = sender()
+                if len(data.lower().split()) == 5:
+                    user = (data.lower().split()[4])
+
+                followers()
+
+                testFollower = None
+
+                # get user index and get their follow time and date and length
+                for i1 in xrange(len(followerList)):
+                    for i2 in xrange(len(followerList[i1])):
+                        # print i1, followerList[i1]['from_name']
+                        if followerList[i1]['from_name'] == user:
+                            followAge = followAgeAll()
+                            message("Last follow was on: " + str(
+                                followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
+                                followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
+                                followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
+                        else:
+                            pass
+
+                if testFollower == None:
+                    message("User is not following the channel")
             except IndexError:
                 pass
-            except Exception,e:
-                message ("followage failed")
-                message (str(e))
+            except Exception, e:
+                message("followage failed")
+                message(str(e))
         if "!smile" in data.lower().split()[3]:
             try:
                 message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())
             except IndexError:
                 message("Remember to smile at someone!")
-            except Exception,e:
-                message ("Smile failed")
-                message (str(e))
+            except Exception, e:
+                message("Smile failed")
+                message(str(e))
         if "!multiply" in data.lower().split()[3]:
             try:
                 message(multiply())
             except IndexError:
                 pass
-            except Exception,e:
-                message ("Multiplication failed")
-                message (str(e))
+            except Exception, e:
+                message("Multiplication failed")
+                message(str(e))
+        if True == True:
+            try:
+                followers()
+                followAgeAll()
+                batCave = [[] for i in range(len(followerList))]
+                for i in xrange(len(followerList)):
+                    batCave[i].insert(0, followerList[i]['from_name'])
+                    batCave[i].insert(1, "Bat name")
+                    batCave[i].insert(2, followAgeList[i][0])
+                    batCave[i].insert(3, "Bat color")
+                print batCave
+            except IndexError:
+                pass
+            except Exception, e:
+                message("Batcave is caving in")
+                message(str(e))
         if "!divide" in data.lower().split()[3]:
             try:
                 message(divide())

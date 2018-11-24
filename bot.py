@@ -8,6 +8,7 @@ import random
 import requests
 import datetime
 import math
+import csv
 from config import *
 from time import sleep
 
@@ -310,6 +311,48 @@ while True:
                 pass
         response = s.recv(1024).decode("utf-8")
         data = response.strip("\r\n")
+        if True == True:
+            try:
+                followers()
+                test = []
+                for i in range(len(followerList)):
+                    test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
+                test = map(str.strip, test)
+                followerData = open("followerData.csv", "r")
+                lines = followerData.readlines()
+                followerData.close()
+                lines = map(str.strip, lines)
+                newFollowers = [item for item in test if item not in lines[1:]]
+                unfollowers = [item for item in lines[1:] if item not in test]
+                if len(newFollowers) > 0:
+                    followerData = open("followerData.csv", "a")
+                    for i in range(len(newFollowers)):
+                        followerData.write(newFollowers[i] + "\n")
+                    followerData.close()
+                    if len(newFollowers) == 1:
+                        message("Thank you for following the channel " + " ".join(newFollowers) + "!")
+                    if len(newFollowers) > 1:
+                        message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " + newFollowers[-1] + "!")
+
+
+
+
+
+
+                # followers()
+                # followAgeAll()
+                # batCave = [[] for i in range(len(followerList))]
+                # for i in xrange(len(followerList)):
+                #     batCave[i].insert(0, followerList[i]['from_name'])
+                #     batCave[i].insert(1, "Bat name")
+                #     batCave[i].insert(2, followAgeList[i][0])
+                #     batCave[i].insert(3, "Bat color")
+                # print batCave
+            except IndexError:
+                pass
+            except Exception, e:
+                message("Batcave is caving in")
+                message(str(e))
         if response == "PING :tmi.twitch.tv\r\n":
             try:
                 s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
@@ -411,25 +454,24 @@ while True:
                 if len(data.lower().split()) == 5:
                     user = (data.lower().split()[4])
 
-                followers()
-
-                testFollower = None
-
+                testFollower = False
                 # get user index and get their follow time and date and length
                 for i1 in xrange(len(followerList)):
                     for i2 in xrange(len(followerList[i1])):
                         # print i1, followerList[i1]['from_name']
-                        if followerList[i1]['from_name'] == user:
+                        if followerList[i1]['from_name'].lower() == user:
                             followAge = followAgeAll()
                             message("Last follow was on: " + str(
                                 followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
                                 followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
                                 followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
+                            user = None
+                            testFollower = True
                         else:
                             pass
-
-                if testFollower == None:
+                if testFollower == False:
                     message("User is not following the channel")
+
             except IndexError:
                 pass
             except Exception, e:
@@ -450,22 +492,6 @@ while True:
                 pass
             except Exception, e:
                 message("Multiplication failed")
-                message(str(e))
-        if True == True:
-            try:
-                followers()
-                followAgeAll()
-                batCave = [[] for i in range(len(followerList))]
-                for i in xrange(len(followerList)):
-                    batCave[i].insert(0, followerList[i]['from_name'])
-                    batCave[i].insert(1, "Bat name")
-                    batCave[i].insert(2, followAgeList[i][0])
-                    batCave[i].insert(3, "Bat color")
-                print batCave
-            except IndexError:
-                pass
-            except Exception, e:
-                message("Batcave is caving in")
                 message(str(e))
         if "!divide" in data.lower().split()[3]:
             try:

@@ -369,7 +369,7 @@ while True:
                  pass
         if "!commands" in data.lower().split()[3]:
             try:
-                message("My current commands are !social, !pack, !oclock, !smile, !timemeout, !multipy and !add")
+                message("My current commands are !fc, !social, !pack, !oclock, !smile, !timemeout, !multipy and !add")
             except IndexError:
                 pass
         if "!test" in data.lower().split()[3]:
@@ -404,7 +404,10 @@ while True:
                 pass
         if "!raid" in data.lower().split()[3]:
             try:
-                message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                if sender().lower() == CHAN[1:]:
+                    message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                else:
+                    pass
             except IndexError:
                 pass
         if "!pack" in data.lower().split()[3]:
@@ -424,7 +427,10 @@ while True:
                 pass
         if "!lick" in data.lower().split()[3]:
             try:
-                message(sender() + " licks " + data.split()[4] + lick())
+                if sender() == 'pupgirl22':
+                    message(sender() + " licks " + data.split()[4] + lick())
+                else:
+                    pass
             except IndexError:
                 pass
         if "!bellyrub" in data.lower().split()[3]:
@@ -517,15 +523,6 @@ while True:
                 pass
             except Exception, e:
                 message("Addition failed")
-                message(str(e))
-        if "!wealth" in data.lower().split()[3]:
-            try:
-                GlobalWealth = int(data.split()[4])
-                message(Person)
-            except IndexError:
-                pass
-            except Exception, e:
-                message("wealth failed")
                 message(str(e))
         else:
             username = re.search(r"\w+", response).group(0) # return the entire match

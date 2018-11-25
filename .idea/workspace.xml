@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99060bf5-1278-43cf-b1f5-3ff50850d01c" name="Default" comment="Changed the !fc command to incorporate all viewers and added lifetime to batcave">
+    <list default="true" id="99060bf5-1278-43cf-b1f5-3ff50850d01c" name="Default" comment="Added a follow alert">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="304" lean-forward="true" selection-start-line="304" selection-end-line="304" />
+            <state relative-caret-position="155">
+              <caret line="354" selection-start-line="354" selection-end-line="354" selection-end-column="27" />
               <folding>
                 <element signature="e#56#65#0" expanded="true" />
               </folding>
@@ -27,14 +27,26 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/followerData.csv">
-          <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="241">
-              <caret line="719" column="10" lean-forward="true" selection-start-line="719" selection-start-column="10" selection-end-line="719" selection-end-column="10" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/followerDataNew.csv">
           <provider editor-type-id="csv-table-editor">
             <state showInfoPanel="true" rowLines="3" />
+          </provider>
+          <provider selected="true" editor-type-id="csv-text-editor">
+            <state relative-caret-position="-102">
+              <caret line="486" column="14" lean-forward="true" selection-start-line="486" selection-start-column="14" selection-end-line="486" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/followerData.csv">
+          <provider editor-type-id="csv-table-editor">
+            <state showInfoPanel="true" rowLines="3" />
+          </provider>
+          <provider selected="true" editor-type-id="csv-text-editor">
+            <state relative-caret-position="221">
+              <caret line="717" selection-start-line="717" selection-end-line="717" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -98,6 +110,9 @@
       <find>cirek</find>
       <find>followers()</find>
       <find>ivana</find>
+      <find>sirg</find>
+      <find>ya</find>
+      <find>yaku</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -113,6 +128,7 @@
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.json" />
         <option value="$PROJECT_DIR$/followerData.txt" />
+        <option value="$PROJECT_DIR$/followerDataNew.csv" />
         <option value="$PROJECT_DIR$/followerData.csv" />
         <option value="$PROJECT_DIR$/bot.py" />
       </list>
@@ -129,7 +145,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -150,6 +165,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -277,7 +293,21 @@
       <option name="project" value="LOCAL" />
       <updated>1542908405669</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added a follow alert">
+      <created>1543078500557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1543078500557</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added fields for all columns">
+      <created>1543148987962</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1543148987962</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -293,12 +323,13 @@
     <frame x="-7" y="-7" width="1295" height="815" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.082670905" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.082670905" />
       <window_info id="Structure" order="1" weight="0.24960254" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" weight="0.329429" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.491875" visible="true" weight="0.35431919" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.491875" visible="true" weight="0.35431919" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -315,19 +346,20 @@
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.082670905" />
-      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info id="Structure" order="1" weight="0.24960254" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.491875" visible="true" weight="0.35431919" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.508125" side_tool="true" weight="0.23844062" />
-      <window_info anchor="bottom" id="Python Console" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.329429" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Messages" order="0" weight="0.329429" />
+      <window_info anchor="bottom" id="Message" order="1" />
+      <window_info anchor="bottom" id="Find" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.491875" visible="true" weight="0.35431919" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.329429" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.508125" side_tool="true" weight="0.23844062" />
+      <window_info anchor="bottom" id="Python Console" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.329429" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -342,7 +374,9 @@
     <MESSAGE value="Added an uptime function" />
     <MESSAGE value="Added !fc command" />
     <MESSAGE value="Changed the !fc command to incorporate all viewers and added lifetime to batcave" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the !fc command to incorporate all viewers and added lifetime to batcave" />
+    <MESSAGE value="Added a follow alert" />
+    <MESSAGE value="Added fields for all columns" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added fields for all columns" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/.PyCharmCE2017.3/system/python_stubs/1489760905/_socket.py" />
@@ -359,6 +393,8 @@
       </provider>
     </entry>
     <entry file="file://E:/Downloads/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/followerData.cvs" />
+    <entry file="file://$PROJECT_DIR$/followerData.txt" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -383,22 +419,7 @@
     <entry file="file://$PROJECT_DIR$/Output.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/followerData.cvs">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/followerData.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="719" column="10" selection-start-line="719" selection-start-column="10" selection-end-line="719" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/followerData.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="241">
-          <caret line="719" column="10" lean-forward="true" selection-start-line="719" selection-start-column="10" selection-end-line="719" selection-end-column="10" />
-        </state>
-      </provider>
       <provider editor-type-id="text-editor">
         <state>
           <caret column="49" lean-forward="true" selection-start-column="49" selection-end-column="49" />
@@ -407,11 +428,26 @@
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" rowLines="3" />
       </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="221">
+          <caret line="717" selection-start-line="717" selection-end-line="717" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/followerDataNew.csv">
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" rowLines="3" />
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="-102">
+          <caret line="486" column="14" lean-forward="true" selection-start-line="486" selection-start-column="14" selection-end-line="486" selection-end-column="14" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="304" lean-forward="true" selection-start-line="304" selection-end-line="304" />
+        <state relative-caret-position="155">
+          <caret line="354" selection-start-line="354" selection-end-line="354" selection-end-column="27" />
           <folding>
             <element signature="e#56#65#0" expanded="true" />
           </folding>

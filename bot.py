@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # bot.py
 
+import os
 import re
 import socket
 import random
@@ -158,6 +159,7 @@ def followAgeAll():
 
     for i in xrange(len(followerList)):
 
+        # Get follow Day Month Year
         m = re.search('(.+?)T', followerList[i]['followed_at'])
         followDate = m.group(1).encode('ascii', 'ignore')
         m = re.search('(.+?)-', followDate)
@@ -169,7 +171,7 @@ def followAgeAll():
         m = re.search('-(.*)', followDay)
         followDay = m.group(1).encode('ascii', 'ignore')
 
-        #follow time
+        # Get follow Hour Minute Second
         m = re.search('T(.+?)Z', followerList[i]['followed_at'])
         followTime = m.group(1).encode('ascii', 'ignore')
         m = re.search('(.+?):', followTime)
@@ -181,7 +183,7 @@ def followAgeAll():
         m = re.search(':(.*)', followSecond)
         followSecond = m.group(1).encode('ascii', 'ignore')
 
-        #current date
+        # Get current Day Month Year
         currentDate = datetime.datetime.utcnow().strftime("%Y-%m-%d")
         m = re.search('(.+?)-', currentDate)
         currentYear = m.group(1).encode('ascii', 'ignore')
@@ -192,7 +194,7 @@ def followAgeAll():
         m = re.search('-(.*)', currentDay)
         currentDay = m.group(1).encode('ascii', 'ignore')
 
-        #current time
+        # Get current Hour Minute Second
         currentTime = datetime.datetime.utcnow().strftime("%H:%M:%S")
         m = re.search('(.+?):', currentTime)
         currentHour = m.group(1).encode('ascii', 'ignore')
@@ -203,7 +205,7 @@ def followAgeAll():
         m = re.search(':(.*)', currentSecond)
         currentSecond = m.group(1).encode('ascii', 'ignore')
 
-
+        # Compare follow with current
         followDate = datetime.date(int(followYear), int(followMonth), int(followDay))
         followDateTime = datetime.datetime.combine(followDate, datetime.time(int(followHour), int(followMinute), int(followSecond), 0,  tzinfo=None))
         currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
@@ -213,6 +215,7 @@ def followAgeAll():
         deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
         deltaSeconds = int(deltaDate.seconds - (deltaHours * 3600) - (deltaMinutes * 60))
 
+        # Return array
         followAgeList[i].insert(0, str(deltaDate))
         followAgeList[i].insert(1, deltaDate.days)
         followAgeList[i].insert(2, deltaHours)
@@ -313,41 +316,47 @@ while True:
         data = response.strip("\r\n")
         if True == True:
             try:
+                # Get new follower list
                 followers()
                 test = []
                 for i in range(len(followerList)):
                     test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
                 test = map(str.strip, test)
-                followerData = open("followerData.csv", "r")
-                lines = followerData.readlines()
-                followerData.close()
-                lines = map(str.strip, lines)
-                newFollowers = [item for item in test if item not in lines[1:]]
-                unfollowers = [item for item in lines[1:] if item not in test]
+
+                # Get existing follower list
+                with open('followerData.csv', "rb") as csvfile:
+                    followerDataReader = csv.reader(csvfile, delimiter=",")
+                    lines = list(followerDataReader)
+
+                # Compare follower lists
+                newFollowers = [item for item in test if item not in [i[0] for i in lines[1:]]]
+                unfollowers = [item for item in [i[0] for i in lines[1:]] if item not in test]
+
+                # thank new follower and add to existing list
                 if len(newFollowers) > 0:
-                    followerData = open("followerData.csv", "a")
                     for i in range(len(newFollowers)):
-                        followerData.write(newFollowers[i] + "\n")
-                    followerData.close()
+                        lines.append([newFollowers[i], "", "", ""])
+                    with open('followerDataNew.csv', "wb") as csvfile:
+                        followerDataWriter = csv.writer(csvfile, delimiter=",")
+                        followerDataWriter.writerows(lines)
+                    os.remove('followerData.csv')
+                    os.rename('followerDataNew.csv', 'followerData.csv')
                     if len(newFollowers) == 1:
                         message("Thank you for following the channel " + " ".join(newFollowers) + "!")
                     if len(newFollowers) > 1:
                         message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " + newFollowers[-1] + "!")
 
-
-
-
-
-
-                # followers()
-                # followAgeAll()
-                # batCave = [[] for i in range(len(followerList))]
-                # for i in xrange(len(followerList)):
-                #     batCave[i].insert(0, followerList[i]['from_name'])
-                #     batCave[i].insert(1, "Bat name")
-                #     batCave[i].insert(2, followAgeList[i][0])
-                #     batCave[i].insert(3, "Bat color")
-                # print batCave
+                # Refresh the total seconds followed per user
+                followAgeAll()
+                for i in range(len(lines)):
+                    for i2 in range(len(followerList)):
+                        if lines[i][0] == followerList[i2]['from_name']:
+                            lines[i][1] = followAgeList[i2][5]
+                with open('followerDataNew.csv', "wb") as csvfile:
+                    followerDataWriter = csv.writer(csvfile, delimiter=",")
+                    followerDataWriter.writerows(lines)
+                os.remove('followerData.csv')
+                os.rename('followerDataNew.csv', 'followerData.csv')
             except IndexError:
                 pass
             except Exception, e:

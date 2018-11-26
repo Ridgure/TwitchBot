@@ -57,7 +57,30 @@ Clone this repo to your local machine using ```https://github.com/Ridgure/Twitch
 
 **Setup**
 
-In order to be able to run the bot fill out the missing parameters in the [config](docs/config.py)
+In order to be able to run the bot add a file config.py that looks something like this and go through the steps below:
+
+```
+HOST = "irc.twitch.tv"                                  # the Twitch IRC server
+PORT = 6667                                             # always use port 6667!
+NICK = "riboture"                                       # your bots Twitch username, lowercase
+PASS = "<insert Oauth here>"                            # your Twitch OAuth token
+CHAN = "#ridgure"                                       # the channel you want to join
+
+User_ID_ridgure = "106586349"
+User_ID_riboture = "109949586"
+User_ID_princess___lissy = "124936690"
+Client_ID = "<Insert client id here>"
+Client_Secret = "<Insert client secret here>"
+```
+
+- Create a Twitch account with the name of your bot
+- Register your application on the [Twitch developer site](https://glass.twitch.tv/login)
+  - Set the Name to the name of the account you just created
+  - Set the redirect uri to http://localhost
+  - Set the application directory to Chat Bot
+  - Agree to the terms and conditions
+  - Get a Client_ID and a Client_Secret
+- generate an Oauth at this address https://twitchapps.com/tmi/
 
 **Prerequisites**
 

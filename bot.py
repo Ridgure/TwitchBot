@@ -12,6 +12,7 @@ import math
 import csv
 from config import *
 from time import sleep
+from decimal import *
 
 s = socket.socket()
 s.connect((HOST, PORT))
@@ -61,40 +62,94 @@ def lick():
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
 
+def subscribers():
+    # url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
+    # params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS, "Accept": "application/vnd.twitchtv.v5+json"}
+    # response = requests.get(url, headers=params).json()
 
-def nameBat():
-    maleFemale = random.randint(0, 1)
-    maleNames = ['Matrix', 'Fuzz', 'Tiberius', 'Impaler', 'Shrike', 'Vulkan', 'Butch', 'Guano', 'Ripmaw', 'Vamp', 'Nightmare', 'Baxter', 'Azar', 'Lockjaw', 'Booboo', 'Darth', 'Dimitri', 'Blues', 'Moon', 'Shrike', 'Midnight', 'Sonar', 'Flaps', 'Screech', 'Draculon', 'Sabath', 'Angel', 'Vladimir', 'Grey', 'Spuds', 'Dexter', 'Mothra', 'Cole', 'Dimitri', 'Archangel', 'Bruce', 'Drake', 'Comet', 'Spectre', 'Rascal', 'Blade', 'Nyx', 'Basil', 'Char', 'Wingnut', 'Orion', 'Shadow', 'Brutus', 'Ash', 'Lucifer']
-    femaleNames = ['Angel', 'Trixy', 'Ruth', 'Rhyme', 'Rhyme', 'Echo', 'Mirage', 'Flutters', 'Bandetta', 'Giggles', 'Sona', 'Dawnstar', 'Nibbles', 'Harmony', 'Equina', 'Siren', 'Mittens', 'Sage', 'Cookie', 'Dawnstar', 'Moonlight', 'Shine', 'Haze', 'Lady', 'Scarlett', 'Illumina', 'Ivy', 'Morning', 'Abby', 'Sade', 'Aine', 'Shade', 'Velvet', 'Aura', 'Azurys', 'Dot', 'Equinox', 'Twilight', 'Iris', 'Cerulean', 'Star', 'Violet', 'Raine', 'Lucy', 'Nugget', 'Indigo', 'Skye', 'Skylar', 'Morticia']
-    randomMaleNameIndex = random.randint(0, len(maleNames))
-    randomFemaleNameIndex = random.randint(0, len(femaleNames))
-    if maleFemale == 1:
-        maleFemale = 'Female'
-        randomName = femaleNames[randomFemaleNameIndex]
-    else:
-        maleFemale = 'male'
-        randomName = maleNames[randomMaleNameIndex]
-    return [randomName, maleFemale]
+    # responds
+    # {u'private_video': False,
+    # u'updated_at': u'2018-11-26T00:23:37Z',
+    # u'privacy_options_enabled': False,
+    # u'video_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-channel_offline_image-3c60c59d9ba5c169-1920x1080.png',
+    # u'partner': False,
+    # u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ee5101dc-3ddb-43aa-a887-a569414a8844-profile_image-300x300.png',
+    # u'display_name': u'Ridgure',
+    # u'followers': 720,
+    # u'broadcaster_software': u'unknown_rtmp',
+    # u'broadcaster_language': u'en',
+    # u'broadcaster_type': u'affiliate',
+    # u'status': u'Making the Asakusa Tourism Center by Kengo Kuma | Architecture',
+    # u'description': u'I stream every Wednesday from 7-12 CET. You can expect entertainment and other fun as well as an awesome community of chatters and other streamers that hang out when I am live.',
+    # u'views': 11096,
+    # u'game': u'Art',
+    # u'name': u'ridgure',
+    # u'language': u'en',
+    # u'url': u'https://www.twitch.tv/ridgure',
+    # u'created_at': u'2015-11-08T22:14:42Z',
+    # u'mature': True,
+    # u'profile_banner_background_color': u'#000000',
+    # u'_id': u'106586349',
+    # u'profile_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-profile_banner-aab842adb656bc98-480.png'}
+
+    # Use this url for getting the token
+    # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + Client_ID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription"
+
+    url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
+    params = {'Accept': 'application/vnd.twitchtv.v5+json', "Client-ID": Client_ID, "Authorization": 'OAuth ' + OPPASS}
+    response = requests.get(url, headers=params, allow_redirects=True).json()
+    print response
+
+    # returns
+    # {u'_total': 3, u'subscriptions': [
+    #     {u'is_gift': False, u'sender': None, u'sub_plan_name': u'Channel Subscription (ridgure)', u'sub_plan': u'1000',
+    #      u'created_at': u'2017-06-28T19:23:44Z', u'user': {
+    #         u'bio': u'Just a start up streamer who does a bit of youtube while still working and going to college',
+    #         u'display_name': u'LilGamerHelle', u'name': u'lilgamerhelle', u'created_at': u'2012-08-03T19:04:34Z',
+    #         u'updated_at': u'2018-11-25T20:13:23Z',
+    #         u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/lilgamerhelle-profile_image-bde580adc7af34ad-300x300.png',
+    #         u'_id': u'32670426', u'type': u'user'}, u'_id': u'c56ff1e6b85b0bcbbfbbb471b7fe903798ecb9dc'},
+    #     {u'is_gift': False, u'sender': None, u'sub_plan_name': u'Channel Subscription (ridgure): $24.99 Sub',
+    #      u'sub_plan': u'3000', u'created_at': u'2017-06-28T20:11:45Z', u'user': {
+    #         u'bio': u'I stream every Wednesday from 7-12 CET. You can expect entertainment and other fun as well as an awesome community of chatters and other streamers that hang out when I am live.',
+    #         u'display_name': u'Ridgure', u'name': u'ridgure', u'created_at': u'2015-11-08T22:14:42Z',
+    #         u'updated_at': u'2018-11-27T23:23:47Z',
+    #         u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ee5101dc-3ddb-43aa-a887-a569414a8844-profile_image-300x300.png',
+    #         u'_id': u'106586349', u'type': u'user'}, u'_id': u'f6fdc613e0ee25ef84b5d0c16605c4444e9d7b50'},
+    #     {u'is_gift': False, u'sender': None, u'sub_plan_name': u'Channel Subscription (ridgure)', u'sub_plan': u'1000',
+    #      u'created_at': u'2018-01-03T23:11:27Z',
+    #      u'user': {u'bio': u'Rocket League/Minecraft', u'display_name': u'Cirekon', u'name': u'cirekon',
+    #                u'created_at': u'2012-07-04T16:10:34Z', u'updated_at': u'2018-11-25T13:14:25Z',
+    #                u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/bca68a9164bd54a1-profile_image-300x300.jpeg',
+    #                u'_id': u'31861174', u'type': u'user'}, u'_id': u'e7879cef043c356c6b99901f3c89d2e32f1d0543'}]}
+
 
 def followers():
-    url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
-    responseFirst100 = requests.get(url100, headers=params).json()
+    try:
+        url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
+        params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+        response = requests.get(url100, headers=params)
+        responseFirst100 = response.json()
+        status = response.status_code
+        if status == 429:
+            print "Too many requests"
 
-    global pagination
-    pagination = responseFirst100['pagination']['cursor']
-    totalFollowers = responseFirst100['total']
-    global followerList
-    followerList = responseFirst100['data']
+        global pagination
+        pagination = responseFirst100['pagination']['cursor']
+        totalFollowers = responseFirst100['total']
+        global followerList
+        followerList = responseFirst100['data']
 
-    # making a list of all the followers
-    for i in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
-        url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
-        response = requests.get(url200, headers=params).json()
-        pagination = response['pagination']['cursor']
-        followerList = followerList + response['data']
+        # making a list of all the followers
+        for i in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
+            url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
+            response = requests.get(url200, headers=params).json()
+            pagination = response['pagination']['cursor']
+            followerList = followerList + response['data']
 
-    return followerList
+        return followerList
+    except Exception, e:
+        pass
 
     # print response
     # returns
@@ -267,7 +322,7 @@ while True:
         data = response.strip("\r\n")
         if True == True:
             try:
-                # Get new follower list
+                # Get new follower list and format it to compare with unfollowers
                 followers()
                 test = []
                 for i in range(len(followerList)):
@@ -286,16 +341,62 @@ while True:
                 # thank new follower and add to existing list
                 if len(newFollowers) > 0:
                     for i in range(len(newFollowers)):
-                        lines.append([newFollowers[i], "", "", ""])
+                        lines.append([newFollowers[i], " ", "1", "", "", ""])
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
                         followerDataWriter.writerows(lines)
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
                     if len(newFollowers) == 1:
-                        message("Thank you for following the channel " + " ".join(newFollowers) + "!")
+                        message("Thank you for following the channel " + " ".join(newFollowers) + "! Type !bat to see the information on your bat")
                     if len(newFollowers) > 1:
-                        message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " + newFollowers[-1] + "!")
+                        message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " + newFollowers[-1] + "! !bat to see the information on your bat")
+
+                # If someone unfollows set follow value to 0
+                for i1 in range(len(unfollowers)):
+                    for i2 in range(len(lines)):
+                        if lines[i2][0] == unfollowers[i1]:
+                            lines[i2][2] = "0"
+
+                # Assign gender
+                for i in range(len(lines)):
+                    if lines[i][4] == "":
+                        maleFemale = random.randint(0, 1)
+                        if maleFemale == 1:
+                            lines[i][4] = 'Female'
+                        else:
+                            lines[i][4] = 'Male'
+
+                maleNames = ['Matrix', 'Fuzz', 'Tiberius', 'Impaler', 'Shrike', 'Vulkan', 'Butch', 'Guano',
+                             'Ripmaw', 'Vamp', 'Nightmare', 'Baxter', 'Azar', 'Lockjaw', 'Booboo', 'Darth',
+                             'Dimitri', 'Blues', 'Moon', 'Shrike', 'Midnight', 'Sonar', 'Flaps', 'Screech',
+                             'Draculon', 'Sabath', 'Angel', 'Vladimir', 'Grey', 'Spuds', 'Dexter', 'Mothra',
+                             'Cole', 'Dimitri', 'Archangel', 'Bruce', 'Drake', 'Comet', 'Spectre', 'Rascal',
+                             'Blade', 'Nyx', 'Basil', 'Char', 'Wingnut', 'Orion', 'Shadow', 'Brutus', 'Ash',
+                             'Lucifer']
+                femaleNames = ['Angel', 'Trixy', 'Ruth', 'Rhyme', 'Rhyme', 'Echo', 'Mirage', 'Flutters',
+                               'Bandetta', 'Giggles', 'Sona', 'Dawnstar', 'Nibbles', 'Harmony', 'Equina',
+                               'Siren', 'Mittens', 'Sage', 'Cookie', 'Dawnstar', 'Moonlight', 'Shine', 'Haze',
+                               'Lady', 'Scarlett', 'Illumina', 'Ivy', 'Morning', 'Abby', 'Sade', 'Aine',
+                               'Shade', 'Velvet', 'Aura', 'Azurys', 'Dot', 'Equinox', 'Twilight', 'Iris',
+                               'Cerulean', 'Star', 'Violet', 'Raine', 'Lucy', 'Nugget', 'Indigo', 'Skye',
+                               'Skylar', 'Morticia']
+
+                # Assign Name
+                for i in range(len(lines)):
+                    try:
+                        if lines[i][3] == "":
+                            if lines[i][4] == 'Male':
+                                randomNumber = random.randint(0, len(maleNames))
+                                maleName = maleNames[randomNumber]
+                                lines[i][3] = maleName
+                            if lines[i][4] == 'Female':
+                                randomNumber = random.randint(0, len(femaleNames))
+                                femaleName = femaleNames[randomNumber]
+                                lines[i][3] = femaleName
+                    except IndexError:
+                        print 'Skipped adding gender. Will add next time this loops'
+                        pass
 
                 # Refresh the total seconds followed per user
                 followAgeAll()
@@ -303,6 +404,70 @@ while True:
                     for i2 in range(len(followerList)):
                         if lines[i][0] == followerList[i2]['from_name']:
                             lines[i][1] = followAgeList[i2][5]
+
+                # Assign color
+                global totalBlackBats, totalBrownBats, totalRedBats
+                global blackBatScore, brownBatScore, redBatScore
+                global percentageBlackBats, percentageRedBats, percentageBrownBrownBats
+                global totalColoredBats
+                totalColoredBats = 0.00
+                totalBlackBats = 0.00
+                totalBrownBats = 0.00
+                totalRedBats = 0.00
+                if lines[1][5] == "":
+                    lines[1][5] = 'Black'
+                if lines[2][5] == "":
+                    lines[2][5] = 'Brown'
+                if lines[3][5] == "":
+                    lines[3][5] = 'Red'
+                try:
+                    for i in range(len(lines)):
+
+                        if totalColoredBats > 2:
+                            percentageBlackBats = float(totalBlackBats / totalColoredBats)
+                            percentageBrownBats = float(totalBrownBats / totalColoredBats)
+                            percentageRedBats = float(totalRedBats / totalColoredBats)
+
+                            blackBatScore = 0.6 - percentageBlackBats
+                            brownBatScore = 0.3 - percentageBrownBats
+                            redBatScore = 0.1 - percentageRedBats
+
+                            # see if list is empty and add value
+                            try:
+                                if lines[i][5] == "":
+                                    if (blackBatScore > brownBatScore) and (blackBatScore > redBatScore):
+                                        lines[i][5] = 'Black'
+                                    if (blackBatScore > brownBatScore) and (blackBatScore == redBatScore):
+                                        lines[i][5] = 'Black'
+                                    if (brownBatScore > blackBatScore) and (brownBatScore > redBatScore):
+                                        lines[i][5] = 'Brown'
+                                    if (brownBatScore > blackBatScore) and (brownBatScore == redBatScore):
+                                        lines[i][5] = 'Brown'
+                                    if (redBatScore > blackBatScore) and (redBatScore > brownBatScore):
+                                        lines[i][5] = 'Red'
+                                    if (redBatScore > blackBatScore) and (redBatScore == brownBatScore):
+                                        lines[i][5] = 'Red'
+                                    if (blackBatScore == brownBatScore) and (brownBatScore == redBatScore):
+                                        lines[i][5] = 'Black'
+                            except Exception, e:
+                                message(str(e))
+
+                        # check for which bat to add next
+                        if lines[i][5] == 'Black':
+                            totalBlackBats = totalBlackBats + 1
+                        if lines[i][5] == 'Brown':
+                            totalBrownBats = totalBrownBats + 1
+                        if lines[i][5] == 'Red':
+                            totalRedBats = totalRedBats + 1
+                        totalColoredBats = totalBlackBats + totalBrownBats + totalRedBats
+
+                except IndexError:
+                    pass
+                except Exception, e:
+                    print message(str(e))
+
+                # After all the editing has been done write back all the lines
+                # I had to write back to a new file and rename it because of lack of memory
                 with open('followerDataNew.csv', "wb") as csvfile:
                     followerDataWriter = csv.writer(csvfile, delimiter=",")
                     followerDataWriter.writerows(lines)
@@ -320,12 +485,12 @@ while True:
                  pass
         if "!commands" in data.lower().split()[3]:
             try:
-                message("My current commands are !fc, !social, !pack, !oclock, !smile, !timemeout, !multipy and !add")
+                message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
             except IndexError:
                 pass
         if "!test" in data.lower().split()[3]:
             try:
-                message(followAgeAll())
+                message(subscribers())
             except IndexError:
                 pass
             except Exception, e:
@@ -352,6 +517,34 @@ while True:
             try:
                 message("Add me on Facebook: Instagram.com/RigidStructure")
             except IndexError:
+                pass
+        if "!bat" in data.lower().split()[3]:
+            try:
+                batInfo = None
+                if data.lower().split()[4]:
+                    for i in range(len(lines)):
+                        if lines[i][0] == data.lower().split()[4]:
+                            batInfo = lines[i]
+                    if batInfo == None:
+                        message("User is not following the channel")
+                    if batInfo[4] == 'Male':
+                        gender = 'He'
+                    if batInfo[4] == 'Female':
+                        gender = 'She'
+                    message(data.split()[4] + "'s bat is called " + batInfo[3] + ". " + gender + " is colored " + batInfo[5].lower())
+                if not data.lower().split()[4]:
+                    for i in range(len(lines)):
+                        if lines[i][0] == sender():
+                            batInfo = lines[i]
+                    if batInfo[4] == 'Male':
+                        gender = 'He'
+                    if batInfo[4] == 'Female':
+                        gender = 'She'
+                    message("Your bat is called " + batInfo[3] + ". " + gender + " is colored " + batInfo[5].lower())
+            except IndexError:
+                pass
+            except Exception, e:
+                print(str(e))
                 pass
         if "!raid" in data.lower().split()[3]:
             try:
@@ -392,6 +585,26 @@ while True:
         if "cobble" in data.lower().split()[2:]:
             try:
                 message("Eww not cobble!")
+            except IndexError:
+                pass
+        if "!namechange" in data.lower().split()[3]:
+            try:
+                with open('followerData.csv', "rb") as csvfile:
+                    followerDataReader = csv.reader(csvfile, delimiter=",")
+                    lines = list(followerDataReader)
+
+                for i in range(len(lines)):
+                    if lines[i][0] == sender():
+                        lines[i][3] = data.split(4)
+                        message("Successfully changed the name of " + sender() + "'s bat to: " + data.split()[4])
+
+
+                with open('followerDataNew.csv', "wb") as csvfile:
+                    followerDataWriter = csv.writer(csvfile, delimiter=",")
+                    followerDataWriter.writerows(lines)
+                os.remove('followerData.csv')
+                os.rename('followerDataNew.csv', 'followerData.csv')
+
             except IndexError:
                 pass
         if "!timemeout" in data.lower().split()[3]:

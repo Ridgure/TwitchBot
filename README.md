@@ -17,7 +17,7 @@
   <a href="#connect">Connect</a>
 </p>
 
-## Key features:
+## Features:
 
 **Commands:**
 
@@ -37,6 +37,7 @@
 !timemeout,
 !twitter
 !uptime
+!namechange
 
 ###### Broadcaster commands:
 !raid

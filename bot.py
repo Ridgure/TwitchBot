@@ -13,74 +13,11 @@ import csv
 from config import *
 from time import sleep
 
-
-date = datetime.date.today()
-
 s = socket.socket()
 s.connect((HOST, PORT))
 s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
 s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
 s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
-
-#This is me trying to make a getter setter function for uptime
-#I feel however like this is just a way to change a global variable. I just want to detect that change...
-#Maybe I do have to use the super complicated observer pattern?
-# the observer pattern seems to be a type of getter setter?
-
-class Square(object):
-    def __init__(self, uptime):
-        self._uptime = uptime
-
-    @property
-    def uptime(self):
-        return self._uptime
-
-    @uptime.setter
-    def uptime(self, value):
-        self._uptime = value
-
-    @uptime.deleter
-    def uptime(self):
-        del self._uptime
-
-class GlobalWealth(object):
-    def __init__(self):
-        self._global_wealth = 10.0
-        self._observers = []
-
-    @property
-    def global_wealth(self):
-        return self._global_wealth
-
-    @global_wealth.setter
-    def global_wealth(self, value):
-        self._global_wealth = value
-        for callback in self._observers:
-            print('announcing change')
-            callback(self._global_wealth)
-
-    def bind_to(self, callback):
-        print('bound')
-        self._observers.append(callback)
-
-
-class Person(object):
-    def __init__(self, data):
-        self.wealth = 1.0
-        self.data = data
-        self.data.bind_to(self.update_how_happy)
-        self.happiness = self.wealth / self.data.global_wealth
-
-    def update_how_happy(self, global_wealth):
-        self.happiness = self.wealth / global_wealth
-
-
-if __name__ == '__main__':
-    data = GlobalWealth()
-    p = Person(data)
-    print(p.happiness)
-    data.global_wealth = 1.0
-    print(p.happiness)
 
 def randomEmote():
     emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
@@ -124,14 +61,30 @@ def lick():
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
 
+
+def nameBat():
+    maleFemale = random.randint(0, 1)
+    maleNames = ['Matrix', 'Fuzz', 'Tiberius', 'Impaler', 'Shrike', 'Vulkan', 'Butch', 'Guano', 'Ripmaw', 'Vamp', 'Nightmare', 'Baxter', 'Azar', 'Lockjaw', 'Booboo', 'Darth', 'Dimitri', 'Blues', 'Moon', 'Shrike', 'Midnight', 'Sonar', 'Flaps', 'Screech', 'Draculon', 'Sabath', 'Angel', 'Vladimir', 'Grey', 'Spuds', 'Dexter', 'Mothra', 'Cole', 'Dimitri', 'Archangel', 'Bruce', 'Drake', 'Comet', 'Spectre', 'Rascal', 'Blade', 'Nyx', 'Basil', 'Char', 'Wingnut', 'Orion', 'Shadow', 'Brutus', 'Ash', 'Lucifer']
+    femaleNames = ['Angel', 'Trixy', 'Ruth', 'Rhyme', 'Rhyme', 'Echo', 'Mirage', 'Flutters', 'Bandetta', 'Giggles', 'Sona', 'Dawnstar', 'Nibbles', 'Harmony', 'Equina', 'Siren', 'Mittens', 'Sage', 'Cookie', 'Dawnstar', 'Moonlight', 'Shine', 'Haze', 'Lady', 'Scarlett', 'Illumina', 'Ivy', 'Morning', 'Abby', 'Sade', 'Aine', 'Shade', 'Velvet', 'Aura', 'Azurys', 'Dot', 'Equinox', 'Twilight', 'Iris', 'Cerulean', 'Star', 'Violet', 'Raine', 'Lucy', 'Nugget', 'Indigo', 'Skye', 'Skylar', 'Morticia']
+    randomMaleNameIndex = random.randint(0, len(maleNames))
+    randomFemaleNameIndex = random.randint(0, len(femaleNames))
+    if maleFemale == 1:
+        maleFemale = 'Female'
+        randomName = femaleNames[randomFemaleNameIndex]
+    else:
+        maleFemale = 'male'
+        randomName = maleNames[randomMaleNameIndex]
+    return [randomName, maleFemale]
+
 def followers():
     url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
     params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
     responseFirst100 = requests.get(url100, headers=params).json()
-    global pagination
 
+    global pagination
     pagination = responseFirst100['pagination']['cursor']
     totalFollowers = responseFirst100['total']
+    global followerList
     followerList = responseFirst100['data']
 
     # making a list of all the followers
@@ -141,7 +94,6 @@ def followers():
         pagination = response['pagination']['cursor']
         followerList = followerList + response['data']
 
-    global followerList
     return followerList
 
     # print response
@@ -153,9 +105,8 @@ def followers():
         # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
 
 def followAgeAll():
-
-    followAgeList = [[] for i in range(len(followerList))]
     global followAgeList
+    followAgeList = [[] for i in range(len(followerList))]
 
     for i in xrange(len(followerList)):
 

@@ -61,17 +61,12 @@ Clone this repo to your local machine using ```https://github.com/Ridgure/Twitch
 In order to be able to run the bot add a file config.py that looks something like this and go through the steps below:
 
 ```
-HOST = "irc.twitch.tv"                                  # the Twitch IRC server
-PORT = 6667                                             # always use port 6667!
-NICK = "riboture"                                       # your bots Twitch username, lowercase
-PASS = "<insert Oauth here>"                            # your Twitch OAuth token
-CHAN = "#ridgure"                                       # the channel you want to join
-
-User_ID_ridgure = "106586349"
-User_ID_riboture = "109949586"
-User_ID_princess___lissy = "124936690"
-Client_ID = "<Insert client id here>"
-Client_Secret = "<Insert client secret here>"
+Host = "irc.twitch.tv"           # The Twitch IRC server
+Port = 6667                      # Always use port 6667!
+Nickname = "<Name>"              # The name of your bot, lowercase
+Token = "<Token>"                # your Twitch token
+Channel = "#<Channel>"           # The channel you want to join, lowercase
+ClientID = "<ClientID>"          # The client ID of your bot
 ```
 
 - Create a Twitch account with the name of your bot
@@ -81,7 +76,16 @@ Client_Secret = "<Insert client secret here>"
   - Set the application directory to Chat Bot
   - Agree to the terms and conditions
   - Get a Client_ID and a Client_Secret
-- generate an Oauth at this address https://twitchapps.com/tmi/
+- Generate an Authentication token 
+  - Go to the link underneath 
+  - Remember to swap out <clientID> with your client id!
+  - Click Authenticate
+  - It will look like you got a blank page but your url should look like the second url
+  - Your access token is the gibberish where it says <Token> in the url 
+```
+https://id.twitch.tv/oauth2/authorize?client_id=<clientID>&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login
+http://localhost/#access_token=<Token>&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login&token_type=bearer
+```
 
 **Prerequisites**
 

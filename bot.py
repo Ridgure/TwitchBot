@@ -15,10 +15,10 @@ from time import sleep
 from decimal import *
 
 s = socket.socket()
-s.connect((HOST, PORT))
-s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
-s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
-s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
+s.connect((Host, Port))
+s.send("PASS {}\r\n".format("oauth:" + Token).encode("utf-8"))
+s.send("NICK {}\r\n".format(Nickname).encode("utf-8"))
+s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
 
 def randomEmote():
     emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
@@ -64,7 +64,7 @@ def lick():
 
 def subscribers():
     # url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
-    # params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS, "Accept": "application/vnd.twitchtv.v5+json"}
+    # params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token, "Accept": "application/vnd.twitchtv.v5+json"}
     # response = requests.get(url, headers=params).json()
 
     # responds
@@ -93,10 +93,10 @@ def subscribers():
     # u'profile_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-profile_banner-aab842adb656bc98-480.png'}
 
     # Use this url for getting the token
-    # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + Client_ID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription"
+    # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + ClientID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_edit+channel_moderate+chat_login"
 
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": Client_ID, "Authorization": "OAuth " + OPPASS, "limit": "100"}
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token, "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
         print "Too many subscriber requests"
@@ -133,7 +133,7 @@ def subscribers():
 def followers():
     try:
         url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-        params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+        params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 429:
@@ -240,7 +240,7 @@ def followAgeAll():
 
 def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
-    params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
+    params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token}
     response = requests.get(url, headers=params).json()
     StreamStart = response['data'][0]
     # print response
@@ -320,7 +320,7 @@ while True:
     try:
         def message(msg):
             try:
-                s.send("PRIVMSG " + CHAN + " :" + msg + "\n")
+                s.send("PRIVMSG " + Channel + " :" + msg + "\n")
             except IndexError:
                 pass
         response = s.recv(1024).decode("utf-8")
@@ -586,7 +586,7 @@ while True:
                 pass
         if "!raid" in data.lower().split()[3]:
             try:
-                if sender().lower() == CHAN[1:]:
+                if sender().lower() == Channel[1:]:
                     message("Please raid Twitch.tv/" + data.split()[4] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
                 else:
                     pass

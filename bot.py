@@ -730,13 +730,13 @@ while True:
             username = re.search(r"\w+", response).group(0) # return the entire match
             message = CHAT_MSG.sub("", response)
             try:
-                f = open("Output.txt", "a")
+                f = open("output.txt", "a")
                 f.write(username + ": " + message)
                 f.close()
-                f = open("Output.txt", "r")
+                f = open("output.txt", "r")
                 lines = f.readlines()
                 f.close()
-                f = open("Output.txt", "w")
+                f = open("output.txt", "w")
                 displayedLines = 20
                 if len(lines) > displayedLines:
                     backlog = len(lines) - displayedLines

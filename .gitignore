@@ -5,3 +5,4 @@ config.py
 *.pyc
 subscriberData.csv
 followerData.csv
+output.txt

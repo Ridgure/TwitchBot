@@ -3,3 +3,5 @@
 venv/
 config.py
 *.pyc
+subscriberData.csv
+followerData.csv

@@ -96,12 +96,17 @@ def subscribers():
     # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + Client_ID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription"
 
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {'Accept': 'application/vnd.twitchtv.v5+json', "Client-ID": Client_ID, "Authorization": 'OAuth ' + OPPASS}
-    response = requests.get(url, headers=params, allow_redirects=True).json()
-    print response
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": Client_ID, "Authorization": "OAuth " + OPPASS, "limit": "100"}
+    response = requests.get(url, headers=params, allow_redirects=True)
+    if response.status_code == 429:
+        print "Too many subscriber requests"
+    global subscriberResponse
+    subscriberResponse = response.json()
+    return subscriberResponse
 
     # returns
-    # {u'_total': 3, u'subscriptions': [
+    # {u'_total': 3,
+    # u'subscriptions': [
     #     {u'is_gift': False, u'sender': None, u'sub_plan_name': u'Channel Subscription (ridgure)', u'sub_plan': u'1000',
     #      u'created_at': u'2017-06-28T19:23:44Z', u'user': {
     #         u'bio': u'Just a start up streamer who does a bit of youtube while still working and going to college',
@@ -121,7 +126,8 @@ def subscribers():
     #      u'user': {u'bio': u'Rocket League/Minecraft', u'display_name': u'Cirekon', u'name': u'cirekon',
     #                u'created_at': u'2012-07-04T16:10:34Z', u'updated_at': u'2018-11-25T13:14:25Z',
     #                u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/bca68a9164bd54a1-profile_image-300x300.jpeg',
-    #                u'_id': u'31861174', u'type': u'user'}, u'_id': u'e7879cef043c356c6b99901f3c89d2e32f1d0543'}]}
+    #                u'_id': u'31861174', u'type': u'user'}, u'_id': u'e7879cef043c356c6b99901f3c89d2e32f1d0543'}
+    #  ]}
 
 
 def followers():
@@ -130,9 +136,8 @@ def followers():
         params = {"Client-ID" : ""+ Client_ID +"", "Authorization": PASS}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
-        status = response.status_code
-        if status == 429:
-            print "Too many requests"
+        if response.status_code == 429:
+            print "Too many follower requests"
 
         global pagination
         pagination = responseFirst100['pagination']['cursor']
@@ -330,6 +335,8 @@ while True:
                 test = map(str.strip, test)
 
                 # Get existing follower list
+                if not os.path.exists('followerData.csv'):
+                    open('followerData.csv', "w+").close()
                 with open('followerData.csv', "rb") as csvfile:
                     followerDataReader = csv.reader(csvfile, delimiter=",")
                     lines = list(followerDataReader)
@@ -341,7 +348,7 @@ while True:
                 # thank new follower and add to existing list
                 if len(newFollowers) > 0:
                     for i in range(len(newFollowers)):
-                        lines.append([newFollowers[i], " ", "1", "", "", ""])
+                        lines.append([newFollowers[i], "", "1", "", "", "", ""])
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
                         followerDataWriter.writerows(lines)
@@ -450,7 +457,8 @@ while True:
                                     if (blackBatScore == brownBatScore) and (brownBatScore == redBatScore):
                                         lines[i][5] = 'Black'
                             except Exception, e:
-                                message(str(e))
+                                print "could not decide bat color"
+                                print(str(e))
 
                         # check for which bat to add next
                         if lines[i][5] == 'Black':
@@ -464,20 +472,51 @@ while True:
                 except IndexError:
                     pass
                 except Exception, e:
-                    print message(str(e))
+                    print "could not add bat color"
+                    print (str(e))
+
+                # Check if subscriber or not.
+                subscribers()
+                for i1 in range(len(lines)):
+                    for i2 in range(len(subscriberResponse['subscriptions'])):
+                        if lines[i1][0] == subscriberResponse['subscriptions'][i2]['user']['display_name']:
+                            lines[i1][6] = 1
+                        if not lines[i1][0] == subscriberResponse['subscriptions'][i2]['user']['display_name']:
+                            if not lines[i1][6] == "IsSubscriber":
+                                lines[i1][6] = 0
 
                 # After all the editing has been done write back all the lines
                 # I had to write back to a new file and rename it because of lack of memory
+
+                if not os.path.exists('followerDataNew.csv'):
+                    open('followerDataNew.csv', "w+").close()
                 with open('followerDataNew.csv', "wb") as csvfile:
                     followerDataWriter = csv.writer(csvfile, delimiter=",")
                     followerDataWriter.writerows(lines)
                 os.remove('followerData.csv')
                 os.rename('followerDataNew.csv', 'followerData.csv')
+
+                # open the subsciber file to get the lines to the Sub file
+                if not os.path.exists('subscriberData.csv'):
+                    open('subscriberData.csv', "w+").close()
+                with open('subscriberData.csv', "rb") as csvfile:
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+
+
+
+                # write back any changes to a the subscriber file
+                with open('subscriberDataNew.csv', "wb") as csvfile:
+                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                    subscriberDataWriter.writerows(subscriberLines)
+                os.remove('subscriberData.csv')
+                os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+
             except IndexError:
                 pass
             except Exception, e:
-                message("Batcave is caving in")
-                message(str(e))
+                print("while true events error")
+                print(str(e))
         if response == "PING :tmi.twitch.tv\r\n":
             try:
                 s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
@@ -523,7 +562,7 @@ while True:
                 batInfo = None
                 if data.lower().split()[4]:
                     for i in range(len(lines)):
-                        if lines[i][0] == data.lower().split()[4]:
+                        if lines[i][0].lower() == data.lower().split()[4]:
                             batInfo = lines[i]
                     if batInfo == None:
                         message("User is not following the channel")
@@ -544,7 +583,6 @@ while True:
             except IndexError:
                 pass
             except Exception, e:
-                print(str(e))
                 pass
         if "!raid" in data.lower().split()[3]:
             try:

@@ -596,6 +596,19 @@ while True:
                 subscriberList = map(str.strip, subscriberList)
 
                 newSubscribers = [item for item in subscriberList if item not in [i[0] for i in subscriberLines[1:]]]
+                newGiftedSubscribers = []
+                newGifters = []
+                newSelfSubscribers = []
+                for i1 in range(len(newSubscribers)):
+                        for i2 in range(len(subscriberResponse['subscriptions'])):
+                            subscriberName = subscriberResponse['subscriptions'][i2]['user']['display_name'].lower()
+                            if subscriberName == newSubscribers[i1].lower():
+                                if subscriberResponse['subscriptions'][i2]['is_gift'] == False:
+                                    newSelfSubscribers.append(newSubscribers[i1])
+                                if subscriberResponse['subscriptions'][i2]['is_gift'] == True:
+                                    newGiftedSubscribers.append(newSubscribers[i1])
+                                    newGifters.append(subscriberResponse['subscriptions'][i2]['sender'].encode('ascii', 'ignore'))
+
                 unSubscribers = [item for item in [i[0] for i in subscriberLines[1:]] if item not in subscriberList]
 
                 if len(newSubscribers) > 0:
@@ -604,15 +617,25 @@ while True:
                             ["Username", "SubStreak", "SubTier", "Elf1", "ElfGender1", "Elf2", "ElfGender2", "Elf3",
                              "ElfGender3", "Elf4", "ElfGender4", "Elf5", "ElfGender5", "Elf6", "ElfGender6", "LastName",
                              "IsSubscriber"])
-                    print subscriberLines
                     for i1 in range(len(newSubscribers)):
                         subscriberLines.append([newSubscribers[i1]] + ([""] * 16))
-                    if len(newSubscribers) == 1:
-                        message("Thank you for subscribing" + " ".join(newSubscribers) + "! Type !elf to see your elf's information")
-                    if len(newSubscribers) > 1:
-                        message("Thank you for the subscriptions " + ", ".join(newSubscribers[0:-1]) + " and " + newSubscribers[-1] + "! Type !elf to see your elf's information")
+                    if len(newSelfSubscribers) == 1:
+                        message("Thank you for subscribing" + " ".join(newSelfSubscribers) + "! Type !elf to see your elf's information")
+                    if len(newSelfSubscribers) > 1:
+                        message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " + newSelfSubscribers[-1] + "! Type !elf to see your elf's information")
+                    if len(newGiftedSubscribers) == 1:
+                        message(newGifters + " has given a subscription to " + " ".join(newGiftedSubscribers) + "! Type !elf to see your elf's information")
+                    if len(newGifters) == 1:
+                        if len(newGiftedSubscribers) > 1:
+                            message(" ".join(newGifters) + "Has gifted a sub to the lucky " + ", ".join(newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[-1] + "! Type !elf to see your elf's information")
+                    if len(newGifters) > 1:
+                        if len(newGiftedSubscribers) > 1:
+                            message(" ".join(newGifters) + "have gifted " + str(
+                                len(newGiftedSubscribers)) + " subs in total to the lucky " + ", ".join(
+                                newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[
+                                        -1] + "! Type !elf to see your elf's information")
 
-                # Set Subtier
+                # Thank for upgrading and set Subtier
                 for i1 in range(len(subscriberLines)):
                     for i2 in range(len(subscriberResponse['subscriptions'])):
                         if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') == subscriberLines[i1][0]:

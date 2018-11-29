@@ -37,7 +37,13 @@
 !timemeout,
 !twitter
 !uptime
-!namechange
+!bat
+!batnamechange
+!elfnamechange
+!elfgenderchange
+
+###### Subscriber commands:
+!elf
 
 ###### Broadcaster commands:
 !raid

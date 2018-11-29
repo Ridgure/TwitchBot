@@ -53,7 +53,7 @@ elfNameMale = [
                 "Horith", "Hubyr", "Iarmenor", "Iefyr", "Ievos", "Ilbryn", "Iliven",
                 "Ilthuryn", "Inarie", "Inchel", "Inialos", "Injros", "Intevar", "Iolas",
                 "assin", "Jhaan", "Jhaartael", "Jhaeros", "Kelkalyn", "Kevan", "Klaern",
-                "Kolvar", "Kuornos", "Kuskyn", "Kymil", "Kyrenic", "Kyrtaar", "Legolas",
+                "Kolvar", "Kuornos", "Kuskyn", "Kymil", "Kyrenic", "Kyrtaar",
                 "lrune", "Maiele", "Mithrandir", "Molonym", "Molostroi", "Montagor",
                 "Morgan", "Morthil", "Myrddin", "Myriil", "Myrin", "Mythanthar", "Naertho",
                 "Naeryndam", "Napraeleon", "Narbeth", "Nardual", "Nelaeryn", "Neldor",
@@ -66,8 +66,13 @@ elfNameMale = [
                 "Taerntym", "Tamnaeuth", "Tannivh", "Tassarion", "Tehlmar", "Therona",
                 "Thingol", "Thranduil", "Toross", "Travaran", "Triandal", "Turgon",
                 "Usunaar", "Uthorim", "Vaalyun", "Vaegon", "Vaeril", "Venrie", "Virjeon",
-                "Yhendorn", "Ylyndar", "Zabbas", "Zaltarish"
+                "Yhendorn", "Ylyndar", "Zabbas", "Zaltarish",
             ]
+elfNameAndrogynous = ["Alva", "Aubrey", "Avery", "Cindertine", "Elowen", "Aelinor", "Akash",
+                      "Alais", "Baelen", "Elwing", "Gaerradh", "Keya", "Nuovis", "Aithlin",
+                      "Círdan", "Corym", "Dior", "Elaran", "Erolith", "Ievos", "Inarie", "Kelkalyn",
+                      "Maiele", "Morgan", "Myrin", "Sharian", "Therona"
+                      ]
 elfLastNames = [
                 "Adanell", "Aelasar", "Aelorothi", "Aendryr", "Aerasumé", "Aeravansel",
                 "Aldaval", "Aloiene", "Alqualonde", "Amaratharr", "Amarthen", "Ammath",

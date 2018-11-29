@@ -525,59 +525,77 @@ while True:
                 for i1 in range(len(subscriberLines)):
                     if subscriberLines[i1][2] == "1":
                         if subscriberLines[i1][4] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][4] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][4] = 'Male'
                     if subscriberLines[i1][2] == "2":
                         if subscriberLines[i1][4] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][4] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][4] = 'Male'
                         if subscriberLines[i1][6] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][6] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][6] = 'Male'
                     if subscriberLines[i1][2] == "3":
                         if subscriberLines[i1][4] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][4] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][4] = 'Male'
                         if subscriberLines[i1][6] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][6] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][6] = 'Male'
                         if subscriberLines[i1][8] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][8] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][8] = 'Male'
                         if subscriberLines[i1][10] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][10] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][10] = 'Male'
                         if subscriberLines[i1][12] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][12] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][12] = 'Male'
                         if subscriberLines[i1][14] == "":
-                            maleFemale = random.randint(0, 1)
+                            maleFemale = random.randint(0, 2)
                             if maleFemale == 1:
                                 subscriberLines[i1][14] = 'Female'
+                            if maleFemale == 2:
+                                subscriberLines[i1][4] = 'Androgynous'
                             else:
                                 subscriberLines[i1][14] = 'Male'
 
@@ -594,6 +612,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNameMale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][3] = femaleName
+                                if subscriberLines[i][4] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][3] = androgynousName
                         if subscriberLines[i][2] == "2":
                             if subscriberLines[i][3] == "":
                                 if subscriberLines[i][4] == 'Male':
@@ -604,6 +626,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][3] = femaleName
+                                if subscriberLines[i][4] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][3] = androgynousName
                             if subscriberLines[i][5] == "":
                                 if subscriberLines[i][6] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -613,6 +639,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][5] = femaleName
+                                if subscriberLines[i][6] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][5] = androgynousName
                         if subscriberLines[i][2] == "3":
                             if subscriberLines[i][3] == "":
                                 if subscriberLines[i][4] == 'Male':
@@ -623,6 +653,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][3] = femaleName
+                                if subscriberLines[i][4] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][3] = androgynousName
                             if subscriberLines[i][5] == "":
                                 if subscriberLines[i][6] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -632,6 +666,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][5] = femaleName
+                                if subscriberLines[i][6] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][5] = androgynousName
                             if subscriberLines[i][7] == "":
                                 if subscriberLines[i][8] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -641,6 +679,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][7] = femaleName
+                                if subscriberLines[i][8] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][7] = androgynousName
                             if subscriberLines[i][9] == "":
                                 if subscriberLines[i][10] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -650,6 +692,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][9] = femaleName
+                                if subscriberLines[i][10] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][9] = androgynousName
                             if subscriberLines[i][11] == "":
                                 if subscriberLines[i][12] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -659,6 +705,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][11] = femaleName
+                                if subscriberLines[i][12] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][11] = androgynousName
                             if subscriberLines[i][13] == "":
                                 if subscriberLines[i][14] == 'Male':
                                     randomNumber = random.randint(0, len(elfNameMale))
@@ -668,6 +718,10 @@ while True:
                                     randomNumber = random.randint(0, len(elfNamesFemale))
                                     femaleName = elfNamesFemale[randomNumber]
                                     subscriberLines[i][13] = femaleName
+                                if subscriberLines[i][14] == 'Androgynous':
+                                    randomNumber = random.randint(0, len(elfNameAndrogynous))
+                                    androgynousName = elfNameAndrogynous[randomNumber]
+                                    subscriberLines[i][13] = androgynousName
                         if subscriberLines[i][15] == "":
                             randomNumber = random.randint(0, len(elfLastNames))
                             elfLastName = elfLastNames[randomNumber]
@@ -768,6 +822,8 @@ while True:
                         gender = 'His'
                     if elfInfo[4] == 'Female':
                         gender = 'Her'
+                    if elfInfo[4] == 'Androgynous':
+                        gender = 'Their'
                     if elfInfo[2] == "1":
                         message(
                             data.split()[4] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[3] + " " +
@@ -792,6 +848,8 @@ while True:
                         gender = 'His'
                     if elfInfo[4] == 'Female':
                         gender = 'Her'
+                    if elfInfo[4] == 'Androgynous':
+                        gender = 'Their'
                     if elfInfo[2] == "1":
                         message(
                             "Your bat morphed into 1 elf. " + gender + " name is " + elfInfo[3] + " " + elfInfo[15])
@@ -851,7 +909,7 @@ while True:
                 message("Eww not cobble!")
             except IndexError:
                 pass
-        if "!namechange" in data.lower().split()[3]:
+        if "!batnamechange" in data.lower().split()[3]:
             try:
                 with open('followerData.csv', "rb") as csvfile:
                     followerDataReader = csv.reader(csvfile, delimiter=",")

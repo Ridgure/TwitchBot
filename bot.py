@@ -348,6 +348,9 @@ while True:
 
                 # thank new follower and add to existing list
                 if len(newFollowers) > 0:
+                    if len(lines) == 0:
+                        lines.append(
+                            ["Username", "FollowLength", "IsFollower", "BatName", "BatGender", "BatColor", "IsSubscriber"])
                     for i in range(len(newFollowers)):
                         lines.append([newFollowers[i], "", "1", "", "", "", ""])
                     with open('followerDataNew.csv', "wb") as csvfile:
@@ -464,12 +467,12 @@ while True:
                 # Check if subscriber or not.
                 subscribers()
                 for i1 in range(len(lines)):
+                    lines[i1][6] = 0
+                for i1 in range(len(lines)):
                     for i2 in range(len(subscriberResponse['subscriptions'])):
-                        if lines[i1][0] == subscriberResponse['subscriptions'][i2]['user']['display_name']:
+                        if lines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user']['display_name'].lower():
                             lines[i1][6] = 1
-                        if not lines[i1][0] == subscriberResponse['subscriptions'][i2]['user']['display_name']:
-                            if not lines[i1][6] == "IsSubscriber":
-                                lines[i1][6] = 0
+
 
                 # After all the editing has been done write back all the lines
                 # I had to write back to a new file and rename it because of lack of memory
@@ -499,8 +502,14 @@ while True:
                 unSubscribers = [item for item in [i[0] for i in subscriberLines[1:]] if item not in subscriberList]
 
                 if len(newSubscribers) > 0:
+                    if len(subscriberLines) == 0:
+                        subscriberLines.append(
+                            ["Username", "SubStreak", "SubTier", "Elf1", "ElfGender1", "Elf2", "ElfGender2", "Elf3",
+                             "ElfGender3", "Elf4", "ElfGender4", "Elf5", "ElfGender5", "Elf6", "ElfGender6", "LastName",
+                             "IsSubscriber"])
+                    print subscriberLines
                     for i1 in range(len(newSubscribers)):
-                            subscriberLines.append([newSubscribers[i1]] + ([""] * 15))
+                        subscriberLines.append([newSubscribers[i1]] + ([""] * 16))
                     if len(newSubscribers) == 1:
                         message("Thank you for subscribing" + " ".join(newSubscribers) + "! Type !elf to see your elf's information")
                     if len(newSubscribers) > 1:
@@ -729,6 +738,15 @@ while True:
                     except IndexError:
                         print 'Skipped adding elf name or gender. Will add next time this loops'
                         pass
+
+                # Check if subscriber or not.
+                for i1 in range(len(subscriberLines)):
+                    if not subscriberLines[i1][16] == "IsSubscriber":
+                        subscriberLines[i1][16] = 0
+                for i1 in range(len(subscriberLines)):
+                    for i2 in range(len(subscriberResponse['subscriptions'])):
+                        if subscriberLines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user']['display_name'].lower():
+                            subscriberLines[i1][16] = 1
 
                 # write back any changes to a the subscriber file
                 with open('subscriberDataNew.csv', "wb") as csvfile:

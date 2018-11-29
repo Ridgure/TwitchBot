@@ -239,6 +239,103 @@ def followAgeAll():
     return followAgeList
 
 
+def months_between(date1,date2):
+    if date1 > date2:
+        date1, date2 = date2, date1
+    m1 = date1.year*12+date1.month
+    m2 = date2.year*12+date2.month
+    months = m2-m1
+    if date1.day > date2.day:
+        months -= 1
+    elif date1.day == date2.day:
+        seconds1 = date1.hour*3600+date1.minute+date1.second
+        seconds2 = date2.hour*3600+date2.minute+date2.second
+        if seconds1 > seconds2:
+            months -= 1
+    return months
+
+# date1 = dt.datetime.strptime('2011-08-15 12:00:00', '%Y-%m-%d %H:%M:%S')
+# date2 = dt.datetime.strptime('2012-02-15', '%Y-%m-%d')
+# print(months_between(date1,date2))
+
+def subscribeAgeAll():
+    global subscribeAgeList
+    subscribeAgeList = [[] for i in range(len(subscriberResponse['subscriptions']))]
+
+    for i in xrange(len(subscriberResponse['subscriptions'])):
+
+        # Get subscribe Day Month Year
+        m = re.search('(.+?)T', subscriberResponse['subscriptions'][i]['created_at'])
+        subscribeDate = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?)-', subscribeDate)
+        subscribeYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', subscribeDate)
+        subscribeMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', subscribeDate)
+        subscribeDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', subscribeDay)
+        subscribeDay = m.group(1).encode('ascii', 'ignore')
+
+        # Get subscribe Hour Minute Second
+        m = re.search('T(.+?)Z', subscriberResponse['subscriptions'][i]['created_at'])
+        subscribeTime = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?):', subscribeTime)
+        subscribeHour = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.+?):', subscribeTime)
+        subscribeMinute = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', subscribeTime)
+        subscribeSecond = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', subscribeSecond)
+        subscribeSecond = m.group(1).encode('ascii', 'ignore')
+
+        # Get current Day Month Year
+        currentDate = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+        m = re.search('(.+?)-', currentDate)
+        currentYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', currentDate)
+        currentMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', currentDate)
+        currentDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', currentDay)
+        currentDay = m.group(1).encode('ascii', 'ignore')
+
+        # Get current Hour Minute Second
+        currentTime = datetime.datetime.utcnow().strftime("%H:%M:%S")
+        m = re.search('(.+?):', currentTime)
+        currentHour = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.+?):', currentTime)
+        currentMinute = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', currentTime)
+        currentSecond = m.group(1).encode('ascii', 'ignore')
+        m = re.search(':(.*)', currentSecond)
+        currentSecond = m.group(1).encode('ascii', 'ignore')
+
+        # Compare subscribe with current
+        subscribeDate = datetime.date(int(subscribeYear), int(subscribeMonth), int(subscribeDay))
+        subscribeDateTime = datetime.datetime.combine(subscribeDate, datetime.time(int(subscribeHour), int(subscribeMinute), int(subscribeSecond), 0,  tzinfo=None))
+        currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
+        currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
+        deltaDate = currentDateTime - subscribeDateTime
+        deltaHours = int(math.floor(deltaDate.seconds / 3600))
+        deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
+        deltaSeconds = int(deltaDate.seconds - (deltaHours * 3600) - (deltaMinutes * 60))
+
+        # Return array
+        subscribeAgeList[i].insert(0, str(deltaDate))
+        subscribeAgeList[i].insert(1, deltaDate.days)
+        subscribeAgeList[i].insert(2, deltaHours)
+        subscribeAgeList[i].insert(3, deltaMinutes)
+        subscribeAgeList[i].insert(4, deltaSeconds)
+        subscribeAgeList[i].insert(5, deltaDate.seconds)
+        subscribeAgeList[i].insert(6, subscribeDateTime)
+
+        date1 = datetime.datetime.strptime(str(subscribeYear) + "-" + str(subscribeMonth) + "-" + str(subscribeDay) + " " + str(subscribeHour) + ":" + str(subscribeMinute) + ":" + str(subscribeSecond), '%Y-%m-%d %H:%M:%S')
+        date2 = datetime.datetime.strptime(str(currentYear) + "-" + str(currentMonth) + "-" + str(currentDay) + " " + str(currentHour) + ":" + str(currentMinute) + ":" + str(currentSecond), '%Y-%m-%d %H:%M:%S')
+        subscribeAgeList[i].append(months_between(date1, date2))
+        subscribeAgeList[i].append(subscriberResponse['subscriptions'][i]['user']['display_name'])
+    return subscribeAgeList
+
+
 def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token}
@@ -748,6 +845,16 @@ while True:
                         if subscriberLines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user']['display_name'].lower():
                             subscriberLines[i1][16] = 1
 
+                # Add length since subscription
+                subscribeAgeAll()
+                print subscribeAgeList
+                for i1 in range(len(subscriberLines)):
+                    for i2 in range(len(subscribeAgeList)):
+                        if not subscriberLines[i1][1] == "SubStreak":
+                            subscriberName = subscribeAgeList[i2][8].lower()
+                            if subscriberLines[i1][0].lower() == subscriberName.encode('ascii', 'ignore'):
+                                subscriberLines[i1][1] = subscribeAgeList[i2][7]
+
                 # write back any changes to a the subscriber file
                 with open('subscriberDataNew.csv', "wb") as csvfile:
                     subscriberDataWriter = csv.writer(csvfile, delimiter=",")
@@ -772,7 +879,8 @@ while True:
                 pass
         if "!test" in data.lower().split()[3]:
             try:
-                message(subscribers())
+                subscribers()
+                message(subscribeAgeAll())
             except IndexError:
                 pass
             except Exception, e:

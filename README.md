@@ -48,13 +48,16 @@
 **Automated functions:**
 
 Follower notification,
-Text to file, Cobble
+Subscriber notification,
+Output last 20 messages in chat to a file, 
+"Eww cobble" every time cobble is mentioned. 
 
 ## Getting started
 
 **Clone**
 
-Clone this repo to your local machine using ```https://github.com/Ridgure/TwitchBot.git```
+Clone this repository to your local machine using 
+```git clone https://github.com/Ridgure/TwitchBot.git```
 
 **Setup**
 
@@ -91,9 +94,9 @@ http://localhost/#access_token=<Token>&scope=channel_subscriptions+user_read+cha
 
 You will need to install these things to run the bot
 
-- Python 2.7.14
+- [Python 2.7.x](https://www.python.org/downloads/)
 - Libraries:
-  - Requests
+  - [Requests](http://docs.python-requests.org/en/master/user/install/)
   
 **Running the bot**
 
@@ -107,10 +110,13 @@ python bot.py
 
 This whole project started off with this [Instructables article](https://www.instructables.com/id/Twitchtv-Moderator-Bot/)
 
-Other interesting projects to check out:
+**Other interesting projects to check out:**
 
 [PythonBot](https://github.com/ZERG3R/PythonBot) by ZERG3R on Twitch as [ZERG3R](https//:twitch.tv/ZERG3R)
 
+Ponderier by DillonEA on Twitch as [DillonEA](https//:twitch.tv/DillonEA)
+
+[Xekeism](https://www.xekeland.com/) by XekeDeath on Twitch as [XekeDeath](https//:twitch.tv/DillonEA)
 
 ## Connect:
 

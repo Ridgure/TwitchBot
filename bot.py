@@ -977,6 +977,59 @@ while True:
             except Exception, e:
                 message("followage failed")
                 message(str(e))
+        if "!elfnamechange" in data.lower().split()[3]:
+            try:
+                owner = False
+                for i1 in range(len(subscriberLines)):
+                    for i2 in range(len(subscriberLines[i1])):
+                        if subscriberLines[i1][0].lower() == sender().lower():
+                            if data.lower().split()[4] == subscriberLines[i1][i2].lower():
+                                with open('subscriberData.csv', "rb") as csvfile:
+                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                    subscriberLines = list(subscriberDataReader)
+                                subscriberLines[i1][i2] = data.split()[7]
+                                subscriberLines[i1][15] = data.split()[8]
+                                message("Successfully changed the name of " + data.split()[4] + " " + data.split()[
+                                        5] + " to " + data.split()[7] + " " + subscriberLines[i1][15])
+                                with open('subscriberDataNew.csv', "wb") as csvfile:
+                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                    subscriberDataWriter.writerows(subscriberLines)
+                                os.remove('subscriberData.csv')
+                                os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                owner = True
+                if owner == False:
+                    message("You cannot change the name of other people's elves")
+            except IndexError:
+                message("Did you remember to write '!elfnamechange firstName lastname to first name lastname'?")
+                print "elfnamechange failed"
+        if "!elfgenderchange" in data.lower().split()[3]:
+            try:
+                owner = False
+                for i1 in range(len(subscriberLines)):
+                    for i2 in range(len(subscriberLines[i1])):
+                        if subscriberLines[i1][0].lower() == sender().lower():
+                            if data.lower().split()[4] == subscriberLines[i1][i2].lower():
+                                with open('subscriberData.csv', "rb") as csvfile:
+                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                    subscriberLines = list(subscriberDataReader)
+                                genderIndex = (int(i2) + 1)
+                                if data.split()[6] == "Male" or data.split()[6] == "Female" or data.split()[6] == "Androgynous":
+                                    message("Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
+                                            subscriberLines[i1][genderIndex] + " to " + data.split()[6])
+                                    subscriberLines[i1][genderIndex] = data.split()[6]
+                                else:
+                                    message("The gender can only be Male, Female or Androgynous")
+                                with open('subscriberDataNew.csv', "wb") as csvfile:
+                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                    subscriberDataWriter.writerows(subscriberLines)
+                                os.remove('subscriberData.csv')
+                                os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                owner = True
+                if owner == False:
+                    message("You cannot change the gender of other people's elves")
+            except IndexError:
+                message("Did you remember to write '!elfgenderchange firstName to gender'?")
+                print "elfnamechange failed"
         if "!smile" in data.lower().split()[3]:
             try:
                 message(sender() + " smiles at " + data.split()[4] + " " + randomEmote())

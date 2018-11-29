@@ -449,7 +449,7 @@ while True:
                         lines.append(
                             ["Username", "FollowLength", "IsFollower", "BatName", "BatGender", "BatColor", "IsSubscriber"])
                     for i in range(len(newFollowers)):
-                        lines.append([newFollowers[i], "", "1", "", "", "", ""])
+                        lines.append([newFollowers[i], "", "", "", "", "", ""])
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
                         followerDataWriter.writerows(lines)
@@ -465,6 +465,11 @@ while True:
                     for i2 in range(len(lines)):
                         if lines[i2][0] == unfollowers[i1]:
                             lines[i2][2] = "0"
+                # If someone follows set follow value to 1
+                for i1 in range(len(lines)):
+                    for i2 in range(len(followerList)):
+                        if lines[i1][0] == followerList[i2]['from_name'].rstrip():
+                            lines[i1][2] = "1"
 
                 # Assign gender
                 for i in range(len(lines)):
@@ -495,7 +500,7 @@ while True:
                 followAgeAll()
                 for i in range(len(lines)):
                     for i2 in range(len(followerList)):
-                        if lines[i][0] == followerList[i2]['from_name']:
+                        if lines[i][0] == followerList[i2]['from_name'].rstrip():
                             lines[i][1] = followAgeList[i2][5]
 
                 # Assign color
@@ -870,7 +875,6 @@ while True:
 
                 # Add length since subscription
                 subscribeAgeAll()
-                print subscribeAgeList
                 for i1 in range(len(subscriberLines)):
                     for i2 in range(len(subscribeAgeList)):
                         if not subscriberLines[i1][1] == "SubStreak":

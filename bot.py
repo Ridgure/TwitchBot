@@ -937,27 +937,35 @@ while True:
                 pass
         if "!bat" in data.lower().split()[3]:
             try:
-                batInfo = None
-                if len(data.lower().split()) == 5:
-                    for i in range(len(lines)):
-                        if lines[i][0].lower() == data.lower().split()[4]:
-                            batInfo = lines[i]
-                    if batInfo == None:
-                        message("User is not following the channel")
-                    if batInfo[4] == 'Male':
-                        gender = 'He'
-                    if batInfo[4] == 'Female':
-                        gender = 'She'
-                    message(data.split()[4] + "'s bat is called " + batInfo[3] + ". " + gender + " is colored " + batInfo[5].lower())
-                if not len(data.lower().split()) == 4:
+                if len(data.lower().split()) == 4:
                     for i in range(len(lines)):
                         if lines[i][0] == sender():
-                            batInfo = lines[i]
-                    if batInfo[4] == 'Male':
-                        gender = 'He'
-                    if batInfo[4] == 'Female':
-                        gender = 'She'
-                    message("Your bat is called " + batInfo[3] + ". " + gender + " is colored " + batInfo[5].lower())
+                            if lines[i][4] == 'Male':
+                                gender = 'He'
+                            if lines[i][4] == 'Female':
+                                gender = 'She'
+                            if lines[i][2] == "0":
+                                message("User is not following the channel")
+                            if lines[i][2] == "1":
+                                    if lines[i][6] == 0:
+                                        message("Your bat is called " + lines[i][3] + ". " + gender + " is colored " + lines[i][5].lower())
+                                    if lines[i][6] == 1:
+                                        message("Your bat has morphed into an elf. !elf to see information on your elf.")
+                if len(data.lower().split()) == 5:
+                    for i in range(len(lines)):
+                        if lines[i][0].lower().rstrip() == data.lower().split()[4]:
+                            if lines[i][4] == 'Male':
+                                gender = 'He'
+                            if lines[i][4] == 'Female':
+                                gender = 'She'
+                            if lines[i][2] == "0":
+                                message("User is not following the channel")
+                            if lines[i][2] == "1":
+                                if lines[i][6] == 0:
+                                    message(data.split()[4] + "'s bat is called " + lines[i][
+                                        3] + ". " + gender + " is colored " + lines[i][5].lower())
+                                if lines[i][6] == 1:
+                                    message(data.split()[4] + "'s bat has morphed into an elf. !elf " + data.split()[4] + " to see information on their elf.")
             except IndexError:
                 pass
             except Exception, e:

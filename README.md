@@ -67,7 +67,8 @@ Clone this repository to your local machine using
 
 **Setup**
 
-In order to be able to run the bot add a file config.py that looks something like this and go through the steps below:
+In order to be able to run the bot add a file config.py in the same folder as the bot and go through the steps below:
+config.py should look something like this:
 
 ```
 Host = "irc.twitch.tv"           # The Twitch IRC server

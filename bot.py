@@ -24,11 +24,20 @@ s.send("CAP REQ :twitch.tv/membership\r\n")
 s.send("CAP REQ :twitch.tv/commands\r\n")
 s.send("CAP REQ :twitch.tv/tags\r\n")
 
+
 def randomEmote():
-    emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss", "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head", "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys", "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee", "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth", "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG", "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati", "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
+    emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss",
+              "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head",
+              "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys",
+              "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee",
+              "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth",
+              "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG",
+              "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati",
+              "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
     randomNumber = random.randint(0, len(emotes))
     randomEmote = emotes[randomNumber]
     return randomEmote
+
 
 def add():
     test = text.split()[1:]
@@ -36,6 +45,7 @@ def add():
     addingNumbers = sum(makingNumbers)
     everythingTogether = ' + '.join(map(str, makingNumbers)) + ' = ' + str(addingNumbers)
     return everythingTogether
+
 
 def multiply():
     test = text.split()[1:]
@@ -46,6 +56,7 @@ def multiply():
     everythingTogether = ' * '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
 
+
 def divide():
     test = text.split()[1:]
     makingNumbers = [int(i) for i in test]
@@ -55,11 +66,13 @@ def divide():
     everythingTogether = ' / '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
 
+
 def lick():
     over = " over and "
     randomNumber = random.randint(1, 30)
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
+
 
 def subscribers():
     # url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
@@ -95,7 +108,8 @@ def subscribers():
     # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + ClientID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_edit+channel_moderate+chat_login"
 
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token, "limit": "100"}
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token,
+              "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
         print "Too many subscriber requests"
@@ -132,7 +146,7 @@ def subscribers():
 def followers():
     try:
         url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-        params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token}
+        params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + Token}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 429:
@@ -157,18 +171,18 @@ def followers():
 
     # print response
     # returns
-    #{u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjoiMTUxNDI1NDE4NzA4NTAyMDAwMCJ9'},
-        # u'total': 421,
+    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjoiMTUxNDI1NDE4NzA4NTAyMDAwMCJ9'},
+    # u'total': 421,
     # u'data': [
-        # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T20:11:57Z', u'from_id': u'163393705'},
-        # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
+    # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T20:11:57Z', u'from_id': u'163393705'},
+    # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
+
 
 def followAgeAll():
     global followAgeList
     followAgeList = [[] for i in range(len(followerList))]
 
     for i in xrange(len(followerList)):
-
         # Get follow Day Month Year
         m = re.search('(.+?)T', followerList[i]['followed_at'])
         followDate = m.group(1).encode('ascii', 'ignore')
@@ -217,9 +231,13 @@ def followAgeAll():
 
         # Compare follow with current
         followDate = datetime.date(int(followYear), int(followMonth), int(followDay))
-        followDateTime = datetime.datetime.combine(followDate, datetime.time(int(followHour), int(followMinute), int(followSecond), 0,  tzinfo=None))
+        followDateTime = datetime.datetime.combine(followDate,
+                                                   datetime.time(int(followHour), int(followMinute), int(followSecond),
+                                                                 0, tzinfo=None))
         currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
-        currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
+        currentDateTime = datetime.datetime.combine(currentDate,
+                                                    datetime.time(int(currentHour), int(currentMinute), int(currentDay),
+                                                                  0, tzinfo=None))
         deltaDate = currentDateTime - followDateTime
         deltaHours = int(math.floor(deltaDate.seconds / 3600))
         deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
@@ -238,20 +256,21 @@ def followAgeAll():
     return followAgeList
 
 
-def months_between(date1,date2):
+def months_between(date1, date2):
     if date1 > date2:
         date1, date2 = date2, date1
-    m1 = date1.year*12+date1.month
-    m2 = date2.year*12+date2.month
-    months = m2-m1
+    m1 = date1.year * 12 + date1.month
+    m2 = date2.year * 12 + date2.month
+    months = m2 - m1
     if date1.day > date2.day:
         months -= 1
     elif date1.day == date2.day:
-        seconds1 = date1.hour*3600+date1.minute+date1.second
-        seconds2 = date2.hour*3600+date2.minute+date2.second
+        seconds1 = date1.hour * 3600 + date1.minute + date1.second
+        seconds2 = date2.hour * 3600 + date2.minute + date2.second
         if seconds1 > seconds2:
             months -= 1
     return months
+
 
 # date1 = dt.datetime.strptime('2011-08-15 12:00:00', '%Y-%m-%d %H:%M:%S')
 # date2 = dt.datetime.strptime('2012-02-15', '%Y-%m-%d')
@@ -262,7 +281,6 @@ def subscribeAgeAll():
     subscribeAgeList = [[] for i in range(len(subscriberResponse['subscriptions']))]
 
     for i in xrange(len(subscriberResponse['subscriptions'])):
-
         # Get subscribe Day Month Year
         m = re.search('(.+?)T', subscriberResponse['subscriptions'][i]['created_at'])
         subscribeDate = m.group(1).encode('ascii', 'ignore')
@@ -311,9 +329,13 @@ def subscribeAgeAll():
 
         # Compare subscribe with current
         subscribeDate = datetime.date(int(subscribeYear), int(subscribeMonth), int(subscribeDay))
-        subscribeDateTime = datetime.datetime.combine(subscribeDate, datetime.time(int(subscribeHour), int(subscribeMinute), int(subscribeSecond), 0,  tzinfo=None))
+        subscribeDateTime = datetime.datetime.combine(subscribeDate,
+                                                      datetime.time(int(subscribeHour), int(subscribeMinute),
+                                                                    int(subscribeSecond), 0, tzinfo=None))
         currentDate = datetime.date(int(currentYear), int(currentMonth), int(currentDay))
-        currentDateTime = datetime.datetime.combine(currentDate, datetime.time(int(currentHour), int(currentMinute), int(currentDay), 0,  tzinfo=None))
+        currentDateTime = datetime.datetime.combine(currentDate,
+                                                    datetime.time(int(currentHour), int(currentMinute), int(currentDay),
+                                                                  0, tzinfo=None))
         deltaDate = currentDateTime - subscribeDateTime
         deltaHours = int(math.floor(deltaDate.seconds / 3600))
         deltaMinutes = int(math.floor((deltaDate.seconds - (deltaHours * 3600)) / 60))
@@ -328,8 +350,12 @@ def subscribeAgeAll():
         subscribeAgeList[i].insert(5, deltaDate.seconds)
         subscribeAgeList[i].insert(6, subscribeDateTime)
 
-        date1 = datetime.datetime.strptime(str(subscribeYear) + "-" + str(subscribeMonth) + "-" + str(subscribeDay) + " " + str(subscribeHour) + ":" + str(subscribeMinute) + ":" + str(subscribeSecond), '%Y-%m-%d %H:%M:%S')
-        date2 = datetime.datetime.strptime(str(currentYear) + "-" + str(currentMonth) + "-" + str(currentDay) + " " + str(currentHour) + ":" + str(currentMinute) + ":" + str(currentSecond), '%Y-%m-%d %H:%M:%S')
+        date1 = datetime.datetime.strptime(
+            str(subscribeYear) + "-" + str(subscribeMonth) + "-" + str(subscribeDay) + " " + str(
+                subscribeHour) + ":" + str(subscribeMinute) + ":" + str(subscribeSecond), '%Y-%m-%d %H:%M:%S')
+        date2 = datetime.datetime.strptime(
+            str(currentYear) + "-" + str(currentMonth) + "-" + str(currentDay) + " " + str(currentHour) + ":" + str(
+                currentMinute) + ":" + str(currentSecond), '%Y-%m-%d %H:%M:%S')
         subscribeAgeList[i].append(months_between(date1, date2))
         subscribeAgeList[i].append(subscriberResponse['subscriptions'][i]['user']['display_name'])
     return subscribeAgeList
@@ -337,24 +363,24 @@ def subscribeAgeAll():
 
 def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
-    params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token}
+    params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + Token}
     response = requests.get(url, headers=params).json()
     StreamStart = response['data'][0]
     # print response
     # returns
     # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'}, u'data': [{
-        # u'user_id': u'109949586',
-        # u'language': u'',
-        # u'title': u'This is the title',
-        # u'type': u'live',
-        # u'tag_ids': None,
-        # u'community_ids': [],
-        # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
-        # u'game_id': u'0',
-        # u'started_at': u'2018-11-16T11:04:29Z',
-        # u'user_name': u'',
-        # u'id': u'31261236144',
-        # u'viewer_count': 0}
+    # u'user_id': u'109949586',
+    # u'language': u'',
+    # u'title': u'This is the title',
+    # u'type': u'live',
+    # u'tag_ids': None,
+    # u'community_ids': [],
+    # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
+    # u'game_id': u'0',
+    # u'started_at': u'2018-11-16T11:04:29Z',
+    # u'user_name': u'',
+    # u'id': u'31261236144',
+    # u'viewer_count': 0}
     # ]}
     m = re.search('T(.+?):', StreamStart['started_at'])
     startHours = m.group(1)
@@ -410,6 +436,7 @@ def uptime():
         uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
         return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
 
+
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 while True:
@@ -420,18 +447,17 @@ while True:
                 s.send("PRIVMSG " + Channel + " :" + msg + "\n")
             except IndexError:
                 pass
+
+
         response = s.recv(1024).decode("utf-8")
         data = response.strip("\r\n")
         if "PRIVMSG" in data:
             username = re.search(r'(?<=display-name=)\w+', response).group(0)
             text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)
             print(username + ": " + text)
-            try:
-                badges = re.search(r'(?:@badges=)(.*?);', response).group(1)
-                badges.split(",")
-                print badges[:]
-            except:
-                pass
+            badges = re.search(r'(?:@badges=)(.*?);', response).group(1).encode("utf-8").split(",")
+            print "Badges: " + str(badges[:])
+            print "Response: " + response  ### These are all the responses that are not message related
             if True == True:
                 try:
                     # Get new follower list and format it to compare with unfollowers
@@ -456,7 +482,8 @@ while True:
                     if len(newFollowers) > 0:
                         if len(lines) == 0:
                             lines.append(
-                                ["Username", "FollowLength", "IsFollower", "BatName", "BatGender", "BatColor", "IsSubscriber"])
+                                ["Username", "FollowLength", "IsFollower", "BatName", "BatGender", "BatColor",
+                                 "IsSubscriber"])
                         for i in range(len(newFollowers)):
                             lines.append([newFollowers[i], "", "", "", "", "", ""])
                         with open('followerDataNew.csv', "wb") as csvfile:
@@ -465,9 +492,11 @@ while True:
                         os.remove('followerData.csv')
                         os.rename('followerDataNew.csv', 'followerData.csv')
                         if len(newFollowers) == 1:
-                            message("Thank you for following the channel " + " ".join(newFollowers) + "! Type !bat to see your bat's information")
+                            message("Thank you for following the channel " + " ".join(
+                                newFollowers) + "! Type !bat to see your bat's information")
                         if len(newFollowers) > 1:
-                            message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " + newFollowers[-1] + "! Type !bat to see your bat's information")
+                            message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " +
+                                    newFollowers[-1] + "! Type !bat to see your bat's information")
 
                     # If someone unfollows set follow value to 0
                     for i1 in range(len(unfollowers)):
@@ -581,9 +610,9 @@ while True:
                         lines[i1][6] = 0
                     for i1 in range(len(lines)):
                         for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if lines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user']['display_name'].lower():
+                            if lines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user'][
+                                'display_name'].lower():
                                 lines[i1][6] = 1
-
 
                     # After all the editing has been done write back all the lines
                     # I had to write back to a new file and rename it because of lack of memory
@@ -606,22 +635,25 @@ while True:
 
                     subscriberList = []
                     for i in range(len(subscriberResponse['subscriptions'])):
-                        subscriberList.insert(0, subscriberResponse['subscriptions'][i]['user']['display_name'].encode('ascii', 'ignore'))
+                        subscriberList.insert(0, subscriberResponse['subscriptions'][i]['user']['display_name'].encode(
+                            'ascii', 'ignore'))
                     subscriberList = map(str.strip, subscriberList)
 
-                    newSubscribers = [item for item in subscriberList if item not in [i[0] for i in subscriberLines[1:]]]
+                    newSubscribers = [item for item in subscriberList if
+                                      item not in [i[0] for i in subscriberLines[1:]]]
                     newGiftedSubscribers = []
                     newGifters = []
                     newSelfSubscribers = []
                     for i1 in range(len(newSubscribers)):
-                            for i2 in range(len(subscriberResponse['subscriptions'])):
-                                subscriberName = subscriberResponse['subscriptions'][i2]['user']['display_name'].lower()
-                                if subscriberName == newSubscribers[i1].lower():
-                                    if subscriberResponse['subscriptions'][i2]['is_gift'] == False:
-                                        newSelfSubscribers.append(newSubscribers[i1])
-                                    if subscriberResponse['subscriptions'][i2]['is_gift'] == True:
-                                        newGiftedSubscribers.append(newSubscribers[i1])
-                                        newGifters.append(subscriberResponse['subscriptions'][i2]['sender'].encode('ascii', 'ignore'))
+                        for i2 in range(len(subscriberResponse['subscriptions'])):
+                            subscriberName = subscriberResponse['subscriptions'][i2]['user']['display_name'].lower()
+                            if subscriberName == newSubscribers[i1].lower():
+                                if subscriberResponse['subscriptions'][i2]['is_gift'] == False:
+                                    newSelfSubscribers.append(newSubscribers[i1])
+                                if subscriberResponse['subscriptions'][i2]['is_gift'] == True:
+                                    newGiftedSubscribers.append(newSubscribers[i1])
+                                    newGifters.append(
+                                        subscriberResponse['subscriptions'][i2]['sender'].encode('ascii', 'ignore'))
 
                     unSubscribers = [item for item in [i[0] for i in subscriberLines[1:]] if item not in subscriberList]
 
@@ -629,19 +661,24 @@ while True:
                         if len(subscriberLines) == 0:
                             subscriberLines.append(
                                 ["Username", "SubStreak", "SubTier", "Elf1", "ElfGender1", "Elf2", "ElfGender2", "Elf3",
-                                 "ElfGender3", "Elf4", "ElfGender4", "Elf5", "ElfGender5", "Elf6", "ElfGender6", "LastName",
-                                 "IsSubscriber"])
+                                 "ElfGender3", "Elf4", "ElfGender4", "Elf5", "ElfGender5", "Elf6", "ElfGender6",
+                                 "LastName"])
                         for i1 in range(len(newSubscribers)):
-                            subscriberLines.append([newSubscribers[i1]] + ([""] * 16))
+                            subscriberLines.append([newSubscribers[i1]] + ([""] * 15))
                         if len(newSelfSubscribers) == 1:
-                            message("Thank you for subscribing" + " ".join(newSelfSubscribers) + "! Type !elf to see your elf's information")
+                            message("Thank you for subscribing" + " ".join(
+                                newSelfSubscribers) + "! Type !elf to see your elf's information")
                         if len(newSelfSubscribers) > 1:
-                            message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " + newSelfSubscribers[-1] + "! Type !elf to see your elf's information")
+                            message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " +
+                                    newSelfSubscribers[-1] + "! Type !elf to see your elf's information")
                         if len(newGiftedSubscribers) == 1:
-                            message(newGifters + " has given a subscription to " + " ".join(newGiftedSubscribers) + "! Type !elf to see your elf's information")
+                            message(newGifters + " has given a subscription to " + " ".join(
+                                newGiftedSubscribers) + "! Type !elf to see your elf's information")
                         if len(newGifters) == 1:
                             if len(newGiftedSubscribers) > 1:
-                                message(" ".join(newGifters) + "Has gifted a sub to the lucky " + ", ".join(newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[-1] + "! Type !elf to see your elf's information")
+                                message(" ".join(newGifters) + "Has gifted a sub to the lucky " + ", ".join(
+                                    newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[
+                                            -1] + "! Type !elf to see your elf's information")
                         if len(newGifters) > 1:
                             if len(newGiftedSubscribers) > 1:
                                 message(" ".join(newGifters) + "have gifted " + str(
@@ -652,17 +689,27 @@ while True:
                     # Thank for upgrading and set Subtier
                     for i1 in range(len(subscriberLines)):
                         for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') == subscriberLines[i1][0]:
+                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                                                                                                      'ignore') == \
+                                    subscriberLines[i1][0]:
                                 # Check for upgrades of existing subscriptions
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') + "for upgrading your subscription to tier 2!")
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 2!")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3!")
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 3!")
 
                                 # Set sub tier
-                                subscriberLines[i1][2] = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
-                                subscriberLines[i1][2] = subscriberLines[i1][2][0]
+                                subscriberLines[i1][2] = 0
+                                subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
+                                subscriberLines[i1][2] = subPlan[0]
 
                     # Assign gender
                     for i1 in range(len(subscriberLines)):
@@ -873,23 +920,25 @@ while True:
                             print 'Skipped adding elf name or gender. Will add next time this loops'
                             pass
 
-                    # Check if subscriber or not.
-                    for i1 in range(len(subscriberLines)):
-                        if not subscriberLines[i1][16] == "IsSubscriber":
-                            subscriberLines[i1][16] = 0
-                    for i1 in range(len(subscriberLines)):
-                        for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if subscriberLines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user']['display_name'].lower():
-                                subscriberLines[i1][16] = 1
+                    # Set subtier dependent on badge
+                    for i1 in range(len(badges)):
+                        if "subscriber" in badges[i1]:
+                            subStreak = re.search(r'/(\d*)', badges[i1]).group(1)
+                            if subStreak == "0":
+                                subStreak = "1"
+                            for i2 in range(len(subscriberLines)):
+                                if subscriberLines[i2][0].lower() == username.rstrip().lower():
+                                    if subStreak > subscriberLines[i2][1]:
+                                        subscriberLines[i2][1] = subStreak
 
                     # Add length since subscription
                     subscribeAgeAll()
                     for i1 in range(len(subscriberLines)):
                         for i2 in range(len(subscribeAgeList)):
                             if not subscriberLines[i1][1] == "SubStreak":
-                                subscriberName = subscribeAgeList[i2][8].lower()
-                                if subscriberLines[i1][0].lower() == subscriberName.encode('ascii', 'ignore'):
-                                    subscriberLines[i1][1] = subscribeAgeList[i2][7]
+                                if subscriberLines[i1][0].lower() == subscribeAgeList[i2][8].lower().encode('ascii', 'ignore'):
+                                    if subscriberLines[i1][1] < subscribeAgeList[i2][7]:
+                                        subscriberLines[i1][1] = subscribeAgeList[i2][7]
 
                     # write back any changes to a the subscriber file
                     with open('subscriberDataNew.csv', "wb") as csvfile:
@@ -907,7 +956,7 @@ while True:
                 try:
                     s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
                 except IndexError:
-                     pass
+                    pass
             if "!commands" in text.lower().split()[0]:
                 try:
                     message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
@@ -956,10 +1005,12 @@ while True:
                                 if lines[i][2] == "0":
                                     message("User is not following the channel")
                                 if lines[i][2] == "1":
-                                        if lines[i][6] == 0:
-                                            message("Your bat is called " + lines[i][3] + ". " + gender + " is colored " + lines[i][5].lower())
-                                        if lines[i][6] == 1:
-                                            message("Your bat has morphed into an elf. !elf to see information on your elf.")
+                                    if lines[i][6] == 0:
+                                        message("Your bat is called " + lines[i][3] + ". " + gender + " is colored " +
+                                                lines[i][5].lower())
+                                    if lines[i][6] == 1:
+                                        message(
+                                            "Your bat has morphed into an elf. !elf to see information on your elf.")
                     if len(text.lower().split()) == 2:
                         for i in range(len(lines)):
                             if lines[i][0].lower().rstrip() == text.lower().split()[1]:
@@ -974,7 +1025,9 @@ while True:
                                         message(text.split()[1] + "'s bat is called " + lines[i][
                                             3] + ". " + gender + " is colored " + lines[i][5].lower())
                                     if lines[i][6] == 1:
-                                        message(text.split()[1] + "'s bat has morphed into an elf. !elf " + text.split()[1] + " to see information on their elf.")
+                                        message(
+                                            text.split()[1] + "'s bat has morphed into an elf. !elf " + text.split()[
+                                                1] + " to see information on their elf.")
                 except IndexError:
                     pass
                 except Exception, e:
@@ -996,16 +1049,19 @@ while True:
                             gender = 'Their'
                         if elfInfo[2] == "1":
                             message(
-                                text.split()[1] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[3] + " " +
+                                text.split()[1] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[
+                                    3] + " " +
                                 elfInfo[15])
                         if elfInfo[2] == "2":
                             message(
-                                text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[3] + " and " +
+                                text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[
+                                    3] + " and " +
                                 elfInfo[5] + " " + elfInfo[15])
                         if elfInfo[2] == "3":
                             message(
                                 text.split()[1] + "'s bat morphed into 6 elves. Their names are " + elfInfo[3] + ", " +
-                                elfInfo[5] + ", " + elfInfo[7] + ", " + elfInfo[9] + ", " + elfInfo[11] + " and " + elfInfo[
+                                elfInfo[5] + ", " + elfInfo[7] + ", " + elfInfo[9] + ", " + elfInfo[11] + " and " +
+                                elfInfo[
                                     13] + " " + elfInfo[15])
                     if len(text.lower().split()) == 1:
                         for i in range(len(subscriberLines)):
@@ -1027,7 +1083,8 @@ while True:
                         if elfInfo[2] == "3":
                             message(
                                 "Your bat morphed into 6 elves. Their names are " + elfInfo[3] + ", " +
-                                elfInfo[5] + ", " + elfInfo[7] + ", " + elfInfo[9] + ", " + elfInfo[11] + " and " + elfInfo[
+                                elfInfo[5] + ", " + elfInfo[7] + ", " + elfInfo[9] + ", " + elfInfo[11] + " and " +
+                                elfInfo[
                                     13] + " " + elfInfo[15])
                 except IndexError, e:
                     print str(e)
@@ -1038,24 +1095,32 @@ while True:
             if "!raid" in text.lower().split()[0]:
                 try:
                     if username.lower() == Channel[1:]:
-                        message("Please raid Twitch.tv/" + text.split()[1] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                        message("Please raid Twitch.tv/" + text.split()[
+                            1] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
                     else:
                         pass
                 except IndexError:
                     pass
             if "!pack" in text.lower().split()[0]:
                 try:
-                    message("The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
+                    message(
+                        "The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
                 except IndexError:
                     pass
             if "!oclock" in text.lower().split()[0]:
                 try:
-                    message("The time for me right now is " + datetime.datetime.now().strftime("%H:%M") + " o'clock" + " CET")
+                    message("The time for me right now is " + datetime.datetime.now().strftime(
+                        "%H:%M") + " o'clock" + " CET")
                 except IndexError:
                     pass
             if "!shout" in text.lower().split()[0]:
                 try:
                     message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
+                except IndexError:
+                    pass
+            if "!asylumcraft" in text.lower().split()[0]:
+                try:
+                    message("See all the members of asylumcraft in the panel below and follow like you have never followerd before")
                 except IndexError:
                     pass
             if "!lick" in text.lower().split()[0]:
@@ -1083,8 +1148,8 @@ while True:
                         lines = list(followerDataReader)
 
                     for i in range(len(lines)):
-                        if lines[i][0] == username:
-                            lines[i][3] = text.split(1)
+                        if lines[i][0].lower().rstrip() == username.lower().rstrip():
+                            lines[i][3] = text.split()[1]
                             message("Successfully changed the name of " + username + "'s bat to: " + text.split()[1])
 
                     with open('followerDataNew.csv', "wb") as csvfile:
@@ -1094,6 +1159,7 @@ while True:
                     os.rename('followerDataNew.csv', 'followerData.csv')
 
                 except IndexError:
+                    message("batnamechange failed")
                     pass
             if "!timemeout" in text.lower().split()[0]:
                 try:
@@ -1157,7 +1223,7 @@ while True:
                                     subscriberLines[i1][i2] = text.split()[4]
                                     subscriberLines[i1][15] = text.split()[5]
                                     message("Successfully changed the name of " + text.split()[1] + " " + text.split()[
-                                            2] + " to " + text.split()[4] + " " + subscriberLines[i1][15])
+                                        2] + " to " + text.split()[4] + " " + subscriberLines[i1][15])
                                     with open('subscriberDataNew.csv', "wb") as csvfile:
                                         subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                                         subscriberDataWriter.writerows(subscriberLines)
@@ -1180,9 +1246,11 @@ while True:
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
                                     genderIndex = (int(i2) + 1)
-                                    if text.split()[3] == "Male" or text.split()[3] == "Female" or text.split()[3] == "Androgynous":
-                                        message("Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
-                                                subscriberLines[i1][genderIndex] + " to " + text.split()[3])
+                                    if text.split()[3] == "Male" or text.split()[3] == "Female" or text.split()[
+                                        3] == "Androgynous":
+                                        message(
+                                            "Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
+                                            subscriberLines[i1][genderIndex] + " to " + text.split()[3])
                                         subscriberLines[i1][genderIndex] = text.split()[3]
                                     else:
                                         message("The gender can only be Male, Female or Androgynous")
@@ -1229,9 +1297,33 @@ while True:
                 except Exception, e:
                     message("Addition failed")
                     message(str(e))
-            print response ### These are all the message related responses
+        if "USERNOTICE" in data:
+            username = re.search(r'(?<=display-name=)\w+', response).group(0)
+            msgId = re.search(r'(?<=msg-id=)(.*?);', response).group(1)
+            systemMsg = re.search(r'(?<=system-msg=)(.*?);', response).group(1)
+            recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
+            message = re.search(r'(?<=user-type)= :tmi.twitch.tv USERNOTICE #\w+ :(.*)', response).group(1)
+            try:
+                with open('testSubscriberData.csv', "rb") as csvfile:
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                for i in range(len(subscriberLines)):
+                    if msgId == "sub" or "resub":
+                        if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
+                            subscriberLines[i][1] = subscriberLines[i][1] + 1
+                    if msgId == "subgift":
+                        if subscriberLines[i][0].rstrip().lower() == recipientUserName.rstrip().lower():
+                            subscriberLines[i][1] = subscriberLines[i][1] + 1
+                with open('testSubscriberDataNew.csv', "wb") as csvfile:
+                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                    subscriberDataWriter.writerows(subscriberLines)
+                os.remove('testSubscriberData.csv')
+                os.rename('testSubscriberDataNew.csv', 'testSubscriberData.csv')
+            except Exception, e:
+                message(str(e))
         else:
             try:
+                print "Response: " + response  ### These are all the non message related responses
                 if "PRIVMSG" in data:
                     username = re.search(r'(?<=display-name=)\w+', response).group(0)
                     text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)
@@ -1253,7 +1345,6 @@ while True:
                         f.close()
             except:
                 pass
-            print response ### These are all the responses that are not message related
             sleep(0.1)
     except IndexError:
         pass

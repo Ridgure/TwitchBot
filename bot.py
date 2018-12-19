@@ -107,8 +107,9 @@ def subscribers():
     # Use this url for getting the token
     # url = "https://id.twitch.tv/oauth2/authorize?client_id=" + ClientID + "&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_edit+channel_moderate+chat_login"
 
+
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token,
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token_Ridgure,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
@@ -952,11 +953,6 @@ while True:
                 except Exception, e:
                     print("while true events error")
                     print(str(e))
-            if response == "PING :tmi.twitch.tv\r\n":
-                try:
-                    s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
-                except IndexError:
-                    pass
             if "!commands" in text.lower().split()[0]:
                 try:
                     message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
@@ -1323,7 +1319,17 @@ while True:
                 message(str(e))
         else:
             try:
-                print "Response: " + response  ### These are all the non message related responses
+                if not "PRIVMSG" in data:
+                    print "Response: " + response  ### These are all the non message related responses
+                if response == "PING :tmi.twitch.tv\r\n":
+                    try:
+                        s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+                        print "Response: PONG :tmi.twitch.tv"
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        print("Pong error")
+                        print(str(e))
                 if "PRIVMSG" in data:
                     username = re.search(r'(?<=display-name=)\w+', response).group(0)
                     text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)

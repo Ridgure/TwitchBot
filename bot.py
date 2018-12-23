@@ -636,6 +636,31 @@ while True:
                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                         subscriberLines = list(subscriberDataReader)
 
+                    # Thank for upgrading and set Subtier
+                    for i1 in range(len(subscriberLines)):
+                        for i2 in range(len(subscriberResponse['subscriptions'])):
+                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                                                                                                      'ignore') == \
+                                    subscriberLines[i1][0]:
+                                # Check for upgrades of existing subscriptions
+                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 2!")
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 3!")
+
+                                # Set sub tier
+                                subscriberLines[i1][2] = 0
+                                subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
+                                subscriberLines[i1][2] = subPlan[0]
+
                     subscriberList = []
                     for i in range(len(subscriberResponse['subscriptions'])):
                         subscriberList.insert(0, subscriberResponse['subscriptions'][i]['user']['display_name'].encode(
@@ -667,7 +692,11 @@ while True:
                                  "ElfGender3", "Elf4", "ElfGender4", "Elf5", "ElfGender5", "Elf6", "ElfGender6",
                                  "LastName"])
                         for i1 in range(len(newSubscribers)):
-                            subscriberLines.append([newSubscribers[i1]] + ([""] * 15))
+                            for i2 in range(len(subscriberResponse['subscriptions'])):
+                                if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                                                                                                      'ignore') == \
+                                    newSubscribers[i1]:
+                                    subscriberLines.append([newSubscribers[i1]] + [""] + [subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 13))
                         if len(newSelfSubscribers) == 1:
                             message("Thank you for subscribing " + " ".join(
                                 newSelfSubscribers) + "! Type !elf to see your elf's information")
@@ -688,31 +717,6 @@ while True:
                                     len(newGiftedSubscribers)) + " subs in total to the lucky " + ", ".join(
                                     newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[
                                             -1] + "! Type !elf to see your elf's information")
-
-                    # Thank for upgrading and set Subtier
-                    for i1 in range(len(subscriberLines)):
-                        for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
-                                                                                                      'ignore') == \
-                                    subscriberLines[i1][0]:
-                                # Check for upgrades of existing subscriptions
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii',
-                                                                   'ignore') + " for upgrading your subscription to tier 2!")
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii',
-                                                                   'ignore') + " for upgrading your subscription to tier 3!")
-
-                                # Set sub tier
-                                subscriberLines[i1][2] = 0
-                                subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
-                                subscriberLines[i1][2] = subPlan[0]
 
                     # Assign gender
                     for i1 in range(len(subscriberLines)):

@@ -17,7 +17,7 @@ from decimal import *
 
 s = socket.socket()
 s.connect((Host, Port))
-s.send("PASS {}\r\n".format("oauth:" + Token).encode("utf-8"))
+s.send("PASS {}\r\n".format("oauth:" + FollowerToken).encode("utf-8"))
 s.send("NICK {}\r\n".format(Nickname).encode("utf-8"))
 s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
 s.send("CAP REQ :twitch.tv/membership\r\n")
@@ -76,7 +76,7 @@ def lick():
 
 def subscribers():
     # url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
-    # params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + Token, "Accept": "application/vnd.twitchtv.v5+json"}
+    # params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
     # response = requests.get(url, headers=params).json()
 
     # responds
@@ -109,7 +109,7 @@ def subscribers():
 
 
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + Token_Ridgure,
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + SubscriberToken,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
@@ -147,7 +147,7 @@ def subscribers():
 def followers():
     try:
         url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-        params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + Token}
+        params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 429:
@@ -364,7 +364,7 @@ def subscribeAgeAll():
 
 def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
-    params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + Token}
+    params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
     response = requests.get(url, headers=params).json()
     StreamStart = response['data'][0]
     # print response
@@ -473,23 +473,25 @@ while True:
                         open('followerData.csv', "w+").close()
                     with open('followerData.csv', "rb") as csvfile:
                         followerDataReader = csv.reader(csvfile, delimiter=",")
-                        lines = list(followerDataReader)
+                        followerLines = list(followerDataReader)
 
                     # Compare follower lists
-                    newFollowers = [item for item in test if item not in [i[0] for i in lines[1:]]]
-                    unfollowers = [item for item in [i[0] for i in lines[1:]] if item not in test]
+                    newFollowers = [item for item in test if item not in [i[0] for i in followerLines[1:]]]
+                    unfollowers = [item for item in [i[0] for i in followerLines[1:]] if item not in test]
 
                     # thank new follower and add to existing list
                     if len(newFollowers) > 0:
-                        if len(lines) == 0:
-                            lines.append(
+                        if len(followerLines) == 0:
+                            followerLines.append(
                                 ["Username", "FollowLength", "IsFollower", "BatName", "BatGender", "BatColor",
                                  "IsSubscriber"])
+                            followerLines.append(
+                                [Channel[1:], "0", "1", "", "", "", ""])
                         for i in range(len(newFollowers)):
-                            lines.append([newFollowers[i], "", "", "", "", "", ""])
+                            followerLines.append([newFollowers[i], "", "", "", "", "", ""])
                         with open('followerDataNew.csv', "wb") as csvfile:
                             followerDataWriter = csv.writer(csvfile, delimiter=",")
-                            followerDataWriter.writerows(lines)
+                            followerDataWriter.writerows(followerLines)
                         os.remove('followerData.csv')
                         os.rename('followerDataNew.csv', 'followerData.csv')
                         if len(newFollowers) == 1:
@@ -498,49 +500,49 @@ while True:
                         if len(newFollowers) > 1:
                             message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " +
                                     newFollowers[-1] + "! Type !bat to see your bat's information")
-
                     # If someone unfollows set follow value to 0
                     for i1 in range(len(unfollowers)):
-                        for i2 in range(len(lines)):
-                            if lines[i2][0] == unfollowers[i1]:
-                                lines[i2][2] = "0"
+                        for i2 in range(len(followerLines)):
+                            if not followerLines[i2][0].lower().rstrip() == Channel[1:].lower().rstrip():
+                                if followerLines[i2][0] == unfollowers[i1]:
+                                    followerLines[i2][2] = "0"
                     # If someone follows set follow value to 1
-                    for i1 in range(len(lines)):
+                    for i1 in range(len(followerLines)):
                         for i2 in range(len(followerList)):
-                            if lines[i1][0] == followerList[i2]['from_name'].rstrip():
-                                lines[i1][2] = "1"
+                            if followerLines[i1][0] == followerList[i2]['from_name'].rstrip():
+                                followerLines[i1][2] = "1"
 
                     # Assign gender
-                    for i in range(len(lines)):
-                        if lines[i][4] == "":
+                    for i in range(len(followerLines)):
+                        if followerLines[i][4] == "":
                             maleFemale = random.randint(0, 1)
                             if maleFemale == 1:
-                                lines[i][4] = 'Female'
+                                followerLines[i][4] = 'Female'
                             else:
-                                lines[i][4] = 'Male'
+                                followerLines[i][4] = 'Male'
 
                     # Assign Name
-                    for i in range(len(lines)):
+                    for i in range(len(followerLines)):
                         try:
-                            if lines[i][3] == "":
-                                if lines[i][4] == 'Male':
+                            if followerLines[i][3] == "":
+                                if followerLines[i][4] == 'Male':
                                     randomNumber = random.randint(0, len(batMaleNames))
                                     maleName = batMaleNames[randomNumber]
-                                    lines[i][3] = maleName
-                                if lines[i][4] == 'Female':
+                                    followerLines[i][3] = maleName
+                                if followerLines[i][4] == 'Female':
                                     randomNumber = random.randint(0, len(batFemaleNames))
                                     femaleName = batFemaleNames[randomNumber]
-                                    lines[i][3] = femaleName
+                                    followerLines[i][3] = femaleName
                         except IndexError:
                             print 'Skipped adding gender. Will add next time this loops'
                             pass
 
                     # Refresh the total seconds followed per user
                     followAgeAll()
-                    for i in range(len(lines)):
+                    for i in range(len(followerLines)):
                         for i2 in range(len(followerList)):
-                            if lines[i][0] == followerList[i2]['from_name'].rstrip():
-                                lines[i][1] = followAgeList[i2][5]
+                            if followerLines[i][0] == followerList[i2]['from_name'].rstrip():
+                                followerLines[i][1] = followAgeList[i2][5]
 
                     # Assign color
                     global totalBlackBats, totalBrownBats, totalRedBats
@@ -551,14 +553,14 @@ while True:
                     totalBlackBats = 0.00
                     totalBrownBats = 0.00
                     totalRedBats = 0.00
-                    if lines[1][5] == "":
-                        lines[1][5] = 'Black'
-                    if lines[2][5] == "":
-                        lines[2][5] = 'Brown'
-                    if lines[3][5] == "":
-                        lines[3][5] = 'Red'
+                    if followerLines[1][5] == "":
+                        followerLines[1][5] = 'Black'
+                    if followerLines[2][5] == "":
+                        followerLines[2][5] = 'Brown'
+                    if followerLines[3][5] == "":
+                        followerLines[3][5] = 'Red'
                     try:
-                        for i in range(len(lines)):
+                        for i in range(len(followerLines)):
 
                             if totalColoredBats > 2:
                                 percentageBlackBats = float(totalBlackBats / totalColoredBats)
@@ -571,31 +573,31 @@ while True:
 
                                 # see if list is empty and add value
                                 try:
-                                    if lines[i][5] == "":
+                                    if followerLines[i][5] == "":
                                         if (blackBatScore > brownBatScore) and (blackBatScore > redBatScore):
-                                            lines[i][5] = 'Black'
+                                            followerLines[i][5] = 'Black'
                                         if (blackBatScore > brownBatScore) and (blackBatScore == redBatScore):
-                                            lines[i][5] = 'Black'
+                                            followerLines[i][5] = 'Black'
                                         if (brownBatScore > blackBatScore) and (brownBatScore > redBatScore):
-                                            lines[i][5] = 'Brown'
+                                            followerLines[i][5] = 'Brown'
                                         if (brownBatScore > blackBatScore) and (brownBatScore == redBatScore):
-                                            lines[i][5] = 'Brown'
+                                            followerLines[i][5] = 'Brown'
                                         if (redBatScore > blackBatScore) and (redBatScore > brownBatScore):
-                                            lines[i][5] = 'Red'
+                                            followerLines[i][5] = 'Red'
                                         if (redBatScore > blackBatScore) and (redBatScore == brownBatScore):
-                                            lines[i][5] = 'Red'
+                                            followerLines[i][5] = 'Red'
                                         if (blackBatScore == brownBatScore) and (brownBatScore == redBatScore):
-                                            lines[i][5] = 'Black'
+                                            followerLines[i][5] = 'Black'
                                 except Exception, e:
                                     print "could not decide bat color"
                                     print(str(e))
 
                             # check for which bat to add next
-                            if lines[i][5] == 'Black':
+                            if followerLines[i][5] == 'Black':
                                 totalBlackBats = totalBlackBats + 1
-                            if lines[i][5] == 'Brown':
+                            if followerLines[i][5] == 'Brown':
                                 totalBrownBats = totalBrownBats + 1
-                            if lines[i][5] == 'Red':
+                            if followerLines[i][5] == 'Red':
                                 totalRedBats = totalRedBats + 1
                             totalColoredBats = totalBlackBats + totalBrownBats + totalRedBats
 
@@ -607,22 +609,22 @@ while True:
 
                     # Check if subscriber or not.
                     subscribers()
-                    for i1 in range(len(lines)):
-                        lines[i1][6] = 0
-                    for i1 in range(len(lines)):
+                    for i1 in range(len(followerLines)):
+                        followerLines[i1][6] = 0
+                    for i1 in range(len(followerLines)):
                         for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if lines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user'][
+                            if followerLines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user'][
                                 'display_name'].lower():
-                                lines[i1][6] = 1
+                                followerLines[i1][6] = 1
 
-                    # After all the editing has been done write back all the lines
+                    # After all the editing has been done write back all the followerLines
                     # I had to write back to a new file and rename it because of lack of memory
 
                     if not os.path.exists('followerDataNew.csv'):
                         open('followerDataNew.csv', "w+").close()
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
-                        followerDataWriter.writerows(lines)
+                        followerDataWriter.writerows(followerLines)
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
 
@@ -667,7 +669,7 @@ while True:
                         for i1 in range(len(newSubscribers)):
                             subscriberLines.append([newSubscribers[i1]] + ([""] * 15))
                         if len(newSelfSubscribers) == 1:
-                            message("Thank you for subscribing" + " ".join(
+                            message("Thank you for subscribing " + " ".join(
                                 newSelfSubscribers) + "! Type !elf to see your elf's information")
                         if len(newSelfSubscribers) > 1:
                             message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " +
@@ -979,6 +981,11 @@ while True:
                     message("Add me on Facebook: fb.com/Ridgure")
                 except IndexError:
                     pass
+            if "!lurk" in text.lower().split()[0]:
+                try:
+                    message(username + "'s bat is going in hybernation")
+                except IndexError:
+                    pass
             if "!twitter" in text.lower().split()[0]:
                 try:
                     message("Add me on Facebook: Twitter.com/RigidStructure")
@@ -992,35 +999,35 @@ while True:
             if "!bat" in text.lower().split()[0]:
                 try:
                     if len(text.lower().split()) == 1:
-                        for i in range(len(lines)):
-                            if lines[i][0] == username:
-                                if lines[i][4] == 'Male':
+                        for i in range(len(followerLines)):
+                            if followerLines[i][0] == username:
+                                if followerLines[i][4] == 'Male':
                                     gender = 'He'
-                                if lines[i][4] == 'Female':
+                                if followerLines[i][4] == 'Female':
                                     gender = 'She'
-                                if lines[i][2] == "0":
+                                if followerLines[i][2] == "0":
                                     message("User is not following the channel")
-                                if lines[i][2] == "1":
-                                    if lines[i][6] == 0:
-                                        message("Your bat is called " + lines[i][3] + ". " + gender + " is colored " +
-                                                lines[i][5].lower())
-                                    if lines[i][6] == 1:
+                                if followerLines[i][2] == "1":
+                                    if followerLines[i][6] == 0:
+                                        message(username + "'s bat is called " + followerLines[i][3] + ". " + gender + " is colored " +
+                                                followerLines[i][5].lower())
+                                    if followerLines[i][6] == 1:
                                         message(
-                                            "Your bat has morphed into an elf. !elf to see information on your elf.")
+                                            username + "'s bat has morphed into an elf. !elf to see information on your elf.")
                     if len(text.lower().split()) == 2:
-                        for i in range(len(lines)):
-                            if lines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                if lines[i][4] == 'Male':
+                        for i in range(len(followerLines)):
+                            if followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                if followerLines[i][4] == 'Male':
                                     gender = 'He'
-                                if lines[i][4] == 'Female':
+                                if followerLines[i][4] == 'Female':
                                     gender = 'She'
-                                if lines[i][2] == "0":
+                                if followerLines[i][2] == "0":
                                     message("User is not following the channel")
-                                if lines[i][2] == "1":
-                                    if lines[i][6] == 0:
-                                        message(text.split()[1] + "'s bat is called " + lines[i][
-                                            3] + ". " + gender + " is colored " + lines[i][5].lower())
-                                    if lines[i][6] == 1:
+                                if followerLines[i][2] == "1":
+                                    if followerLines[i][6] == 0:
+                                        message(text.split()[1] + "'s bat is called " + followerLines[i][
+                                            3] + ". " + gender + " is colored " + followerLines[i][5].lower())
+                                    if followerLines[i][6] == 1:
                                         message(
                                             text.split()[1] + "'s bat has morphed into an elf. !elf " + text.split()[
                                                 1] + " to see information on their elf.")
@@ -1100,7 +1107,12 @@ while True:
             if "!pack" in text.lower().split()[0]:
                 try:
                     message(
-                        "The modpack I am playing is called FTB Infinity Evolved on expert mode. Minecraft version 1.7.10. It is available through the twitch launcher and on curse")
+                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available through the twitch launcher, curse and the AT launcher")
+                except IndexError:
+                    pass
+            if "!discord" in text.lower().split()[0]:
+                try:
+                    message("Join the discord! https://discord.gg/yddBmCE")
                 except IndexError:
                     pass
             if "!oclock" in text.lower().split()[0]:
@@ -1141,32 +1153,74 @@ while True:
                 try:
                     with open('followerData.csv', "rb") as csvfile:
                         followerDataReader = csv.reader(csvfile, delimiter=",")
-                        lines = list(followerDataReader)
+                        followerLines = list(followerDataReader)
 
-                    for i in range(len(lines)):
-                        if lines[i][0].lower().rstrip() == username.lower().rstrip():
-                            lines[i][3] = text.split()[1]
+                    for i in range(len(followerLines)):
+                        if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
+                            followerLines[i][3] = text.split()[1]
                             message("Successfully changed the name of " + username + "'s bat to: " + text.split()[1])
 
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
-                        followerDataWriter.writerows(lines)
+                        followerDataWriter.writerows(followerLines)
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
-
                 except IndexError:
-                    message("batnamechange failed")
+                    message("Did you remember to add the name of the bat?")
+                    pass
+            if "!batgenderchange" in text.lower().split()[0]:
+                try:
+                    with open('followerData.csv', "rb") as csvfile:
+                        followerDataReader = csv.reader(csvfile, delimiter=",")
+                        followerLines = list(followerDataReader)
+
+                    owner = False
+                    for i1 in range(len(followerLines)):
+                        if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                            if text.split()[1] == "Male":
+                                if followerLines[i1][4] == "Male":
+                                    message(followerLines[i1][0] + "'s bat is already Male")
+                                if followerLines[i1][4] == "Female":
+                                    message(
+                                        "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                        followerLines[i1][4] + " to " + text.split()[1])
+                                    followerLines[i1][4] = text.split()[1]
+                            if text.split()[1] == "Female":
+                                if followerLines[i1][4] == "Female":
+                                    message(followerLines[i1][0] + "'s bat is already Female")
+                                if followerLines[i1][4] == "Male":
+                                    message(
+                                        "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                        followerLines[i1][4] + " to " + text.split()[1])
+                                    followerLines[i1][4] = text.split()[1]
+                            if not text.split()[1] == "Male":
+                                if not text.split()[1] == "Female":
+                                    message("The gender can only be Male or Female")
+                            owner = True
+                    with open('followerDataNew.csv', "wb") as csvfile:
+                        followerDataWriter = csv.writer(csvfile, delimiter=",")
+                        followerDataWriter.writerows(followerLines)
+                    os.remove('followerData.csv')
+                    os.rename('followerDataNew.csv', 'followerData.csv')
+                    if owner == False:
+                        message("You cannot change the gender of other people's bats")
+                except IndexError:
+                    print message("Did you remember to add the gender of the bat?")
+                    print "batgenderchange error"
                     pass
             if "!timemeout" in text.lower().split()[0]:
                 try:
                     ## time out KBiglair ##
-                    if 0 < int(text.split()[1]) < 3601:
-                        message("/timeout " + username + " " + text.split()[1])
-                        message("Timed out " + username + " for " + text.split()[1] + " seconds")
-                    elif int(text.split()[1]) < 0:
-                        message("You cannot go back in time unless you are the doctor or Marty McFly")
-                    else:
-                        message("TimeMeOut failed")
+                    if username == "Kbigliar":
+                        if 0 < int(text.split()[1]) < 3601:
+                            message("/timeout " + username + " " + text.split()[1])
+                            message("Timed out " + username + " for " + text.split()[1] + " seconds")
+                        elif int(text.split()[1]) < 0:
+                            message("You cannot go back in time unless you are the doctor or Marty McFly")
+                        else:
+                            message("TimeMeOut failed")
+                    if not username == "Kbigliar":
+                        message("Only Kbigliar can time himself out")
                 except IndexError:
                     message("Add amount of seconds you want to be timed out after command")
                     pass
@@ -1211,7 +1265,7 @@ while True:
                     owner = False
                     for i1 in range(len(subscriberLines)):
                         for i2 in range(len(subscriberLines[i1])):
-                            if subscriberLines[i1][0].lower() == username.lower():
+                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                 if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                     with open('subscriberData.csv', "rb") as csvfile:
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
@@ -1233,14 +1287,14 @@ while True:
                     print "elfnamechange failed"
             if "!elfgenderchange" in text.lower().split()[0]:
                 try:
+                    with open('subscriberData.csv', "rb") as csvfile:
+                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                        subscriberLines = list(subscriberDataReader)
                     owner = False
                     for i1 in range(len(subscriberLines)):
                         for i2 in range(len(subscriberLines[i1])):
-                            if subscriberLines[i1][0].lower() == username.lower():
+                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                 if text.lower().split()[1] == subscriberLines[i1][i2].lower():
-                                    with open('subscriberData.csv', "rb") as csvfile:
-                                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                        subscriberLines = list(subscriberDataReader)
                                     genderIndex = (int(i2) + 1)
                                     if text.split()[3] == "Male" or text.split()[3] == "Female" or text.split()[
                                         3] == "Androgynous":
@@ -1250,12 +1304,12 @@ while True:
                                         subscriberLines[i1][genderIndex] = text.split()[3]
                                     else:
                                         message("The gender can only be Male, Female or Androgynous")
-                                    with open('subscriberDataNew.csv', "wb") as csvfile:
-                                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                        subscriberDataWriter.writerows(subscriberLines)
-                                    os.remove('subscriberData.csv')
-                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                                     owner = True
+                    with open('subscriberDataNew.csv', "wb") as csvfile:
+                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                        subscriberDataWriter.writerows(subscriberLines)
+                    os.remove('subscriberData.csv')
+                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                     if owner == False:
                         message("You cannot change the gender of other people's elves")
                 except IndexError:
@@ -1324,7 +1378,7 @@ while True:
                 if response == "PING :tmi.twitch.tv\r\n":
                     try:
                         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
-                        print "Response: PONG :tmi.twitch.tv"
+                        print "Reply: PONG :tmi.twitch.tv"
                     except IndexError:
                         pass
                     except Exception, e:

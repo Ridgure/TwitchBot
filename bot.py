@@ -33,7 +33,7 @@ def randomEmote():
               "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth",
               "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG",
               "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati",
-              "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "VaultBoy", "LUL", "PowerUpR", "PowerUpL"]
+              "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "LUL", "PowerUpR", "PowerUpL"]
     randomNumber = random.randint(0, len(emotes))
     randomEmote = emotes[randomNumber]
     return randomEmote
@@ -496,10 +496,10 @@ while True:
                         os.rename('followerDataNew.csv', 'followerData.csv')
                         if len(newFollowers) == 1:
                             message("Thank you for following the channel " + " ".join(
-                                newFollowers) + "! Type !bat to see your bat's information")
+                                newFollowers) + "! Type !bat to see your the information on your :bat:")
                         if len(newFollowers) > 1:
                             message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " +
-                                    newFollowers[-1] + "! Type !bat to see your bat's information")
+                                    newFollowers[-1] + "! Type !bat to see the information on your :bat:")
                     # If someone unfollows set follow value to 0
                     for i1 in range(len(unfollowers)):
                         for i2 in range(len(followerLines)):
@@ -1000,20 +1000,20 @@ while True:
                     message("Add me on Facebook: Instagram.com/RigidStructure")
                 except IndexError:
                     pass
-            if "!bat" in text.lower().split()[0]:
+            if "!bat" == text.lower().split()[0]:
                 try:
                     if len(text.lower().split()) == 1:
                         for i in range(len(followerLines)):
-                            if followerLines[i][0] == username:
+                            if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
                                 if followerLines[i][4] == 'Male':
-                                    gender = 'He'
+                                    gender = 'he'
                                 if followerLines[i][4] == 'Female':
-                                    gender = 'She'
+                                    gender = 'she'
                                 if followerLines[i][2] == "0":
                                     message("User is not following the channel")
                                 if followerLines[i][2] == "1":
                                     if followerLines[i][6] == 0:
-                                        message(username + "'s bat is called " + followerLines[i][3] + ". " + gender + " is colored " +
+                                        message(username + "'s :bat: is called " + followerLines[i][3] + " " + gender + " is colored " +
                                                 followerLines[i][5].lower())
                                     if followerLines[i][6] == 1:
                                         message(
@@ -1074,6 +1074,8 @@ while True:
                         for i in range(len(subscriberLines)):
                             if subscriberLines[i][0].lower() == username.lower():
                                 elfInfo = subscriberLines[i]
+                        if elfInfo == None:
+                            message("User is not a subscriber")
                         if elfInfo[4] == 'Male':
                             gender = 'His'
                         if elfInfo[4] == 'Female':
@@ -1114,6 +1116,17 @@ while True:
                         "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available through the twitch launcher, curse and the AT launcher")
                 except IndexError:
                     pass
+            if "!sevtech" in text.lower().split()[0]:
+                try:
+                    message(
+                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available through the twitch launcher, curse and the AT launcher")
+                except IndexError:
+                    pass
+            if "!scrowl" in text.lower().split()[0]:
+                try:
+                    message(username + "grumpily scowls at " + text.split()[1])
+                except IndexError:
+                    pass
             if "!discord" in text.lower().split()[0]:
                 try:
                     message("Join the discord! https://discord.gg/yddBmCE")
@@ -1126,8 +1139,19 @@ while True:
                 except IndexError:
                     pass
             if "!shout" in text.lower().split()[0]:
+                if username == "Ridgure":
+                    try:
+                        message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
+                    except IndexError:
+                        pass
+            if "!jc747" in text.lower().split()[0]:
                 try:
-                    message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
+                    message("It's JSea474 you fool!")
+                except IndexError:
+                    pass
+            if "!octo" in text.lower().split()[0]:
+                try:
+                    message("Squid3 Squid3 Squid3 Squid3 Squid3")
                 except IndexError:
                     pass
             if "!asylumcraft" in text.lower().split()[0]:
@@ -1162,7 +1186,7 @@ while True:
                     for i in range(len(followerLines)):
                         if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
                             followerLines[i][3] = text.split()[1]
-                            message("Successfully changed the name of " + username + "'s bat to: " + text.split()[1])
+                            message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
 
                     with open('followerDataNew.csv', "wb") as csvfile:
                         followerDataWriter = csv.writer(csvfile, delimiter=",")
@@ -1181,24 +1205,24 @@ while True:
                     owner = False
                     for i1 in range(len(followerLines)):
                         if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                            if text.split()[1] == "Male":
+                            if text.split()[1].lower().rstrip() == "Male":
                                 if followerLines[i1][4] == "Male":
                                     message(followerLines[i1][0] + "'s bat is already Male")
-                                if followerLines[i1][4] == "Female":
+                                if followerLines[i1][4].lower().rstrip() == "Female":
                                     message(
                                         "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
                                         followerLines[i1][4] + " to " + text.split()[1])
                                     followerLines[i1][4] = text.split()[1]
-                            if text.split()[1] == "Female":
-                                if followerLines[i1][4] == "Female":
+                            if text.split()[1].lower().rstrip() == "Female":
+                                if followerLines[i1][4].lower().rstrip() == "Female":
                                     message(followerLines[i1][0] + "'s bat is already Female")
-                                if followerLines[i1][4] == "Male":
+                                if followerLines[i1][4].lower().rstrip() == "Male":
                                     message(
                                         "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
                                         followerLines[i1][4] + " to " + text.split()[1])
                                     followerLines[i1][4] = text.split()[1]
-                            if not text.split()[1] == "Male":
-                                if not text.split()[1] == "Female":
+                            if not text.split()[1].lower().rstrip() == "Male":
+                                if not text.split()[1].lower().rstrip() == "Female":
                                     message("The gender can only be Male or Female")
                             owner = True
                     with open('followerDataNew.csv', "wb") as csvfile:
@@ -1234,6 +1258,37 @@ while True:
                 except IndexError:
                     print "Uptime failed"
             if "!fc" in text.lower().split()[0]:
+                try:
+                    # get the user
+                    if len(text.lower().split()) == 1:
+                        user = username
+                    if len(text.lower().split()) == 2:
+                        user = (text.lower().split()[1])
+
+                    testFollower = False
+                    # get user index and get their follow time and date and length
+                    for i1 in xrange(len(followerList)):
+                        for i2 in xrange(len(followerList[i1])):
+                            # print i1, followerList[i1]['from_name']
+                            if followerList[i1]['from_name'].lower() == user:
+                                followAge = followAgeAll()
+                                message("Last follow was on: " + str(
+                                    followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
+                                    followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
+                                    followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
+                                user = None
+                                testFollower = True
+                            else:
+                                pass
+                    if testFollower == False:
+                        message("User is not following the channel")
+
+                except IndexError:
+                    pass
+                except Exception, e:
+                    message("followage failed")
+                    message(str(e))
+            if "!followdate" in text.lower().split()[0]:
                 try:
                     # get the user
                     if len(text.lower().split()) == 1:
@@ -1300,8 +1355,8 @@ while True:
                             if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                 if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                     genderIndex = (int(i2) + 1)
-                                    if text.split()[3] == "Male" or text.split()[3] == "Female" or text.split()[
-                                        3] == "Androgynous":
+                                    if text.split()[3].lower().rstrip() == "Male" or text.split()[3].lower().rstrip() == "Female" or text.split()[
+                                        3].lower().rstrip() == "Androgynous":
                                         message(
                                             "Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
                                             subscriberLines[i1][genderIndex] + " to " + text.split()[3])
@@ -1409,7 +1464,7 @@ while True:
                         f.close()
             except:
                 pass
-            sleep(0.1)
+        sleep(20/30)
     except IndexError:
         pass
     except Exception, e:

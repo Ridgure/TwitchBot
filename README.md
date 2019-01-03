@@ -22,34 +22,60 @@
 **Commands:**
 
 ###### Commands for everyone:
-!add,
-!bellyrub,
-!divide,
-!facebook,
-!fc, 
-!instagram
-!multipy,
+
+General:
+!commands,
+!lurk,
+!fc,
+!followdate,
 !oclock,
-!pack, 
+!uptime,
+!asylumcraft
+
+Stating emotion:
+!bellyrub,
+!scrowl,
+!smile,
+
+Minecraft related:
+!pack,
+!sevtech,
+!tp,
+!java
+
+Social media:
 !social,
-!shout 
-!smile, 
-!timemeout,
-!twitter
-!uptime
-!bat
-!batnamechange
-!elfnamechange
-!elfgenderchange
+!instagram,
+!facebook,
+!twitter,
+!discord,
+!ctt
+
+Calculator:
+!add,
+!multipy,
+!divide
+
+Bat cave:
+!bat,
+!batnamechange,
+!batgenderchange
 
 ###### Subscriber commands:
-!elf
+Elf tree:
+!elf,
+!elfnamechange,
+!elfgenderchange
 
 ###### Broadcaster commands:
-!raid
+!raid,
+!shout
 
 ###### User specific commands:
-!lick
+!lick,
+!timemeout
+!jc747
+!octo
 
 **Automated functions:**
 

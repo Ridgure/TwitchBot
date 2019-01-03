@@ -471,9 +471,10 @@ while True:
                     # Get existing follower list
                     if not os.path.exists('followerData.csv'):
                         open('followerData.csv', "w+").close()
-                    with open('followerData.csv', "rb") as csvfile:
-                        followerDataReader = csv.reader(csvfile, delimiter=",")
-                        followerLines = list(followerDataReader)
+                    csvfile = open('followerData.csv', "rb")
+                    followerDataReader = csv.reader(csvfile, delimiter=",")
+                    followerLines = list(followerDataReader)
+                    csvfile.close()
 
                     # Compare follower lists
                     newFollowers = [item for item in test if item not in [i[0] for i in followerLines[1:]]]
@@ -489,9 +490,10 @@ while True:
                                 [Channel[1:], "0", "1", "", "", "", ""])
                         for i in range(len(newFollowers)):
                             followerLines.append([newFollowers[i], "", "", "", "", "", ""])
-                        with open('followerDataNew.csv', "wb") as csvfile:
-                            followerDataWriter = csv.writer(csvfile, delimiter=",")
-                            followerDataWriter.writerows(followerLines)
+                        csvfile = open('followerDataNew.csv', "wb")
+                        followerDataWriter = csv.writer(csvfile, delimiter=",")
+                        followerDataWriter.writerows(followerLines)
+                        csvfile.close()
                         os.remove('followerData.csv')
                         os.rename('followerDataNew.csv', 'followerData.csv')
                         if len(newFollowers) == 1:
@@ -622,9 +624,10 @@ while True:
 
                     if not os.path.exists('followerDataNew.csv'):
                         open('followerDataNew.csv', "w+").close()
-                    with open('followerDataNew.csv', "wb") as csvfile:
-                        followerDataWriter = csv.writer(csvfile, delimiter=",")
-                        followerDataWriter.writerows(followerLines)
+                    csvfile = open('followerDataNew.csv', "wb")
+                    followerDataWriter = csv.writer(csvfile, delimiter=",")
+                    followerDataWriter.writerows(followerLines)
+                    csvfile.close()
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
 
@@ -632,9 +635,10 @@ while True:
                     if not os.path.exists('subscriberData.csv'):
                         open('subscriberData.csv', "w+").close()
                     global subscriberLines
-                    with open('subscriberData.csv', "rb") as csvfile:
-                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                        subscriberLines = list(subscriberDataReader)
+                    csvfile = open('subscriberData.csv', "rb")
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                    csvfile.close()
 
                     # Thank for upgrading and set Subtier
                     for i1 in range(len(subscriberLines)):
@@ -948,9 +952,10 @@ while True:
                                         subscriberLines[i1][1] = subscribeAgeList[i2][7]
 
                     # write back any changes to a the subscriber file
-                    with open('subscriberDataNew.csv', "wb") as csvfile:
-                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                        subscriberDataWriter.writerows(subscriberLines)
+                    csvfile = open('subscriberDataNew.csv', "wb")
+                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                    subscriberDataWriter.writerows(subscriberLines)
+                    csvfile.close()
                     os.remove('subscriberData.csv')
                     os.rename('subscriberDataNew.csv', 'subscriberData.csv')
 
@@ -962,6 +967,16 @@ while True:
             if "!commands" in text.lower().split()[0]:
                 try:
                     message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
+                except IndexError:
+                    pass
+            if "!ctt" in text.lower().split()[0]:
+                try:
+                    message("Tweet out the stream using this link: https://ctt.ac/q2ne9")
+                except IndexError:
+                    pass
+            if "!tp" in text.lower().split()[0]:
+                try:
+                    message("The texture pack I am currently using is Soartex Fanver Modded Universal")
                 except IndexError:
                     pass
             if "!test" in text.lower().split()[0]:
@@ -1017,7 +1032,7 @@ while True:
                                                 followerLines[i][5].lower())
                                     if followerLines[i][6] == 1:
                                         message(
-                                            username + "'s bat has morphed into an elf. !elf to see information on your elf.")
+                                            username + "'s :bat: has morphed into an elf. !elf to see information on your elf.")
                     if len(text.lower().split()) == 2:
                         for i in range(len(followerLines)):
                             if followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
@@ -1029,17 +1044,21 @@ while True:
                                     message("User is not following the channel")
                                 if followerLines[i][2] == "1":
                                     if followerLines[i][6] == 0:
-                                        message(text.split()[1] + "'s bat is called " + followerLines[i][
+                                        message(text.split()[1] + "'s :bat: is called " + followerLines[i][
                                             3] + ". " + gender + " is colored " + followerLines[i][5].lower())
                                     if followerLines[i][6] == 1:
                                         message(
-                                            text.split()[1] + "'s bat has morphed into an elf. !elf " + text.split()[
+                                            text.split()[1] + "'s :bat: has morphed into an elf. !elf " + text.split()[
                                                 1] + " to see information on their elf.")
+                                if not followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                    message("Follower not found")
+                            elif followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                message("User is not following the channel")
                 except IndexError:
                     pass
                 except Exception, e:
                     pass
-            if "!elf" in text.lower().split()[0]:
+            if "!elf" == text.lower().split()[0]:
                 try:
                     elfInfo = None
                     if len(text.lower().split()) == 2:
@@ -1132,6 +1151,11 @@ while True:
                     message("Join the discord! https://discord.gg/yddBmCE")
                 except IndexError:
                     pass
+            if "!java" in text.lower().split()[0]:
+                try:
+                    message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
+                except IndexError:
+                    pass
             if "!oclock" in text.lower().split()[0]:
                 try:
                     message("The time for me right now is " + datetime.datetime.now().strftime(
@@ -1179,18 +1203,23 @@ while True:
                     pass
             if "!batnamechange" in text.lower().split()[0]:
                 try:
-                    with open('followerData.csv', "rb") as csvfile:
-                        followerDataReader = csv.reader(csvfile, delimiter=",")
-                        followerLines = list(followerDataReader)
+                    csvfile = open('followerData.csv', "rb")
+                    followerDataReader = csv.reader(csvfile, delimiter=",")
+                    followerLines = list(followerDataReader)
+                    csvfile.close()
 
-                    for i in range(len(followerLines)):
-                        if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
-                            followerLines[i][3] = text.split()[1]
-                            message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
+                    if len(text.lower().split()[1].encode("utf-8")) < 10:
+                        for i in range(len(followerLines)):
+                            if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
+                                followerLines[i][3] = text.split()[1]
+                                message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
 
-                    with open('followerDataNew.csv', "wb") as csvfile:
-                        followerDataWriter = csv.writer(csvfile, delimiter=",")
-                        followerDataWriter.writerows(followerLines)
+                    if len(text.lower().split()[1].encode("utf-8")) > 20:
+                        message("Name cannot be longer than 20 characters")
+                    csvfile = open('followerDataNew.csv', "wb")
+                    followerDataWriter = csv.writer(csvfile, delimiter=",")
+                    followerDataWriter.writerows(followerLines)
+                    csvfile.close()
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
                 except IndexError:
@@ -1198,36 +1227,38 @@ while True:
                     pass
             if "!batgenderchange" in text.lower().split()[0]:
                 try:
-                    with open('followerData.csv', "rb") as csvfile:
-                        followerDataReader = csv.reader(csvfile, delimiter=",")
-                        followerLines = list(followerDataReader)
+                    csvfile = open('followerData.csv', "rb")
+                    followerDataReader = csv.reader(csvfile, delimiter=",")
+                    followerLines = list(followerDataReader)
+                    csvfile.close()
 
                     owner = False
                     for i1 in range(len(followerLines)):
                         if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                            if text.split()[1].lower().rstrip() == "Male":
-                                if followerLines[i1][4] == "Male":
-                                    message(followerLines[i1][0] + "'s bat is already Male")
-                                if followerLines[i1][4].lower().rstrip() == "Female":
+                            if text.split()[1].lower().rstrip() == "male":
+                                if followerLines[i1][4].lower().rstrip() == "male":
+                                    message(followerLines[i1][0] + "'s bat is already male")
+                                if followerLines[i1][4].lower().rstrip() == "female":
                                     message(
                                         "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
-                                        followerLines[i1][4] + " to " + text.split()[1])
-                                    followerLines[i1][4] = text.split()[1]
-                            if text.split()[1].lower().rstrip() == "Female":
-                                if followerLines[i1][4].lower().rstrip() == "Female":
+                                        "female to male")
+                                    followerLines[i1][4] = "Male"
+                            if text.split()[1].lower().rstrip() == "female":
+                                if followerLines[i1][4].lower().rstrip() == "female":
                                     message(followerLines[i1][0] + "'s bat is already Female")
-                                if followerLines[i1][4].lower().rstrip() == "Male":
+                                if followerLines[i1][4].lower().rstrip() == "male":
                                     message(
                                         "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
-                                        followerLines[i1][4] + " to " + text.split()[1])
-                                    followerLines[i1][4] = text.split()[1]
-                            if not text.split()[1].lower().rstrip() == "Male":
-                                if not text.split()[1].lower().rstrip() == "Female":
-                                    message("The gender can only be Male or Female")
+                                        "male to female")
+                                    followerLines[i1][4] = "Female"
+                            if not text.split()[1].lower().rstrip() == "male":
+                                if not text.split()[1].lower().rstrip() == "female":
+                                    message("The gender can only be male or female")
                             owner = True
-                    with open('followerDataNew.csv', "wb") as csvfile:
-                        followerDataWriter = csv.writer(csvfile, delimiter=",")
-                        followerDataWriter.writerows(followerLines)
+                    csvfile = open('followerDataNew.csv', "wb")
+                    followerDataWriter = csv.writer(csvfile, delimiter=",")
+                    followerDataWriter.writerows(followerLines)
+                    csvfile.close()
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
                     if owner == False:
@@ -1281,7 +1312,7 @@ while True:
                             else:
                                 pass
                     if testFollower == False:
-                        message("User is not following the channel")
+                        message("Command on cooldown")
 
                 except IndexError:
                     pass
@@ -1322,23 +1353,29 @@ while True:
             if "!elfnamechange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    for i1 in range(len(subscriberLines)):
-                        for i2 in range(len(subscriberLines[i1])):
-                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                if text.lower().split()[1] == subscriberLines[i1][i2].lower():
-                                    with open('subscriberData.csv', "rb") as csvfile:
+                    if (len(text.lower().split()[4].encode("ascii")) + len(text.lower().split()[5].encode("ascii"))) < 20:
+                        for i1 in range(len(subscriberLines)):
+                            for i2 in range(len(subscriberLines[i1])):
+                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                    if text.lower().split()[1] == subscriberLines[i1][i2].lower():
+                                        csvfile = open('subscriberData.csv', "rb")
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
-                                    subscriberLines[i1][i2] = text.split()[4]
-                                    subscriberLines[i1][15] = text.split()[5]
-                                    message("Successfully changed the name of " + text.split()[1] + " " + text.split()[
-                                        2] + " to " + text.split()[4] + " " + subscriberLines[i1][15])
-                                    with open('subscriberDataNew.csv', "wb") as csvfile:
+                                        csvfile.close()
+                                        subscriberLines[i1][i2] = text.split()[4]
+                                        subscriberLines[i1][15] = text.split()[5]
+                                        message("Successfully changed the name of " + text.split()[1] + " " + text.split()[
+                                            2] + " to " + text.split()[4] + " " + subscriberLines[i1][15])
+                                        csvfile = open('subscriberDataNew.csv', "wb")
                                         subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                                         subscriberDataWriter.writerows(subscriberLines)
-                                    os.remove('subscriberData.csv')
-                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                    owner = True
+                                        csvfile.close()
+                                        os.remove('subscriberData.csv')
+                                        os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                        owner = True
+                                    if (len(text.lower().split()[4].encode("ascii")) + len(text.lower().split()[5].encode("ascii"))) > 20:
+                                        message("Name cannot be longer than 20 characters")
+                                        owner = True
                     if owner == False:
                         message("You cannot change the name of other people's elves")
                 except IndexError:
@@ -1346,9 +1383,10 @@ while True:
                     print "elfnamechange failed"
             if "!elfgenderchange" in text.lower().split()[0]:
                 try:
-                    with open('subscriberData.csv', "rb") as csvfile:
-                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                        subscriberLines = list(subscriberDataReader)
+                    csvfile = open('subscriberData.csv', "rb")
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                    csvfile.close()
                     owner = False
                     for i1 in range(len(subscriberLines)):
                         for i2 in range(len(subscriberLines[i1])):
@@ -1364,9 +1402,10 @@ while True:
                                     else:
                                         message("The gender can only be Male, Female or Androgynous")
                                     owner = True
-                    with open('subscriberDataNew.csv', "wb") as csvfile:
-                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                        subscriberDataWriter.writerows(subscriberLines)
+                    csvfile = open('subscriberDataNew.csv', "wb")
+                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                    subscriberDataWriter.writerows(subscriberLines)
+                    csvfile.close()
                     os.remove('subscriberData.csv')
                     os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                     if owner == False:
@@ -1413,9 +1452,10 @@ while True:
             recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
             message = re.search(r'(?<=user-type)= :tmi.twitch.tv USERNOTICE #\w+ :(.*)', response).group(1)
             try:
-                with open('testSubscriberData.csv', "rb") as csvfile:
-                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                    subscriberLines = list(subscriberDataReader)
+                csvfile = open('testSubscr   iberData.csv', "rb")
+                subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                subscriberLines = list(subscriberDataReader)
+                csvfile.close()
                 for i in range(len(subscriberLines)):
                     if msgId == "sub" or "resub":
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
@@ -1423,9 +1463,10 @@ while True:
                     if msgId == "subgift":
                         if subscriberLines[i][0].rstrip().lower() == recipientUserName.rstrip().lower():
                             subscriberLines[i][1] = subscriberLines[i][1] + 1
-                with open('testSubscriberDataNew.csv', "wb") as csvfile:
-                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                    subscriberDataWriter.writerows(subscriberLines)
+                csvfile = open('testSubscriberDataNew.csv', "wb")
+                subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                subscriberDataWriter.writerows(subscriberLines)
+                csvfile.close()
                 os.remove('testSubscriberData.csv')
                 os.rename('testSubscriberDataNew.csv', 'testSubscriberData.csv')
             except Exception, e:

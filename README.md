@@ -23,7 +23,7 @@
 
 ###### Commands for everyone:
 
-General:
+General:<br>
 !commands,
 !lurk,
 !fc,
@@ -32,18 +32,18 @@ General:
 !uptime,
 !asylumcraft
 
-Stating emotion:
+Stating emotion:<br>
 !bellyrub,
 !scrowl,
 !smile,
 
-Minecraft related:
+Minecraft related:<br>
 !pack,
 !sevtech,
 !tp,
 !java
 
-Social media:
+Social media:<br>
 !social,
 !instagram,
 !facebook,
@@ -51,18 +51,18 @@ Social media:
 !discord,
 !ctt
 
-Calculator:
+Calculator:<br>
 !add,
 !multipy,
 !divide
 
-Bat cave:
+Bat cave:<br>
 !bat,
 !batnamechange,
 !batgenderchange
 
 ###### Subscriber commands:
-Elf tree:
+Elf tree:<br>
 !elf,
 !elfnamechange,
 !elfgenderchange
@@ -72,17 +72,19 @@ Elf tree:
 !shout
 
 ###### User specific commands:
-!lick,
-!timemeout
-!jc747
+!lick,<br>
+!timemeout<br>
+!jc747<br>
 !octo
 
 **Automated functions:**
 
-Follower notification,
-Subscriber notification,
-Output last 20 messages in chat to a file, 
-"Eww cobble" every time cobble is mentioned. 
+Follower notification,<br>
+Subscriber notification,<br>
+Output last 20 messages in chat to a file,<br>
+"Eww cobble" every time cobble is mentioned,<br>
+Times out non vip/moderators if they post links<br>
+Bans users that use bad language
 
 ## Getting started
 
@@ -122,7 +124,7 @@ ClientID = "<ClientID>"        # Your client ID
   - Remember to swap out <clientID> with your client id!
   - Click Authenticate
   - It will look like you got a blank page but your url should look like the second url
-  - Your access token is the gibberish where it says <Token> in the url 
+  - Your access token is the gibberish where it says Token in the url 
 ```
 https://id.twitch.tv/oauth2/authorize?client_id=<clientID>&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login
 http://localhost/#access_token=<Token>&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login&token_type=bearer

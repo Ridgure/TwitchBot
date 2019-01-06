@@ -26,14 +26,6 @@ s.send("CAP REQ :twitch.tv/tags\r\n")
 
 
 def randomEmote():
-    emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss",
-              "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head",
-              "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys",
-              "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee",
-              "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth",
-              "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG",
-              "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati",
-              "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "LUL", "PowerUpR", "PowerUpL"]
     randomNumber = random.randint(0, len(emotes))
     randomEmote = emotes[randomNumber]
     return randomEmote
@@ -163,6 +155,8 @@ def followers():
         for i in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
             url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
             response = requests.get(url200, headers=params).json()
+            if response.status_code == 429:
+                print "Too many follower requests"
             pagination = response['pagination']['cursor']
             followerList = followerList + response['data']
 
@@ -363,9 +357,11 @@ def subscribeAgeAll():
 
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
     params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
     response = requests.get(url, headers=params).json()
+    if response.status_code == 429:
+        print "Too many uptime requests"
     StreamStart = response['data'][0]
     # print response
     # returns
@@ -437,11 +433,15 @@ def uptime():
         uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
         return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
 
-
-CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
+# Declare variables
+# Message severities
+# Timeout 1 second
+level1 = ["https://", "http://"]
+# Ban
+level2 = ["nigger", "retard"]
+broadcaster = Channel[1:]
 
 while True:
-
     try:
         def message(msg):
             try:
@@ -461,6 +461,37 @@ while True:
             print "Response: " + response  ### These are all the responses that are not message related
             if True == True:
                 try:
+                    # Timeout misbehaving users
+                    if not username.lower().rstrip() == broadcaster:
+                        for i1 in range(len(badges)):
+                            if not str(badges[i1]) == "moderator/1":
+                                if not str(badges[i1]) == "vip/1":
+                                    if "." in text.lower().encode('ascii'):
+                                        for i2 in topLevelDomains:  # Found in names.py
+                                            if i2 in text.lower().encode('ascii', 'ignore'):
+                                                print "test2"
+                                                try:
+                                                    message("/timeout " + username + " 1")
+                                                    print "Timed out " + username + " for 1 second because of " + i2
+                                                except IndexError, e:
+                                                    print str(e)
+                                                    pass
+                                    for i3 in level1:
+                                        if i3 in text.lower().encode('ascii', 'ignore'):
+                                            try:
+                                                message("/timeout " + username + " 1")
+                                                print "Timed out " + username + " for 1 second because of " + i
+                                            except IndexError, e:
+                                                print str(e)
+                                                pass
+                                    for i4 in level2:
+                                        if i4 in text.lower().encode('ascii', 'ignore'):
+                                            try:
+                                                message("/ban " + username)
+                                            except IndexError, e:
+                                                print str(e)
+                                                pass
+
                     # Get new follower list and format it to compare with unfollowers
                     followers()
                     test = []
@@ -1163,7 +1194,7 @@ while True:
                 except IndexError:
                     pass
             if "!shout" in text.lower().split()[0]:
-                if username == "Ridgure":
+                if username.lower().rstrip() == broadcaster:
                     try:
                         message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
                     except IndexError:

@@ -358,8 +358,8 @@ def uptime():
     url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
     params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
     response = requests.get(url, headers=params).json()
-    if response.status_code == 429:
-        print "Too many uptime requests"
+    # if response.status_code == 429:
+    #     print "Too many uptime requests"
     StreamStart = response['data'][0]
     # print response
     # returns
@@ -1730,7 +1730,7 @@ while True:
             if "!elfnamechange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    if (len(text.lower().split()[3].encode("ascii"))) < 10:
+                    if (len(text.lower().split()[3].encode("ascii"))) < 15:
                         for i1 in range(len(subscriberLines)):
                             for i2 in [8, 10, 12, 14, 16, 18]:
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
@@ -1748,10 +1748,10 @@ while True:
                                         csvfile.close()
                                         os.remove('subscriberData.csv')
                                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                        owner = True
-                                    if (len(text.lower().split()[3].encode("ascii"))) > 10:
+                                        break
+                                    if (len(text.lower().split()[3].encode("ascii"))) > 15:
                                         message("Name cannot be longer than 20 characters")
-                                        owner = True
+                                    owner = True
                     if owner == False:
                         message("You cannot change the name of other people's elves")
                 except IndexError:
@@ -1760,7 +1760,7 @@ while True:
             if "!elffamilychange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    if (len(text.lower().split()[3].encode("ascii"))) < 10:
+                    if (len(text.lower().split()[3].encode("ascii"))) < 15:
                         for i1 in range(len(subscriberLines)):
                             for i2 in [8, 10, 12, 14, 16, 18]:
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
@@ -1778,12 +1778,11 @@ while True:
                                         csvfile.close()
                                         os.remove('subscriberData.csv')
                                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                        owner = True
-                                    if (len(text.lower().split()[3].encode("ascii"))) > 10:
+                                    if (len(text.lower().split()[3].encode("ascii"))) > 15:
                                         message("Name cannot be longer than 20 characters")
-                                        owner = True
+                                    owner = True
                     if owner == False:
-                        message("You cannot change the name of other people's elves")
+                        message("You cannot change the family of other people's elves")
                 except IndexError:
                     message("Did you remember to write '!elffamilychange <old lastname> to <new lastname>'?")
                     print "elffamilychange failed"
@@ -1856,33 +1855,16 @@ while True:
                 except Exception, e:
                     message("Addition failed")
                     message(str(e))
-        if "USERNOTICE" in data:
+        elif "USERNOTICE" in data:
             global username, msgId, systemMsg, recipientUserName, text, msgParamSubPlan
             try:
+                print "Response: " + response
                 username = re.search(r'(?<=display-name=)\w+', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 msgId = re.search(r'(?<=msg-id=)(.*?);', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 systemMsg = re.search(r'(?<=system-msg=)(.*?);', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 text = re.search(r'(?<=user-type)= :tmi.twitch.tv USERNOTICE #\w+ :(.*)', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(1)
-            except Exception, e:
-                print str(e)
-            try:
                 if msgId == "ritual":
                     message("Welcome " + username + "! " + text.encode('ascii', 'ignore'))
                 if msgId == "raid":

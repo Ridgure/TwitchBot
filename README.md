@@ -30,7 +30,9 @@ General:<br>
 !followdate,
 !oclock,
 !uptime,
-!asylumcraft
+!asylumcraft,
+!bot,
+!breakdance
 
 Stating emotion:<br>
 !bellyrub,

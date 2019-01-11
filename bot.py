@@ -1561,6 +1561,11 @@ while True:
                     message("See all the members of asylumcraft in the panel below and follow like you have never followerd before")
                 except IndexError:
                     pass
+            if "!bot" in text.lower().split()[0]:
+                try:
+                    message("I write my own chatbot. To figure out what commands can be used and how to install it check out this page: https://github.com/Ridgure/TwitchBot")
+                except IndexError:
+                    pass
             if "!bug" in text.lower().split()[0]:
                 try:
                     message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
@@ -1736,18 +1741,18 @@ while True:
             if "!elfnamechange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    if (len(text.lower().split()[3].encode("ascii"))) <= 15:
+                    if (len(text.lower().split()[2].encode("ascii"))) <= 15:
                         for i1 in range(len(subscriberLines)):
-                            for i2 in [8, 10, 12, 14, 16, 18]:
-                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                for i2 in [8, 10, 12, 14, 16, 18]:
                                     if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                         csvfile = open('subscriberData.csv', "rb")
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
                                         csvfile.close()
-                                        subscriberLines[i1][i2] = text.split()[3]
+                                        subscriberLines[i1][i2] = text.split()[2]
                                         for i in range(1):
-                                            message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[3] + " " + subscriberLines[i1][7])
+                                            message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
                                         csvfile = open('subscriberDataNew.csv', "wb")
                                         subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                                         subscriberDataWriter.writerows(subscriberLines)
@@ -1756,7 +1761,7 @@ while True:
                                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                                         owner = True
                                         break
-                    elif (len(text.lower().split()[3].encode("ascii"))) > 15:
+                    elif (len(text.lower().split()[2].encode("ascii"))) > 15:
                         message("Name cannot be longer than 15 characters")
                         owner = True
                     if owner == False:
@@ -1767,27 +1772,26 @@ while True:
             if "!elffamilychange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    if (len(text.lower().split()[3].encode("ascii"))) <= 15:
+                    if (len(text.lower().split()[2].encode("ascii"))) <= 15:
                         for i1 in range(len(subscriberLines)):
-                            for i2 in [8, 10, 12, 14, 16, 18]:
-                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                    if text.lower().split()[1] == subscriberLines[i1][7].lower():
-                                        csvfile = open('subscriberData.csv', "rb")
-                                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                        subscriberLines = list(subscriberDataReader)
-                                        csvfile.close()
-                                        subscriberLines[i1][7] = text.split()[2]
-                                        for i in range(1):
-                                            message("Successfully changed family " + text.split()[1] + " to family " + subscriberLines[i1][7])
-                                        csvfile = open('subscriberDataNew.csv', "wb")
-                                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                        subscriberDataWriter.writerows(subscriberLines)
-                                        csvfile.close()
-                                        os.remove('subscriberData.csv')
-                                        os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                        owner = True
-                    elif (len(text.lower().split()[3].encode("ascii"))) > 15:
-                        message("Name cannot be longer than 15 characters")
+                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                if text.lower().split()[1] == subscriberLines[i1][7].lower():
+                                    csvfile = open('subscriberData.csv', "rb")
+                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                    subscriberLines = list(subscriberDataReader)
+                                    csvfile.close()
+                                    subscriberLines[i1][7] = text.split()[2]
+                                    for i in range(1):
+                                        message("Successfully changed family " + text.split()[1] + " to family " + subscriberLines[i1][7])
+                                    csvfile = open('subscriberDataNew.csv', "wb")
+                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                    subscriberDataWriter.writerows(subscriberLines)
+                                    csvfile.close()
+                                    os.remove('subscriberData.csv')
+                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                    owner = True
+                    elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                        message("Family name cannot be longer than 15 characters")
                         owner = True
                     if owner == False:
                         message("You cannot change the family of other people's elves")
@@ -1802,8 +1806,8 @@ while True:
                     csvfile.close()
                     owner = False
                     for i1 in range(len(subscriberLines)):
-                        for i2 in [8, 10, 12, 14, 16, 18]:
-                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                        if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                            for i2 in [8, 10, 12, 14, 16, 18]:
                                 if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                     genderIndex = (int(i2) + 1)
                                     if text.split()[

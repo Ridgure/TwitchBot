@@ -459,15 +459,16 @@ while True:
                                 break
                             if badges[i1] == 'vip/1':
                                 break
-                            if "." in text.lower().encode('ascii'):
-                                for i2 in topLevelDomains:  # Found in names.py
-                                    if i2 in text.lower().encode('ascii', 'ignore'):
-                                        try:
-                                            message("/timeout " + username + " 1")
-                                            print "Timed out " + username + " for 1 second because of " + i2
-                                        except IndexError, e:
-                                            print str(e)
-                                            pass
+                            if "/" in text.lower().encode('ascii'):
+                                if "." in text.lower().encode('ascii'):
+                                    for i2 in topLevelDomains:  # Found in names.py
+                                        if i2 in text.lower().encode('ascii', 'ignore'):
+                                            try:
+                                                message("/timeout " + username + " 1")
+                                                print "Timed out " + username + " for 1 second because of " + i2
+                                            except IndexError, e:
+                                                print str(e)
+                                                pass
                             for i3 in timeout1:
                                 if i3 in text.lower().encode('ascii', 'ignore'):
                                     try:
@@ -1539,6 +1540,12 @@ while True:
                         message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
                     except IndexError:
                         pass
+            if "!breakdance" in text.lower().split()[0]:
+                if username.lower().rstrip() == broadcaster:
+                    try:
+                        message("oi, get up off ye arse an stretch your legs, grab a drink. Ridgure will be back shortly")
+                    except IndexError:
+                        pass
             if "!jc747" in text.lower().split()[0]:
                 try:
                     message("It's JSea474 you fool!")
@@ -1755,7 +1762,7 @@ while True:
                     if owner == False:
                         message("You cannot change the name of other people's elves")
                 except IndexError:
-                    message("Did you remember to write '!elfnamechange firstName lastname to first name lastname'?")
+                    message("Did you remember to write '!elfnamechange firstName first name'?")
                     print "elfnamechange failed"
             if "!elffamilychange" in text.lower().split()[0]:
                 try:
@@ -1769,7 +1776,7 @@ while True:
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
                                         csvfile.close()
-                                        subscriberLines[i1][7] = text.split()[3]
+                                        subscriberLines[i1][7] = text.split()[2]
                                         for i in range(1):
                                             message("Successfully changed family " + text.split()[1] + " to family " + subscriberLines[i1][7])
                                         csvfile = open('subscriberDataNew.csv', "wb")
@@ -1778,13 +1785,14 @@ while True:
                                         csvfile.close()
                                         os.remove('subscriberData.csv')
                                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                        owner = True
                     elif (len(text.lower().split()[3].encode("ascii"))) > 15:
                         message("Name cannot be longer than 15 characters")
                         owner = True
                     if owner == False:
                         message("You cannot change the family of other people's elves")
                 except IndexError:
-                    message("Did you remember to write '!elffamilychange <old lastname> to <new lastname>'?")
+                    message("Did you remember to write '!elffamilychange <old lastname> <new lastname>'?")
                     print "elffamilychange failed"
             if "!elfgenderchange" in text.lower().split()[0]:
                 try:

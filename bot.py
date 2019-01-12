@@ -724,20 +724,17 @@ while True:
                                                                                                       'ignore') == \
                                     newSubscribers[i1]:
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "1":
-                                    subPoints = "1"
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
-                                                                       [""] * 2) + [subPoints] + ([""] * 4))
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                                               "1"] + ([""] * 4))
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "2":
-                                    subPoints = "2"
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
-                                                                       [""] * 2) + [subPoints] + ([""] * 6))
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                                               "2"] + ([""] * 4))
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "3":
-                                    subPoints = "6"
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
-                                                                       [""] * 2) + [subPoints] + ([""] * 14))
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                                               "6"] + ([""] * 4))
                     if len(newGiftedSubscribers) == 1:
                         message(newGifters + " has given a subscription to " + " ".join(
                             newGiftedSubscribers) + "! Type !elf to see your elf's information")
@@ -759,15 +756,6 @@ while True:
                                     newGifter = False
                                 if newGifter == True:
                                     subscriberLines.append([newGifters[i1]] + ([""] * 18))
-
-                # add parameters for elves if gifts subs have been given
-                for i1 in range(len(subscriberLines)):
-                    if not subscriberLines[i1][0] == "Username":
-                        print (int(subscriberLines[i1][6]) * 2)
-                        print len(subscriberLines[i1][8:])
-                        if (int(subscriberLines[i1][6]) * 2) > len(subscriberLines[i1][8:]):
-                            for i2 in range(((int(subscriberLines[i1][6]) * 2) - len(subscriberLines[i1][8:]))):
-                                subscriberLines[i1].append("")
 
                 # add sub and gift points
                 for i in range(len(subscriberLines)):
@@ -817,6 +805,13 @@ while True:
                     except IndexError:
                         print 'Skipped adding elf name or gender. Will add next time this loops'
                         pass
+
+                # add parameters for elves if gifts subs have been given
+                for i1 in range(len(subscriberLines)):
+                    if not subscriberLines[i1][0] == "Username":
+                        if (int(subscriberLines[i1][6]) * 2) > len(subscriberLines[i1][8:]):
+                            for i2 in range(((int(subscriberLines[i1][6]) * 2) - len(subscriberLines[i1][8:]))):
+                                subscriberLines[i1].append("")
 
                 # Update SubStreak if badge is higher than local value
                 for i1 in range(len(badges)):
@@ -1374,43 +1369,84 @@ while True:
                 except Exception, e:
                     message("Addition failed")
                     message(str(e))
-        elif "USERNOTICE" in data:
-            global username, msgId, systemMsg, recipientUserName, text, msgParamSubPlan
+        if "USERNOTICE" in data:
             try:
                 print "Response: " + response
-                username = re.search(r'(?<=display-name=)\w+', response).group(1)
+                username = re.search(r'(?<=display-name=)\w+', response).group(0)
                 msgId = re.search(r'(?<=msg-id=)(.*?);', response).group(1)
                 systemMsg = re.search(r'(?<=system-msg=)(.*?);', response).group(1)
-                recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
-                text = re.search(r'(?<=user-type)= :tmi.twitch.tv USERNOTICE #\w+ :(.*)', response).group(1)
-                msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(1)
+                try:
+                    global text
+                    text = re.search(r'(?<=USERNOTICE)\W+\w+\s\:(.*)', response).group(1)
+                except Exception, e:
+                    print "text failed"
+                    print str(e)
                 if msgId == "ritual":
                     message("Welcome " + username + "! " + text.encode('ascii', 'ignore'))
                 if msgId == "raid":
-                    message("Welcome raiders!")
-                csvfile = open('subscriberData.csv', "rb")
-                subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                subscriberLines = list(subscriberDataReader)
-                csvfile.close()
-                for i in range(len(subscriberLines)):
-                    if msgId == "sub" or "resub":
+                    message("Raiders are flying through the cave and climbing up the tree!")
+                if msgId == "sub":
+                    msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
+                    csvfile = open('subscriberData.csv', "rb")
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                    csvfile.close()
+                    for i in range(len(subscriberLines)):
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
-                            subscriberLines[i][1] = str(int(subscriberLines[i][1]) + 1)
-                    if msgId == "subgift":
-                        if subscriberLines[i][0].rstrip().lower() == recipientUserName.rstrip().lower():
-                            if subscriberLines[i][3] == "":
-                                subscriberLines[i][3] = "0"
-                            if subscriberLines[i][4] == "":
-                                subscriberLines[i][4] = "0"
-                            subscriberLines[i][3] = str(int(subscriberLines[i][3]) + 1)
-                            if msgParamSubPlan.encode('ascii', 'ignore') == "Prime":
-                                subscriberLines[i][3] = str(int(subscriberLines[i][4]) + 1)
+                            subscriberLines[i][1] = 1
+                    message("Spam all the hearts you have!!!")
+                if msgId == "resub":
+                    msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
+                    csvfile = open('subscriberData.csv', "rb")
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                    csvfile.close()
+                    subStreak = re.search(r'for\\s(\d+)', systemMsg).group(1)
+                    for i in range(len(subscriberLines)):
+                        if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
+                            subscriberLines[i][1] = subStreak
+                    message("Spam all the hearts you have!!!")
+                if msgId == "subgift":
+                    recipientUserName = re.search(r'(?<=msg-param-recipient-display-name=)(.*?);', response).group(1)
+                    msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
+                    message("Thank you so much " + username + " for gifting that tier " +
+                            msgParamSubPlan.encode('ascii', 'ignore')[0] + " sub to " + recipientUserName)
+                    csvfile = open('subscriberData.csv', "rb")
+                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                    subscriberLines = list(subscriberDataReader)
+                    csvfile.close()
+                    newContributer = True
+                    for i1 in range(len(subscriberLines)):
+                        if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                            newContributer = False
+                            if subscriberLines[i1][3] == "":
+                                subscriberLines[i1][3] = "0"
+                            if subscriberLines[i1][4] == "":
+                                subscriberLines[i1][4] = "0"
+                            subscriberLines[i1][3] = str(int(subscriberLines[i1][3]) + 1)
                             if msgParamSubPlan.encode('ascii', 'ignore') == "1000":
-                                subscriberLines[i][3] = str(int(subscriberLines[i][4]) + 1)
-                            if msgParamSubPlan[0].encode('ascii', 'ignore') == "2000":
-                                subscriberLines[i][3] = str(int(subscriberLines[i][4]) + 2)
-                            if msgParamSubPlan[0].encode('ascii', 'ignore') == "3000":
-                                subscriberLines[i][3] = str(int(subscriberLines[i][4]) + 6)
+                                subscriberLines[i1][4] = str(int(subscriberLines[i1][4]) + 1)
+                            if msgParamSubPlan.encode('ascii', 'ignore') == "2000":
+                                subscriberLines[i1][4] = str(int(subscriberLines[i1][4]) + 2)
+                            if msgParamSubPlan.encode('ascii', 'ignore') == "3000":
+                                subscriberLines[i1][4] = str(int(subscriberLines[i1][4]) + 6)
+                    if newContributer == True:
+                        if msgParamSubPlan.encode('ascii', 'ignore') == "1000":
+                            subscriberLines.append(
+                                [username] + ["0"] + ["0"] + ["1"] + ["1"] + ["0"] + ([""] * 4))
+                        if msgParamSubPlan.encode('ascii', 'ignore') == "2000":
+                            subscriberLines.append(
+                                [username] + ["0"] + ["0"] + ["1"] + ["2"] + ["0"] + ([""] * 4))
+                        if msgParamSubPlan.encode('ascii', 'ignore') == "3000":
+                            subscriberLines.append(
+                                [username] + ["0"] + ["0"] + ["1"] + ["6"] + ["0"] + ([""] * 4))
+                if msgId == "anonsubgift":
+                    recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
+                    msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
+                    message("Thank you for giving that anonymous tier " + msgParamSubPlan.encode('ascii', 'ignore')[
+                        0] + " subgift to " + recipientUserName)
+
+                # Write back subscriber lines
                 csvfile = open('subscriberDataNew.csv', "wb")
                 subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                 subscriberDataWriter.writerows(subscriberLines)
@@ -1418,7 +1454,7 @@ while True:
                 os.remove('subscriberData.csv')
                 os.rename('subscriberDataNew.csv', 'subscriberData.csv')
             except Exception, e:
-                message(str(e))
+                print str(e)
         else:
             try:
                 if not "PRIVMSG" in data:

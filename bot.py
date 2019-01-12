@@ -651,29 +651,33 @@ while True:
                 csvfile.close()
 
                 # Thank for upgrading and set Subtier
-                for i1 in range(len(subscriberLines)):
-                    for i2 in range(len(subscriberResponse['subscriptions'])):
-                        if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
-                                                                                                  'ignore') == \
-                                subscriberLines[i1][0]:
-                            # Check for upgrades of existing subscriptions
-                            if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
-                                    message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                        'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
-                                    message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                        'display_name'].encode('ascii',
-                                                               'ignore') + " for upgrading your subscription to tier 2!")
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
-                                    message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                        'display_name'].encode('ascii',
-                                                               'ignore') + " for upgrading your subscription to tier 3!")
+                try:
+                    for i1 in range(len(subscriberLines)):
+                        for i2 in range(len(subscriberResponse['subscriptions'])):
+                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                                                                                                      'ignore') == \
+                                    subscriberLines[i1][0]:
+                                # Check for upgrades of existing subscriptions
+                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 2!")
+                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
+                                            'display_name'].encode('ascii',
+                                                                   'ignore') + " for upgrading your subscription to tier 3!")
 
-                            # Set sub tier and set back to 0 if sub runs out
-                            subscriberLines[i1][2] = 0
-                            subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
-                            subscriberLines[i1][2] = subPlan[0]
+                                # Set sub tier and set back to 0 if sub runs out
+                                subscriberLines[i1][2] = 0
+                                subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
+                                subscriberLines[i1][2] = subPlan[0]
+                except Exception, e:
+                    print "Subtier error"
+                    print str(e)
 
                 # Find new subscribers
                 subscriberList = []
@@ -719,16 +723,21 @@ while True:
                             if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
                                                                                                       'ignore') == \
                                     newSubscribers[i1]:
-                                subPoints = "0"
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "1":
                                     subPoints = "1"
+                                    subscriberLines.append([newSubscribers[i1]] + ["1"] + [
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
+                                                                       [""] * 2) + [subPoints] + ([""] * 4))
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "2":
                                     subPoints = "2"
+                                    subscriberLines.append([newSubscribers[i1]] + ["1"] + [
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
+                                                                       [""] * 2) + [subPoints] + ([""] * 6))
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "3":
                                     subPoints = "6"
-                                subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                    subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
-                                                                   [""] * 2) + [subPoints] + ([""] * 14))
+                                    subscriberLines.append([newSubscribers[i1]] + ["1"] + [
+                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + (
+                                                                       [""] * 2) + [subPoints] + ([""] * 14))
                     if len(newGiftedSubscribers) == 1:
                         message(newGifters + " has given a subscription to " + " ".join(
                             newGiftedSubscribers) + "! Type !elf to see your elf's information")
@@ -750,6 +759,15 @@ while True:
                                     newGifter = False
                                 if newGifter == True:
                                     subscriberLines.append([newGifters[i1]] + ([""] * 18))
+
+                # add parameters for elves if gifts subs have been given
+                for i1 in range(len(subscriberLines)):
+                    if not subscriberLines[i1][0] == "Username":
+                        print (int(subscriberLines[i1][6]) * 2)
+                        print len(subscriberLines[i1][8:])
+                        if (int(subscriberLines[i1][6]) * 2) > len(subscriberLines[i1][8:]):
+                            for i2 in range(((int(subscriberLines[i1][6]) * 2) - len(subscriberLines[i1][8:]))):
+                                subscriberLines[i1].append("")
 
                 # add sub and gift points
                 for i in range(len(subscriberLines)):
@@ -974,8 +992,9 @@ while True:
                             if int(elfInfo[6]) > 2:
                                 maxElf = (int(elfInfo[6]) * 2) + 6
                                 elves = elfInfo[8:maxElf:2]
-                                message(text.split()[1] + "'s bat morphed into 6 elves. Their names are " + ", ".join(
-                                    elves) + " and " + elfInfo[maxElf] + " " + elfInfo[7])
+                                message(text.split()[1] + "'s bat morphed into " + elfInfo[
+                                    6] + " elves. Their names are " + ", ".join(elves) + " and " + elfInfo[
+                                            maxElf] + " " + elfInfo[7])
                     if len(text.lower().split()) == 1:
                         for i in range(len(subscriberLines)):
                             if subscriberLines[i][0].lower() == username.lower():

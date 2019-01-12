@@ -355,28 +355,16 @@ def subscribeAgeAll():
 
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture #from the config file
     params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
-    response = requests.get(url, headers=params).json()
-    # if response.status_code == 429:
-    #     print "Too many uptime requests"
-    StreamStart = response['data'][0]
-    # print response
-    # returns
-    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MX19'}, u'data': [{
-    # u'user_id': u'109949586',
-    # u'language': u'',
-    # u'title': u'This is the title',
-    # u'type': u'live',
-    # u'tag_ids': None,
-    # u'community_ids': [],
-    # u'thumbnail_url': u'https://static-cdn.jtvnw.net/previews-ttv/live_user_riboture-{width}x{height}.jpg',
-    # u'game_id': u'0',
-    # u'started_at': u'2018-11-16T11:04:29Z',
-    # u'user_name': u'',
-    # u'id': u'31261236144',
-    # u'viewer_count': 0}
-    # ]}
+    response = requests.get(url, headers=params)
+    streamData = response.json()
+    if response.status_code == 429:
+        print "Too many uptime requests"
+    if streamData['data'] == []:
+        print "stream is not live"
+    StreamStart = streamData['data'][0]
+
     m = re.search('T(.+?):', StreamStart['started_at'])
     startHours = m.group(1)
     m = re.search(':(.+?):', StreamStart['started_at'])
@@ -410,30 +398,15 @@ def uptime():
     d1 = datetime.date(int(startYear), int(startMonth), int(startDay))
     d2 = datetime.date(int(finishYear), int(finishMonth), int(finishDay))
     delta = d2 - d1
-    if delta.days == 1:
-        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (24 * 60)
-        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
-        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
-        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
-    if delta.days == 2:
-        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (48 * 60)
-        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
-        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
-        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
-    if delta.days == 3:
-        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (72 * 60)
-        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
-        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
-        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
-    if delta.days == 0:
-        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes)
-        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
-        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
-        return "The stream has been live for " + str(uptimeHours) + "h " + str(uptimeMinutes) + "m"
+    totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (delta.days * 24 * 60)
+    uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+    uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+    return datetime.time(uptimeHours, uptimeMinutes, 0)
 
 def message(msg):
     try:
         s.send("PRIVMSG " + Channel + " :" + msg + "\n")
+        print "Riboture: " + msg
     except IndexError:
         pass
 
@@ -1302,15 +1275,18 @@ while True:
                     message("The texture pack I am currently using is Soartex Fanver Modded Universal")
                 except IndexError:
                     pass
-            if "!test" in text.lower().split()[0]:
+            if "!nextbreak" in text.lower().split()[0]:
                 try:
-                    subscribers()
-                    message(subscribeAgeAll())
+                    if uptime().hour % 2 == 0:
+                        message("Next break is in 1 hour and " + str(60 - uptime().minute) + " minutes")
+                        pass
+                    else:
+                        if uptime().minute >= 50:
+                            message("Breaktime should be right now. If there is no break being taken something is severely wrong")
+                        else:
+                            message("Next break is in " + str(60 - uptime().minute) + " minutes")
                 except IndexError:
                     pass
-                except Exception, e:
-                    message("Division failed")
-                    message(str(e))
             if "!social" in text.lower().split()[0]:
                 try:
                     message("Add me on Facebook: fb.com/Ridgure")
@@ -1501,16 +1477,16 @@ while True:
                 except IndexError:
                     message("Msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
                     pass
-            if "!pack" in text.lower().split()[0]:
+            if "!pack" or "!sevtech" in text.lower().split()[0]:
                 try:
                     message(
-                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available through the twitch launcher, curse and the AT launcher")
+                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
+                        "through the twitch launcher, curse and the AT launcher")
                 except IndexError:
                     pass
-            if "!sevtech" in text.lower().split()[0]:
+            if "!test" or "!t3st" in text.lower().split()[0]:
                 try:
-                    message(
-                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available through the twitch launcher, curse and the AT launcher")
+                    print "test"
                 except IndexError:
                     pass
             if "!scrowl" in text.lower().split()[0]:
@@ -1543,9 +1519,14 @@ while True:
             if "!breakdance" in text.lower().split()[0]:
                 if username.lower().rstrip() == broadcaster:
                     try:
-                        message("oi, get up off ye arse an stretch your legs, grab a drink. Ridgure will be back shortly")
+                        message("Move around, grab a drink and Ridgure will be back before you think. If you enjoyed this session follow the !social media for updates on my progress so far and to get notified when I go live")
                     except IndexError:
                         pass
+            if "!support" in text.lower().split()[0]:
+                try:
+                    message("You can support the stream by hosting, tweeting out the stream -> !ctt")
+                except IndexError:
+                    pass
             if "!jc747" in text.lower().split()[0]:
                 try:
                     message("It's JSea474 you fool!")
@@ -1611,7 +1592,7 @@ while True:
                     os.remove('followerData.csv')
                     os.rename('followerDataNew.csv', 'followerData.csv')
                 except IndexError:
-                    message("Did you remember to add the name of the bat?")
+                    message("Did you remember to '!batnamechange <new name>'?")
                     pass
             if "!batgenderchange" in text.lower().split()[0]:
                 try:
@@ -1652,13 +1633,12 @@ while True:
                     if owner == False:
                         message("You cannot change the gender of other people's bats")
                 except IndexError:
-                    print message("Did you remember to add the gender of the bat?")
+                    print message("Did you remember to '!batgenderchange <new gender>'?")
                     print "batgenderchange error"
                     pass
             if "!timemeout" in text.lower().split()[0]:
                 try:
-                    ## time out KBiglair ##
-                    if username == "Kbigliar":
+                    if username.lower().rstrip() == "kbigliar":
                         if 0 < int(text.split()[1]) < 3601:
                             message("/timeout " + username + " " + text.split()[1])
                             message("Timed out " + username + " for " + text.split()[1] + " seconds")
@@ -1673,10 +1653,10 @@ while True:
                     pass
             if "!uptime" in text.lower().split()[0]:
                 try:
-                    message(uptime())
+                    message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
                 except IndexError:
                     print "Uptime failed"
-            if "!fc" in text.lower().split()[0]:
+            if "!fc" or "!followdate" in text.lower().split()[0]:
                 try:
                     # get the user
                     if len(text.lower().split()) == 1:
@@ -1701,37 +1681,6 @@ while True:
                                 pass
                     if testFollower == False:
                         message("Command on cooldown")
-
-                except IndexError:
-                    pass
-                except Exception, e:
-                    message("followage failed")
-                    message(str(e))
-            if "!followdate" in text.lower().split()[0]:
-                try:
-                    # get the user
-                    if len(text.lower().split()) == 1:
-                        user = username
-                    if len(text.lower().split()) == 2:
-                        user = (text.lower().split()[1])
-
-                    testFollower = False
-                    # get user index and get their follow time and date and length
-                    for i1 in xrange(len(followerList)):
-                        for i2 in xrange(len(followerList[i1])):
-                            # print i1, followerList[i1]['from_name']
-                            if followerList[i1]['from_name'].lower() == user:
-                                followAge = followAgeAll()
-                                message("Last follow was on: " + str(
-                                    followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
-                                    followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
-                                    followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
-                                user = None
-                                testFollower = True
-                            else:
-                                pass
-                    if testFollower == False:
-                        message("User is not following the channel")
 
                 except IndexError:
                     pass
@@ -1767,8 +1716,8 @@ while True:
                     if owner == False:
                         message("You cannot change the name of other people's elves")
                 except IndexError:
-                    message("Did you remember to write '!elfnamechange firstName first name'?")
-                    print "elfnamechange failed"
+                    message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
+                    print "elfgenderchange failed"
             if "!elffamilychange" in text.lower().split()[0]:
                 try:
                     owner = False
@@ -1796,7 +1745,7 @@ while True:
                     if owner == False:
                         message("You cannot change the family of other people's elves")
                 except IndexError:
-                    message("Did you remember to write '!elffamilychange <old lastname> <new lastname>'?")
+                    message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
                     print "elffamilychange failed"
             if "!elfgenderchange" in text.lower().split()[0]:
                 try:
@@ -1833,13 +1782,13 @@ while True:
                     if owner == False:
                         message("You cannot change the gender of other people's elves")
                 except IndexError:
-                    message("Did you remember to write '!elfgenderchange first name gender'?")
+                    message("Did you remember to write '!elfgenderchange <first name> <gender>'?")
                     print "elfnamechange failed"
             if "!smile" in text.lower().split()[0]:
                 try:
                     message(username + " smiles at " + text.split()[1] + " " + randomEmote())
                 except IndexError:
-                    message("Remember to smile at someone!")
+                    message("Remember to '!smile <someone>'!")
                 except Exception, e:
                     message("Smile failed")
                     message(str(e))

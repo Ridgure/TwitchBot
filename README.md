@@ -32,7 +32,7 @@ General:<br>
 !uptime,
 !asylumcraft,
 !bot,
-!breakdance
+!support
 
 Stating emotion:<br>
 !bellyrub,
@@ -71,7 +71,8 @@ Elf tree:<br>
 
 ###### Broadcaster commands:
 !raid,
-!shout
+!shout,
+!breakdance
 
 ###### User specific commands:
 !lick,<br>

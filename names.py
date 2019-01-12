@@ -112,6 +112,7 @@ emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSal
           "cmonBruh", "NomNom", "StinkyCheese", "ChefFrank", "FutureMan", "OpieOP", "DxCat", "GivePLZ", "TakeNRG",
           "Jebaited", "CurseLit", "TriHard", "CoolStoryBob", "ItsBoshyTime", "PartyTime", "TheIlluminati",
           "BlessRNG", "TwitchLit", "CarlSmile", "Squid3", "LUL", "PowerUpR", "PowerUpL"]
+
 # Message severities
 # Timeout 1 second
 timeout1 = ["https://", "http://"]

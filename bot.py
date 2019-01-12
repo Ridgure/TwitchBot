@@ -1397,30 +1397,12 @@ while True:
                                 text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[
                                     8] + " and " +
                                 elfInfo[10] + " " + elfInfo[7])
-                        if elfInfo[6] == "3":
-                            message(
-                                text.split()[1] + "'s bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + " and " +
-                                elfInfo[
-                                    12] + " " + elfInfo[7])
-                        if elfInfo[6] == "4":
-                            message(
-                                text.split()[1] + "'s bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + " and " +
-                                elfInfo[
-                                    14] + " " + elfInfo[7])
-                        if elfInfo[6] == "5":
-                            message(
-                                text.split()[1] + "'s bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + ", " + elfInfo[14] + " and " +
-                                elfInfo[
-                                    16] + " " + elfInfo[7])
-                        if elfInfo[6] == "6":
-                            message(
-                                text.split()[1] + "'s bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + ", " + elfInfo[14] + ", " + elfInfo[16] + " and " +
-                                elfInfo[
-                                    18] + " " + elfInfo[7])
+                        if int(elfInfo[6]) > 2:
+                            if int(elfInfo[6]) > 2:
+                                maxElf = (int(elfInfo[6]) * 2) + 6
+                                elves = elfInfo[8:maxElf:2]
+                                message(text.split()[1] + "'s bat morphed into 6 elves. Their names are " + ", ".join(
+                                    elves) + " and " + elfInfo[maxElf] + " " + elfInfo[7])
                     if len(text.lower().split()) == 1:
                         for i in range(len(subscriberLines)):
                             if subscriberLines[i][0].lower() == username.lower():
@@ -1440,27 +1422,11 @@ while True:
                             message(
                                 "Your bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
                                 elfInfo[10] + " " + elfInfo[7])
-                        if elfInfo[6] == "3":
-                            message(
-                                "Your bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + " and " +
-                                elfInfo[12] + " " + elfInfo[7])
-                        if elfInfo[6] == "4":
-                            message(
-                                "Your bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + " and " +
-                                elfInfo[14] + " " + elfInfo[7])
-                        if elfInfo[6] == "5":
-                            message(
-                                "Your bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + ", " + elfInfo[14] + " and " +
-                                elfInfo[16] + " " + elfInfo[7])
-                        if elfInfo[6] == "6":
-                            message(
-                                "Your bat morphed into 6 elves. Their names are " + elfInfo[8] + ", " +
-                                elfInfo[10] + ", " + elfInfo[12] + ", " + elfInfo[14] + ", " + elfInfo[16] + " and " +
-                                elfInfo[
-                                    18] + " " + elfInfo[7])
+                        if int(elfInfo[6]) > 2:
+                            maxElf = (int(elfInfo[6]) * 2) + 6
+                            elves = elfInfo[8:maxElf:2]
+                            message("Your bat morphed into 6 elves. Their names are " + ", ".join(elves) + " and " +
+                                    elfInfo[maxElf] + " " + elfInfo[7])
                 except IndexError, e:
                     print str(e)
                     pass
@@ -1477,14 +1443,14 @@ while True:
                 except IndexError:
                     message("Msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
                     pass
-            if "!pack" or "!sevtech" in text.lower().split()[0]:
+            if "!pack" in text.lower().split()[0] or "!sevtech" in text.lower().split()[0]:
                 try:
                     message(
                         "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
                         "through the twitch launcher, curse and the AT launcher")
                 except IndexError:
                     pass
-            if "!test" or "!t3st" in text.lower().split()[0]:
+            if "!test" in text.lower().split()[0] or "!t3st" in text.lower().split()[0]:
                 try:
                     print "test"
                 except IndexError:
@@ -1656,7 +1622,7 @@ while True:
                     message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
                 except IndexError:
                     print "Uptime failed"
-            if "!fc" or "!followdate" in text.lower().split()[0]:
+            if "!fc" in text.lower().split()[0] or "!followdate" in text.lower().split()[0]:
                 try:
                     # get the user
                     if len(text.lower().split()) == 1:

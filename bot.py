@@ -67,35 +67,6 @@ def lick():
 
 
 def subscribers():
-    # url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
-    # params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
-    # response = requests.get(url, headers=params).json()
-
-    # responds
-    # {u'private_video': False,
-    # u'updated_at': u'2018-11-26T00:23:37Z',
-    # u'privacy_options_enabled': False,
-    # u'video_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-channel_offline_image-3c60c59d9ba5c169-1920x1080.png',
-    # u'partner': False,
-    # u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ee5101dc-3ddb-43aa-a887-a569414a8844-profile_image-300x300.png',
-    # u'display_name': u'Ridgure',
-    # u'followers': 720,
-    # u'broadcaster_software': u'unknown_rtmp',
-    # u'broadcaster_language': u'en',
-    # u'broadcaster_type': u'affiliate',
-    # u'status': u'Making the Asakusa Tourism Center by Kengo Kuma | Architecture',
-    # u'description': u'I stream every Wednesday from 7-12 CET. You can expect entertainment and other fun as well as an awesome community of chatters and other streamers that hang out when I am live.',
-    # u'views': 11096,
-    # u'game': u'Art',
-    # u'name': u'ridgure',
-    # u'language': u'en',
-    # u'url': u'https://www.twitch.tv/ridgure',
-    # u'created_at': u'2015-11-08T22:14:42Z',
-    # u'mature': True,
-    # u'profile_banner_background_color': u'#000000',
-    # u'_id': u'106586349',
-    # u'profile_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-profile_banner-aab842adb656bc98-480.png'}
-
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
     params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + SubscriberToken,
               "limit": "100"}
@@ -131,6 +102,39 @@ def subscribers():
     #                u'_id': u'31861174', u'type': u'user'}, u'_id': u'e7879cef043c356c6b99901f3c89d2e32f1d0543'}
     #  ]}
 
+def channelInfo():
+    url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
+    params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
+    response = requests.get(url, headers=params)
+    if response.status_code == 429:
+        print "Too many stream info requests"
+    channelInfoResponse = response.json()
+    return channelInfoResponse
+
+    # responds
+    # {u'private_video': False,
+    # u'updated_at': u'2018-11-26T00:23:37Z',
+    # u'privacy_options_enabled': False,
+    # u'video_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-channel_offline_image-3c60c59d9ba5c169-1920x1080.png',
+    # u'partner': False,
+    # u'logo': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ee5101dc-3ddb-43aa-a887-a569414a8844-profile_image-300x300.png',
+    # u'display_name': u'Ridgure',
+    # u'followers': 720,
+    # u'broadcaster_software': u'unknown_rtmp',
+    # u'broadcaster_language': u'en',
+    # u'broadcaster_type': u'affiliate',
+    # u'status': u'Making the Asakusa Tourism Center by Kengo Kuma | Architecture',
+    # u'description': u'I stream every Wednesday from 7-12 CET. You can expect entertainment and other fun as well as an awesome community of chatters and other streamers that hang out when I am live.',
+    # u'views': 11096,
+    # u'game': u'Art',
+    # u'name': u'ridgure',
+    # u'language': u'en',
+    # u'url': u'https://www.twitch.tv/ridgure',
+    # u'created_at': u'2015-11-08T22:14:42Z',
+    # u'mature': True,
+    # u'profile_banner_background_color': u'#000000',
+    # u'_id': u'106586349',
+    # u'profile_banner': u'https://static-cdn.jtvnw.net/jtv_user_pictures/ridgure-profile_banner-aab842adb656bc98-480.png'}
 
 def followers():
     try:
@@ -664,12 +668,10 @@ while True:
                                             'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii',
-                                                                   'ignore') + " for upgrading your subscription to tier 2!")
+                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2!")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii',
-                                                                   'ignore') + " for upgrading your subscription to tier 3!")
+                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3!")
 
                                 # Set sub tier and set back to 0 if sub runs out
                                 subscriberLines[i1][2] = 0
@@ -851,10 +853,36 @@ while True:
                     message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
                 except IndexError:
                     pass
-            if "!ctt" in text.lower().split()[0]:
+            if "!ctt" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
                 try:
-                    message("Tweet out the stream using this link: https://ctt.ac/q2ne9")
+                    message("Generating tweet")
+                    subscriber = False
+                    for i1 in range(len(subscriberLines)):
+                        if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
+                                subscriberLines[i1][1]) > 0:
+                            if not subscriberLines[i1][0] == "Username":
+                                subscriber = True
+                                if int(subscriberLines[i1][6]) == 1:
+                                    tweet = "My elf " + subscriberLines[i1][8] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                if int(subscriberLines[i1][6]) > 1:
+                                    maxElf = (int(subscriberLines[i1][6]) * 2) + 7
+                                    tweet = "My elves " + ", ".join(subscriberLines[i1][8:maxElf:2]) + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                    if subscriber == False:
+                        follower = False
+                        for i1 in range(len(followerLines)):
+                            if not followerLines[i1][0] == "Username":
+                                if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
+                                    if int(followerLines[i1][2]) == 1:
+                                        follower = True
+                                        tweet = "My bat " + followerLines[i1][3] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                if follower == False:
+                                        tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
+                    message("/w " + username + " " + tweet)
+                    message(username + " has been whispered a suggested tweet. You are welcome to write your own tweet as well")
                 except IndexError:
+                    pass
+                except Exception, e:
+                    print str(e)
                     pass
             if "!tp" in text.lower().split()[0]:
                 try:
@@ -1284,7 +1312,8 @@ while True:
                                     csvfile.close()
                                     subscriberLines[i1][7] = text.split()[2]
                                     for i in range(1):
-                                        message("Successfully changed family " + text.split()[1] + " to family " + subscriberLines[i1][7])
+                                        message("Successfully changed family " + text.split()[1] + " to family " +
+                                                subscriberLines[i1][7])
                                     csvfile = open('subscriberDataNew.csv', "wb")
                                     subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                                     subscriberDataWriter.writerows(subscriberLines)

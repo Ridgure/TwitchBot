@@ -359,14 +359,14 @@ def subscribeAgeAll():
 
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_riboture #from the config file
+    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
     params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
     response = requests.get(url, headers=params)
     streamData = response.json()
     if response.status_code == 429:
         print "Too many uptime requests"
     if streamData['data'] == []:
-        print "stream is not live"
+        message("Twitch has not realized stream is live")
     StreamStart = streamData['data'][0]
 
     m = re.search('T(.+?):', StreamStart['started_at'])
@@ -473,6 +473,7 @@ while True:
 
                 # Get new follower list and format it to compare with unfollowers
                 followers()
+
                 test = []
                 for i in range(len(followerList)):
                     test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
@@ -855,7 +856,6 @@ while True:
                     pass
             if "!ctt" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
                 try:
-                    message("Generating tweet")
                     subscriber = False
                     for i1 in range(len(subscriberLines)):
                         if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
@@ -875,10 +875,39 @@ while True:
                                     if int(followerLines[i1][2]) == 1:
                                         follower = True
                                         tweet = "My bat " + followerLines[i1][3] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
-                                if follower == False:
-                                        tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
+                        if follower == False:
+                                tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
                     message("/w " + username + " " + tweet)
-                    message(username + " has been whispered a suggested tweet. You are welcome to write your own tweet as well")
+                    message(username + " has been whispered a suggested tweet. You are welcome to write your own tweet as well. If you would like your suggested tweet in chat do !cttchat")
+                except IndexError:
+                    pass
+                except Exception, e:
+                    print str(e)
+                    pass
+            if "!cttchat" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
+                try:
+                    subscriber = False
+                    for i1 in range(len(subscriberLines)):
+                        if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
+                                subscriberLines[i1][1]) > 0:
+                            if not subscriberLines[i1][0] == "Username":
+                                subscriber = True
+                                if int(subscriberLines[i1][6]) == 1:
+                                    tweet = "My elf " + subscriberLines[i1][8] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                if int(subscriberLines[i1][6]) > 1:
+                                    maxElf = (int(subscriberLines[i1][6]) * 2) + 7
+                                    tweet = "My elves " + ", ".join(subscriberLines[i1][8:maxElf:2]) + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                    if subscriber == False:
+                        follower = False
+                        for i1 in range(len(followerLines)):
+                            if not followerLines[i1][0] == "Username":
+                                if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
+                                    if int(followerLines[i1][2]) == 1:
+                                        follower = True
+                                        tweet = "My bat " + followerLines[i1][3] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                        if follower == False:
+                                tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
+                    message(tweet)
                 except IndexError:
                     pass
                 except Exception, e:
@@ -892,13 +921,13 @@ while True:
             if "!nextbreak" in text.lower().split()[0]:
                 try:
                     if uptime().hour % 2 == 0:
-                        message("Next break is in 1 hour and " + str(60 - uptime().minute) + " minutes")
+                        message("Next break is in 1 hour and " + str(50 - uptime().minute) + " minutes")
                         pass
                     else:
                         if uptime().minute >= 50:
                             message("Breaktime should be right now. If there is no break being taken something is severely wrong")
                         else:
-                            message("Next break is in " + str(60 - uptime().minute) + " minutes")
+                            message("Next break is in " + str(50 - uptime().minute) + " minutes")
                 except IndexError:
                     pass
             if "!social" in text.lower().split()[0]:
@@ -1040,7 +1069,7 @@ while True:
                         if int(elfInfo[6]) > 2:
                             maxElf = (int(elfInfo[6]) * 2) + 6
                             elves = elfInfo[8:maxElf:2]
-                            message("Your bat morphed into 6 elves. Their names are " + ", ".join(elves) + " and " +
+                            message("Your bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
                                     elfInfo[maxElf] + " " + elfInfo[7])
                 except IndexError, e:
                     print str(e)
@@ -1274,7 +1303,7 @@ while True:
                     if (len(text.lower().split()[2].encode("ascii"))) <= 15:
                         for i1 in range(len(subscriberLines)):
                             if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                for i2 in [8, 10, 12, 14, 16, 18]:
+                                for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
                                     if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                         csvfile = open('subscriberData.csv', "rb")
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
@@ -1338,7 +1367,7 @@ while True:
                     owner = False
                     for i1 in range(len(subscriberLines)):
                         if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                            for i2 in [8, 10, 12, 14, 16, 18]:
+                            for i2 in range(len(subscriberLines[i1][0:]))[9::2]:
                                 if text.lower().split()[1] == subscriberLines[i1][i2].lower():
                                     genderIndex = (int(i2) + 1)
                                     if text.split()[

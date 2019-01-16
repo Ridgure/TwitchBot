@@ -36,7 +36,7 @@ elfNameMale = ["Aego", "Aelrindel", "Aerendyl", "Aeson", "Afamrail", "Agis", "Ai
                "Fenris", "Filvendor", "Fingolfin", "Finrod", "Folduin", "Gael", "Gaemon", "Gil-galad", "Glynkas",
                "Haemir", "Hagduin", "Haladavar", "Halafarin", "Haryk", "Hastos", "Hatharal", "Herbalar", "Horith",
                "Hubyr", "Iarmenor", "Iefyr", "Ievos", "Ilbryn", "Iliven", "Ilthuryn", "Inarie", "Inchel", "Inialos",
-               "Injros", "Intevar", "Iolas", "assin", "Jhaan", "Jhaartael", "Jhaeros", "Kelkalyn", "Kevan", "Klaern",
+               "Injros", "Intevar", "Iolas", "Jassin", "Jhaan", "Jhaartael", "Jhaeros", "Kelkalyn", "Kevan", "Klaern",
                 "Kolvar", "Kuornos", "Kuskyn", "Kymil", "Kyrenic", "Kyrtaar", "lrune", "Maiele", "Mithrandir",
                "Molonym", "Molostroi", "Montagor", "Morgan", "Morthil", "Myrddin", "Myriil", "Myrin", "Mythanthar",
                "Naertho", "Naeryndam", "Napraeleon", "Narbeth", "Nardual", "Nelaeryn", "Neldor", "Nerilamin",

@@ -30,7 +30,7 @@ elfNameMale = ["Aego", "Aelrindel", "Aerendyl", "Aeson", "Afamrail", "Agis", "Ai
                "Celeborn", "Celebrimbor", "Chathanglas", "Cheyrth", "Círdan", "Cluhurach", "Cluym", "Cohnal", "Conall",
                "Connak", "Cornaith", "Corym", "Curunir", "Cymbiir", "Cystenn", "Daeharice", "Daemeon", "Dakath",
                "Dalyor", "Darcassan", "Dior", "Earendil", "Edrahil", "Eladithas", "Elanjar", "Elaran", "Elashor",
-               "Elbauthin", "Elbereth", "Eldaernth", "Eldar", "Eldrin", "Elénaril", "Elenshaer", "Elrond", "Eluchil",
+               "Elbauthin", "Elbereth", "Eldaernth", "Eldar", "Eldrin", "Elenaril", "Elenshaer", "Elrond", "Eluchil",
                "Elwin", "Erlan", "Erlathan", "Eroan", "Erolith", "Eschallus", "Estelar", "Etchelion", "Ethlando",
                "Ettrian", "Evindal", "Eyrynnhv", "Eyrynnhv", "Faelar", "Faelyn", "Faeranduil", "Falael", "Fëanor",
                "Fenris", "Filvendor", "Fingolfin", "Finrod", "Folduin", "Gael", "Gaemon", "Gil-galad", "Glynkas",

@@ -140,6 +140,7 @@ You will need to install these things to run the bot
 - [Python 2.7.x](https://www.python.org/downloads/)
 - Libraries:
   - [Requests](http://docs.python-requests.org/en/master/user/install/)
+  - [TinyUrl](https://pypi.org/project/TinyUrl/)
   
 **Running the bot**
 

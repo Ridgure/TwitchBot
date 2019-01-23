@@ -10,6 +10,7 @@ import requests
 import datetime
 import math
 import csv
+import tinyurl
 from names import *
 from config import *
 from time import sleep
@@ -666,13 +667,13 @@ while True:
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing!")
+                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2!")
+                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3!")
+                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
 
                                 # Set sub tier and set back to 0 if sub runs out
                                 subscriberLines[i1][2] = 0
@@ -717,10 +718,10 @@ while True:
                              "Elf6Name", "Elf6Gender"])
                     if len(newSelfSubscribers) == 1:
                         message("Thank you for subscribing " + " ".join(
-                            newSelfSubscribers) + "! Type !elf to see your elf's information")
+                            newSelfSubscribers) + "! Type !elf to see your elf's information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     if len(newSelfSubscribers) > 1:
                         message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " +
-                                newSelfSubscribers[-1] + "! Type !elf to see your elf's information")
+                                newSelfSubscribers[-1] + "! Type !elf to see your elf's information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     for i1 in range(len(newSubscribers)):
                         for i2 in range(len(subscriberResponse['subscriptions'])):
                             if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
@@ -857,16 +858,18 @@ while True:
             if "!ctt" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
                 try:
                     subscriber = False
+                    title = channelInfo()['status'].encode('ascii', 'ignore')
+                    title = title.replace(" ", "%20")
                     for i1 in range(len(subscriberLines)):
                         if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
                                 subscriberLines[i1][1]) > 0:
                             if not subscriberLines[i1][0] == "Username":
                                 subscriber = True
                                 if int(subscriberLines[i1][6]) == 1:
-                                    tweet = "My elf " + subscriberLines[i1][8] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                    tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elf%20" + subscriberLines[i1][8] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
                                 if int(subscriberLines[i1][6]) > 1:
                                     maxElf = (int(subscriberLines[i1][6]) * 2) + 7
-                                    tweet = "My elves " + ", ".join(subscriberLines[i1][8:maxElf:2]) + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                    tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elves%20" + ",%20".join(subscriberLines[i1][8:maxElf:2]) + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20%23ModdedMinecraft%20%23SevTech")
                     if subscriber == False:
                         follower = False
                         for i1 in range(len(followerLines)):
@@ -874,11 +877,10 @@ while True:
                                 if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
                                     if int(followerLines[i1][2]) == 1:
                                         follower = True
-                                        tweet = "My bat " + followerLines[i1][3] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
+                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20bat%20" + followerLines[i1][3] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
                         if follower == False:
-                                tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
-                    message("/w " + username + " " + tweet)
-                    message(username + " has been whispered a suggested tweet. You are welcome to write your own tweet as well. If you would like your suggested tweet in chat do !cttchat")
+                                tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=I%20am%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20me%20at%20Twitch.tv/Ridgure%20#Asylumcraft%20#ModdedMinecraft%20#SevTech")
+                    message("This link is only for " + username + "! " + tweet + " get your link by doing !ctt")
                 except IndexError:
                     pass
                 except Exception, e:
@@ -1174,6 +1176,7 @@ while True:
                 try:
                     message(username + " rubs " + text.split()[1] + "'s belly " + lick())
                 except IndexError:
+                    message("Did you remember to '!bellyrub <target>'?")
                     pass
             if "cobble" in text.lower().split()[:]:
                 try:
@@ -1300,7 +1303,7 @@ while True:
             if "!elfnamechange" in text.lower().split()[0]:
                 try:
                     owner = False
-                    if (len(text.lower().split()[2].encode("ascii"))) <= 15:
+                    if (len(text.lower().split()[2])) <= 15:
                         for i1 in range(len(subscriberLines)):
                             if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                 for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
@@ -1309,7 +1312,7 @@ while True:
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
                                         csvfile.close()
-                                        subscriberLines[i1][i2] = text.split()[2]
+                                        subscriberLines[i1][i2] = text.split()[2].encode("utf-8")
                                         for i in range(1):
                                             message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
                                         csvfile = open('subscriberDataNew.csv', "wb")
@@ -1452,7 +1455,7 @@ while True:
                     for i in range(len(subscriberLines)):
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
                             subscriberLines[i][1] = 1
-                    message("Spam all the hearts you have!!!")
+                    message("Spam all the hearts you have!!! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                 if msgId == "resub":
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     csvfile = open('subscriberData.csv', "rb")
@@ -1463,12 +1466,12 @@ while True:
                     for i in range(len(subscriberLines)):
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
                             subscriberLines[i][1] = subStreak
-                    message("Spam all the hearts you have!!!")
+                    message("Spam all the hearts you have!!! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                 if msgId == "subgift":
                     recipientUserName = re.search(r'(?<=msg-param-recipient-display-name=)(.*?);', response).group(1)
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     message("Thank you so much " + username + " for gifting that tier " +
-                            msgParamSubPlan.encode('ascii', 'ignore')[0] + " sub to " + recipientUserName)
+                            msgParamSubPlan.encode('ascii', 'ignore')[0] + " sub to " + recipientUserName + " ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     csvfile = open('subscriberData.csv', "rb")
                     subscriberDataReader = csv.reader(csvfile, delimiter=",")
                     subscriberLines = list(subscriberDataReader)
@@ -1502,7 +1505,7 @@ while True:
                     recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     message("Thank you for giving that anonymous tier " + msgParamSubPlan.encode('ascii', 'ignore')[
-                        0] + " subgift to " + recipientUserName)
+                        0] + " subgift to " + recipientUserName + "ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
 
                 # Write back subscriber lines
                 csvfile = open('subscriberDataNew.csv', "wb")

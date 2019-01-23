@@ -850,471 +850,475 @@ while True:
             except Exception, e:
                 print("while true events error")
                 print(str(e))
-            if "!commands" in text.lower().split()[0]:
-                try:
-                    message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
-                except IndexError:
-                    pass
-            if "!ctt" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
-                try:
-                    subscriber = False
-                    title = channelInfo()['status'].encode('ascii', 'ignore')
-                    title = title.replace(" ", "%20")
-                    for i1 in range(len(subscriberLines)):
-                        if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
-                                subscriberLines[i1][1]) > 0:
-                            if not subscriberLines[i1][0] == "Username":
-                                subscriber = True
-                                if int(subscriberLines[i1][6]) == 1:
-                                    tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elf%20" + subscriberLines[i1][8] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
-                                if int(subscriberLines[i1][6]) > 1:
-                                    maxElf = (int(subscriberLines[i1][6]) * 2) + 7
-                                    tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elves%20" + ",%20".join(subscriberLines[i1][8:maxElf:2]) + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20%23ModdedMinecraft%20%23SevTech")
-                    if subscriber == False:
-                        follower = False
-                        for i1 in range(len(followerLines)):
-                            if not followerLines[i1][0] == "Username":
-                                if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
-                                    if int(followerLines[i1][2]) == 1:
-                                        follower = True
-                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20bat%20" + followerLines[i1][3] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
-                        if follower == False:
-                                tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=I%20am%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20me%20at%20Twitch.tv/Ridgure%20#Asylumcraft%20#ModdedMinecraft%20#SevTech")
-                    message("This link is only for " + username + "! " + tweet + " get your link by doing !ctt")
-                except IndexError:
-                    pass
-                except Exception, e:
-                    print str(e)
-                    pass
-            if "!cttchat" in text.lower().split()[0] or "!tweet" in text.lower().split()[0]:
-                try:
-                    subscriber = False
-                    for i1 in range(len(subscriberLines)):
-                        if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
-                                subscriberLines[i1][1]) > 0:
-                            if not subscriberLines[i1][0] == "Username":
-                                subscriber = True
-                                if int(subscriberLines[i1][6]) == 1:
-                                    tweet = "My elf " + subscriberLines[i1][8] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
-                                if int(subscriberLines[i1][6]) > 1:
-                                    maxElf = (int(subscriberLines[i1][6]) * 2) + 7
-                                    tweet = "My elves " + ", ".join(subscriberLines[i1][8:maxElf:2]) + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
-                    if subscriber == False:
-                        follower = False
-                        for i1 in range(len(followerLines)):
-                            if not followerLines[i1][0] == "Username":
-                                if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
-                                    if int(followerLines[i1][2]) == 1:
-                                        follower = True
-                                        tweet = "My bat " + followerLines[i1][3] + " and I are watching @Ridgure doing " + channelInfo()['status'].encode('ascii', 'ignore') + " come join us at Twitch.tv/Ridgure #ModdedMinecraft #SevTech"
-                        if follower == False:
-                                tweet = "I am watching @Ridgure doing " + channelInfo()['status'].encode('ascii','ignore') + " come join me at Twitch.tv/Ridgure #Asylumcraft #ModdedMinecraft #SevTech"
-                    message(tweet)
-                except IndexError:
-                    pass
-                except Exception, e:
-                    print str(e)
-                    pass
-            if "!tp" in text.lower().split()[0]:
-                try:
-                    message("The texture pack I am currently using is Soartex Fanver Modded Universal")
-                except IndexError:
-                    pass
-            if "!nextbreak" in text.lower().split()[0]:
-                try:
-                    if uptime().hour % 2 == 0:
-                        message("Next break is in 1 hour and " + str(50 - uptime().minute) + " minutes")
+            if "!" in text.lower().split()[0][0]:
+                firstStr = text.lower().split()[0]
+                if "!commands" in firstStr:
+                    try:
+                        message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
+                    except IndexError:
                         pass
-                    else:
-                        if uptime().minute >= 50:
-                            message("Breaktime should be right now. If there is no break being taken something is severely wrong")
+                elif "!ctt" in firstStr or "!tweet" in text.lower().split()[0]:
+                    try:
+                        subscriber = False
+                        title = channelInfo()['status'].encode('ascii', 'ignore')
+                        title = title.replace(" ", "%20")
+                        for i1 in range(len(subscriberLines)):
+                            if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
+                                    subscriberLines[i1][1]) > 0:
+                                if not subscriberLines[i1][0] == "Username":
+                                    subscriber = True
+                                    if int(subscriberLines[i1][6]) == 1:
+                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elf%20" + subscriberLines[i1][8] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
+                                    if int(subscriberLines[i1][6]) > 1:
+                                        maxElf = (int(subscriberLines[i1][6]) * 2) + 7
+                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elves%20" + ",%20".join(subscriberLines[i1][8:maxElf:2]) + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20%23ModdedMinecraft%20%23SevTech")
+                        if subscriber == False:
+                            follower = False
+                            for i1 in range(len(followerLines)):
+                                if not followerLines[i1][0] == "Username":
+                                    if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
+                                        if int(followerLines[i1][2]) == 1:
+                                            follower = True
+                                            tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20bat%20" + followerLines[i1][3] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
+                            if follower == False:
+                                    tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=I%20am%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20me%20at%20Twitch.tv/Ridgure%20#Asylumcraft%20#ModdedMinecraft%20#SevTech")
+                        message("This link is only for " + username + "! " + tweet + " get your link by doing !ctt")
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        print str(e)
+                        pass
+                elif "!tp" in firstStr:
+                    try:
+                        message("The texture pack I am currently using is Soartex Fanver Modded Universal")
+                    except IndexError:
+                        pass
+                elif "!nextbreak" in firstStr:
+                    try:
+                        if uptime().hour % 2 == 0:
+                            message("Next break is in 1 hour and " + str(50 - uptime().minute) + " minutes")
+                            pass
                         else:
-                            message("Next break is in " + str(50 - uptime().minute) + " minutes")
-                except IndexError:
-                    pass
-            if "!social" in text.lower().split()[0]:
-                try:
-                    message("Add me on Facebook: fb.com/Ridgure")
-                    message("Add me on Twitter: Twitter.com/RigidStructure")
-                    message("Add me on Instagram: Instagram.com/Ridgure")
-                except IndexError:
-                    pass
-            if "!facebook" in text.lower().split()[0]:
-                try:
-                    message("Add me on Facebook: fb.com/Ridgure")
-                except IndexError:
-                    pass
-            if "!lurk" in text.lower().split()[0]:
-                try:
-                    message(username + "'s bat is going in hybernation")
-                except IndexError:
-                    pass
-            if "!twitter" in text.lower().split()[0]:
-                try:
-                    message("Add me on Facebook: Twitter.com/RigidStructure")
-                except IndexError:
-                    pass
-            if "!instagram" in text.lower().split()[0]:
-                try:
-                    message("Add me on Facebook: Instagram.com/RigidStructure")
-                except IndexError:
-                    pass
-            if "!english" in text.lower().split()[0]:
-                try:
-                    message("Please keep the chat in english so your fellow chatters will understand you")
-                except IndexError:
-                    pass
-            if "!rhino" in text.lower().split()[0]:
-                try:
-                    message("The program I am using to generate the bat cave and sub tree is called Rhinoceros3D")
-                except IndexError:
-                    pass
-            if "!benefits" in text.lower().split()[0]:
-                try:
-                    message("Per sub point you contribute to the stream one bat morphs into an elf. If you are subscribed you will also have access to my sub emote")
-                except IndexError:
-                    pass
-            if "!bat" == text.lower().split()[0]:
-                try:
-                    if len(text.lower().split()) == 1:
-                        for i in range(len(followerLines)):
-                            if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
-                                if followerLines[i][4].lower() == 'male':
-                                    gender = 'he'
-                                if followerLines[i][4].lower() == 'female':
-                                    gender = 'she'
-                                if followerLines[i][2] == "0":
+                            if uptime().minute >= 50:
+                                message("Breaktime should be right now. If there is no break being taken something is severely wrong")
+                            else:
+                                message("Next break is in " + str(50 - uptime().minute) + " minutes")
+                    except IndexError:
+                        pass
+                elif "!social" in firstStr:
+                    try:
+                        message("Add me on Facebook: fb.com/Ridgure")
+                        message("Add me on Twitter: Twitter.com/RigidStructure")
+                        message("Add me on Instagram: Instagram.com/Ridgure")
+                    except IndexError:
+                        pass
+                elif "!facebook" in firstStr:
+                    try:
+                        message("Add me on Facebook: fb.com/Ridgure")
+                    except IndexError:
+                        pass
+                elif "!lurk" in firstStr:
+                    try:
+                        message(username + "'s bat is going in hybernation")
+                    except IndexError:
+                        pass
+                elif "!twitter" in firstStr:
+                    try:
+                        message("Add me on Facebook: Twitter.com/RigidStructure")
+                    except IndexError:
+                        pass
+                elif "!instagram" in firstStr:
+                    try:
+                        message("Add me on Facebook: Instagram.com/RigidStructure")
+                    except IndexError:
+                        pass
+                elif "!english" in firstStr:
+                    try:
+                        message("Please keep the chat in english so your fellow chatters will understand you")
+                    except IndexError:
+                        pass
+                elif "!rhino" in firstStr:
+                    try:
+                        message("The program I am using to generate the bat cave and sub tree is called Rhinoceros3D")
+                    except IndexError:
+                        pass
+                elif "!benefits" in firstStr:
+                    try:
+                        message("Per sub point you contribute to the stream one bat morphs into an elf. If you are subscribed you will also have access to my sub emote")
+                    except IndexError:
+                        pass
+                elif "!bat" == firstStr:
+                    try:
+                        if len(text.lower().split()) == 1:
+                            for i in range(len(followerLines)):
+                                if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
+                                    if followerLines[i][4].lower() == 'male':
+                                        gender = 'he'
+                                    if followerLines[i][4].lower() == 'female':
+                                        gender = 'she'
+                                    if followerLines[i][2] == "0":
+                                        message("User is not following the channel")
+                                    if followerLines[i][2] == "1":
+                                        if followerLines[i][6] == 0:
+                                            message(username + "'s :bat: is called " + followerLines[i][
+                                                3] + " " + gender + " is colored " + followerLines[i][5].lower())
+                                        if followerLines[i][6] == 1:
+                                            message(
+                                                username + "'s :bat: has morphed into an elf. !elf to see information on your elf.")
+                        if len(text.lower().split()) == 2:
+                            for i in range(len(followerLines)):
+                                if followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                    if followerLines[i][4].lower() == 'male':
+                                        gender = 'He'
+                                    if followerLines[i][4].lower() == 'female':
+                                        gender = 'She'
+                                    if followerLines[i][2] == "0":
+                                        message("User is not following the channel")
+                                    if followerLines[i][2] == "1":
+                                        if followerLines[i][6] == 0:
+                                            message(text.split()[1] + "'s :bat: is called " + followerLines[i][
+                                                3] + ". " + gender + " is colored " + followerLines[i][5].lower())
+                                        if followerLines[i][6] == 1:
+                                            message(
+                                                text.split()[1] + "'s :bat: has morphed into an elf. !elf " + text.split()[
+                                                    1] + " to see information on their elf.")
+                                    if not followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                        message("Follower not found")
+                                elif followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
                                     message("User is not following the channel")
-                                if followerLines[i][2] == "1":
-                                    if followerLines[i][6] == 0:
-                                        message(username + "'s :bat: is called " + followerLines[i][
-                                            3] + " " + gender + " is colored " + followerLines[i][5].lower())
-                                    if followerLines[i][6] == 1:
-                                        message(
-                                            username + "'s :bat: has morphed into an elf. !elf to see information on your elf.")
-                    if len(text.lower().split()) == 2:
-                        for i in range(len(followerLines)):
-                            if followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                if followerLines[i][4].lower() == 'male':
-                                    gender = 'He'
-                                if followerLines[i][4].lower() == 'female':
-                                    gender = 'She'
-                                if followerLines[i][2] == "0":
-                                    message("User is not following the channel")
-                                if followerLines[i][2] == "1":
-                                    if followerLines[i][6] == 0:
-                                        message(text.split()[1] + "'s :bat: is called " + followerLines[i][
-                                            3] + ". " + gender + " is colored " + followerLines[i][5].lower())
-                                    if followerLines[i][6] == 1:
-                                        message(
-                                            text.split()[1] + "'s :bat: has morphed into an elf. !elf " + text.split()[
-                                                1] + " to see information on their elf.")
-                                if not followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                    message("Follower not found")
-                            elif followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                message("User is not following the channel")
-                except IndexError:
-                    pass
-                except Exception, e:
-                    pass
-            if "!elf" == text.lower().split()[0]:
-                try:
-                    elfInfo = None
-                    if len(text.lower().split()) == 2:
-                        for i in range(len(subscriberLines)):
-                            if subscriberLines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                elfInfo = subscriberLines[i]
-                        if elfInfo == None:
-                            message("User is not a subscriber")
-                        if elfInfo[9].lower() == 'male':
-                            gender = 'His'
-                        if elfInfo[9].lower() == 'female':
-                            gender = 'Her'
-                        if elfInfo[9] == 'Androgynous':
-                            gender = 'Their'
-                        if elfInfo[6] == "1":
-                            message(
-                                text.split()[1] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[
-                                    8] + " " +
-                                elfInfo[7])
-                        if elfInfo[6] == "2":
-                            message(
-                                text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[
-                                    8] + " and " +
-                                elfInfo[10] + " " + elfInfo[7])
-                        if int(elfInfo[6]) > 2:
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        pass
+                elif "!elf" == firstStr:
+                    try:
+                        elfInfo = None
+                        if len(text.lower().split()) == 2:
+                            for i in range(len(subscriberLines)):
+                                if subscriberLines[i][0].lower().rstrip() == text.lower().split()[1]:
+                                    elfInfo = subscriberLines[i]
+                            if elfInfo == None:
+                                message("User is not a subscriber")
+                            if elfInfo[9].lower() == 'male':
+                                gender = 'His'
+                            if elfInfo[9].lower() == 'female':
+                                gender = 'Her'
+                            if elfInfo[9] == 'Androgynous':
+                                gender = 'Their'
+                            if elfInfo[6] == "1":
+                                message(
+                                    text.split()[1] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[
+                                        8] + " " +
+                                    elfInfo[7])
+                            if elfInfo[6] == "2":
+                                message(
+                                    text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[
+                                        8] + " and " +
+                                    elfInfo[10] + " " + elfInfo[7])
+                            if int(elfInfo[6]) > 2:
+                                if int(elfInfo[6]) > 2:
+                                    maxElf = (int(elfInfo[6]) * 2) + 6
+                                    elves = elfInfo[8:maxElf:2]
+                                    message(text.split()[1] + "'s bat morphed into " + elfInfo[
+                                        6] + " elves. Their names are " + ", ".join(elves) + " and " + elfInfo[
+                                                maxElf] + " " + elfInfo[7])
+                        if len(text.lower().split()) == 1:
+                            for i in range(len(subscriberLines)):
+                                if subscriberLines[i][0].lower() == username.lower():
+                                    elfInfo = subscriberLines[i]
+                            if elfInfo == None:
+                                message("User is not a subscriber")
+                            if elfInfo[9].lower() == 'male':
+                                gender = 'His'
+                            if elfInfo[9].lower() == 'female':
+                                gender = 'Her'
+                            if elfInfo[9] == 'Androgynous':
+                                gender = 'Their'
+                            if elfInfo[6] == "1":
+                                message(
+                                    "Your bat morphed into 1 elf. " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
+                            if elfInfo[6] == "2":
+                                message(
+                                    "Your bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
+                                    elfInfo[10] + " " + elfInfo[7])
                             if int(elfInfo[6]) > 2:
                                 maxElf = (int(elfInfo[6]) * 2) + 6
                                 elves = elfInfo[8:maxElf:2]
-                                message(text.split()[1] + "'s bat morphed into " + elfInfo[
-                                    6] + " elves. Their names are " + ", ".join(elves) + " and " + elfInfo[
-                                            maxElf] + " " + elfInfo[7])
-                    if len(text.lower().split()) == 1:
-                        for i in range(len(subscriberLines)):
-                            if subscriberLines[i][0].lower() == username.lower():
-                                elfInfo = subscriberLines[i]
-                        if elfInfo == None:
-                            message("User is not a subscriber")
-                        if elfInfo[9].lower() == 'male':
-                            gender = 'His'
-                        if elfInfo[9].lower() == 'female':
-                            gender = 'Her'
-                        if elfInfo[9] == 'Androgynous':
-                            gender = 'Their'
-                        if elfInfo[6] == "1":
-                            message(
-                                "Your bat morphed into 1 elf. " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
-                        if elfInfo[6] == "2":
-                            message(
-                                "Your bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
-                                elfInfo[10] + " " + elfInfo[7])
-                        if int(elfInfo[6]) > 2:
-                            maxElf = (int(elfInfo[6]) * 2) + 6
-                            elves = elfInfo[8:maxElf:2]
-                            message("Your bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
-                                    elfInfo[maxElf] + " " + elfInfo[7])
-                except IndexError, e:
-                    print str(e)
-                    pass
-                except Exception, e:
-                    print str(e)
-                    pass
-            if "!raid" in text.lower().split()[0]:
-                try:
-                    if username.lower() == broadcaster:
-                        message("Please raid Twitch.tv/" + text.split()[
-                            1] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
-                    else:
+                                message("Your bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
+                                        elfInfo[maxElf] + " " + elfInfo[7])
+                    except IndexError, e:
+                        print str(e)
                         pass
-                except IndexError:
-                    message("Msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
-                    pass
-            if "!pack" in text.lower().split()[0] or "!sevtech" in text.lower().split()[0]:
-                try:
-                    message(
-                        "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
-                        "through the twitch launcher, curse and the AT launcher")
-                except IndexError:
-                    pass
-            if "!test" in text.lower().split()[0] or "!t3st" in text.lower().split()[0]:
-                try:
-                    print "test"
-                except IndexError:
-                    pass
-            if "!scrowl" in text.lower().split()[0]:
-                try:
-                    message(username + "grumpily scowls at " + text.split()[1])
-                except IndexError:
-                    pass
-            if "!discord" in text.lower().split()[0]:
-                try:
-                    message("Join the discord! https://discord.gg/yddBmCE")
-                except IndexError:
-                    pass
-            if "!java" in text.lower().split()[0]:
-                try:
-                    message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
-                except IndexError:
-                    pass
-            if "!oclock" in text.lower().split()[0]:
-                try:
-                    message("The time for me right now is " + datetime.datetime.now().strftime(
-                        "%H:%M") + " o'clock" + " CET")
-                except IndexError:
-                    pass
-            if "!shout" in text.lower().split()[0]:
-                if username.lower().rstrip() == broadcaster:
+                    except Exception, e:
+                        print str(e)
+                        pass
+                elif "!raid" in text.lower().split()[0]:
                     try:
-                        message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
-                    except IndexError:
-                        pass
-            if "!breakdance" in text.lower().split()[0]:
-                if username.lower().rstrip() == broadcaster:
-                    try:
-                        message("Move around, grab a drink and Ridgure will be back before you think. If you enjoyed this session follow the !social media for updates on my progress so far and to get notified when I go live")
-                    except IndexError:
-                        pass
-            if "!support" in text.lower().split()[0]:
-                try:
-                    message("You can support the stream by hosting, tweeting out the stream -> !ctt")
-                except IndexError:
-                    pass
-            if "!jc747" in text.lower().split()[0]:
-                try:
-                    message("It's JSea474 you fool!")
-                except IndexError:
-                    pass
-            if "!octo" in text.lower().split()[0]:
-                try:
-                    message("Squid3 Squid3 Squid3 Squid3 Squid3")
-                except IndexError:
-                    pass
-            if "!asylumcraft" in text.lower().split()[0]:
-                try:
-                    message("See all the members of asylumcraft in the panel below and follow like you have never followerd before")
-                except IndexError:
-                    pass
-            if "!bot" in text.lower().split()[0]:
-                try:
-                    message("I write my own chatbot. To figure out what commands can be used and how to install it check out this page: https://github.com/Ridgure/TwitchBot")
-                except IndexError:
-                    pass
-            if "!bug" in text.lower().split()[0]:
-                try:
-                    message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
-                except IndexError:
-                    pass
-            if "!lick" in text.lower().split()[0]:
-                try:
-                    if username == 'pupgirl22':
-                        message(username + " licks " + text.split()[1] + lick())
-                    else:
-                        pass
-                except IndexError:
-                    pass
-            if "!bellyrub" in text.lower().split()[0]:
-                try:
-                    message(username + " rubs " + text.split()[1] + "'s belly " + lick())
-                except IndexError:
-                    message("Did you remember to '!bellyrub <target>'?")
-                    pass
-            if "cobble" in text.lower().split()[:]:
-                try:
-                    message("Eww not cobble!")
-                except IndexError:
-                    pass
-            if "!batnamechange" in text.lower().split()[0]:
-                try:
-                    csvfile = open('followerData.csv', "rb")
-                    followerDataReader = csv.reader(csvfile, delimiter=",")
-                    followerLines = list(followerDataReader)
-                    csvfile.close()
-
-                    if len(text.lower().split()[1].encode("utf-8")) < 10:
-                        for i in range(len(followerLines)):
-                            if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
-                                followerLines[i][3] = text.split()[1]
-                                message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
-
-                    if len(text.lower().split()[1].encode("utf-8")) > 20:
-                        message("Name cannot be longer than 20 characters")
-                    csvfile = open('followerDataNew.csv', "wb")
-                    followerDataWriter = csv.writer(csvfile, delimiter=",")
-                    followerDataWriter.writerows(followerLines)
-                    csvfile.close()
-                    os.remove('followerData.csv')
-                    os.rename('followerDataNew.csv', 'followerData.csv')
-                except IndexError:
-                    message("Did you remember to '!batnamechange <new name>'?")
-                    pass
-            if "!batgenderchange" in text.lower().split()[0]:
-                try:
-                    csvfile = open('followerData.csv', "rb")
-                    followerDataReader = csv.reader(csvfile, delimiter=",")
-                    followerLines = list(followerDataReader)
-                    csvfile.close()
-
-                    owner = False
-                    for i1 in range(len(followerLines)):
-                        if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                            if text.split()[1].lower().rstrip() == "male":
-                                if followerLines[i1][4].lower().rstrip() == "male":
-                                    message(followerLines[i1][0] + "'s bat is already male")
-                                if followerLines[i1][4].lower().rstrip() == "female":
-                                    message(
-                                        "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
-                                        "female to male")
-                                    followerLines[i1][4] = "male"
-                            if text.split()[1].lower().rstrip() == "female":
-                                if followerLines[i1][4].lower().rstrip() == "female":
-                                    message(followerLines[i1][0] + "'s bat is already female")
-                                if followerLines[i1][4].lower().rstrip() == "male":
-                                    message(
-                                        "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
-                                        "male to female")
-                                    followerLines[i1][4] = "female"
-                            if not text.split()[1].lower().rstrip() == "male":
-                                if not text.split()[1].lower().rstrip() == "female":
-                                    message("The gender can only be male or female")
-                            owner = True
-                    csvfile = open('followerDataNew.csv', "wb")
-                    followerDataWriter = csv.writer(csvfile, delimiter=",")
-                    followerDataWriter.writerows(followerLines)
-                    csvfile.close()
-                    os.remove('followerData.csv')
-                    os.rename('followerDataNew.csv', 'followerData.csv')
-                    if owner == False:
-                        message("You cannot change the gender of other people's bats")
-                except IndexError:
-                    print message("Did you remember to '!batgenderchange <new gender>'?")
-                    print "batgenderchange error"
-                    pass
-            if "!timemeout" in text.lower().split()[0]:
-                try:
-                    if username.lower().rstrip() == "kbigliar":
-                        if 0 < int(text.split()[1]) < 3601:
-                            message("/timeout " + username + " " + text.split()[1])
-                            message("Timed out " + username + " for " + text.split()[1] + " seconds")
-                        elif int(text.split()[1]) < 0:
-                            message("You cannot go back in time unless you are the doctor or Marty McFly")
+                        if username.lower() == broadcaster:
+                            message("Please raid Twitch.tv/" + text.split()[
+                                1] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
                         else:
-                            message("TimeMeOut failed")
-                    if not username == "Kbigliar":
-                        message("Only Kbigliar can time himself out")
-                except IndexError:
-                    message("Add amount of seconds you want to be timed out after command")
-                    pass
-            if "!uptime" in text.lower().split()[0]:
-                try:
-                    message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
-                except IndexError:
-                    print "Uptime failed"
-            if "!fc" in text.lower().split()[0] or "!followdate" in text.lower().split()[0]:
-                try:
-                    # get the user
-                    if len(text.lower().split()) == 1:
-                        user = username
-                    if len(text.lower().split()) == 2:
-                        user = (text.lower().split()[1])
+                            pass
+                    except IndexError:
+                        message("Msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                        pass
+                elif "!pack" in firstStr or "!sevtech" in firstStr:
+                    try:
+                        message(
+                            "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
+                            "through the twitch launcher, curse and the AT launcher")
+                    except IndexError:
+                        pass
+                elif "!test" in firstStr or "!t3st" in firstStr:
+                    try:
+                        print "test"
+                    except IndexError:
+                        pass
+                elif "!scrowl" in firstStr:
+                    try:
+                        message(username + "grumpily scowls at " + text.split()[1])
+                    except IndexError:
+                        pass
+                elif "!discord" in firstStr:
+                    try:
+                        message("Join the discord! https://discord.gg/yddBmCE")
+                    except IndexError:
+                        pass
+                elif "!java" in firstStr:
+                    try:
+                        message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
+                    except IndexError:
+                        pass
+                elif "!oclock" in firstStr:
+                    try:
+                        message("The time for me right now is " + datetime.datetime.now().strftime(
+                            "%H:%M") + " o'clock" + " CET")
+                    except IndexError:
+                        pass
+                elif "!shout" in firstStr:
+                    if username.lower().rstrip() == broadcaster:
+                        try:
+                            message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
+                        except IndexError:
+                            pass
+                elif "!breakdance" in firstStr:
+                    if username.lower().rstrip() == broadcaster:
+                        try:
+                            message("Move around, grab a drink and Ridgure will be back before you think. If you enjoyed this session follow the !social media for updates on my progress so far and to get notified when I go live")
+                        except IndexError:
+                            pass
+                elif "!support" in firstStr:
+                    try:
+                        message("You can support the stream by hosting, tweeting out the stream -> !ctt")
+                    except IndexError:
+                        pass
+                elif "!jc747" in firstStr:
+                    try:
+                        message("It's JSea474 you fool!")
+                    except IndexError:
+                        pass
+                elif "!octo" in firstStr:
+                    try:
+                        message("Squid3 Squid3 Squid3 Squid3 Squid3")
+                    except IndexError:
+                        pass
+                elif "!asylumcraft" in firstStr:
+                    try:
+                        message("See all the members of asylumcraft in the panel below and follow like you have never followerd before")
+                    except IndexError:
+                        pass
+                elif "!bot" in firstStr:
+                    try:
+                        message("I write my own chatbot. To figure out what commands can be used and how to install it check out this page: https://github.com/Ridgure/TwitchBot")
+                    except IndexError:
+                        pass
+                elif "!bug" in firstStr:
+                    try:
+                        message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
+                    except IndexError:
+                        pass
+                elif "!lick" in firstStr:
+                    try:
+                        if username == 'pupgirl22':
+                            message(username + " licks " + text.split()[1] + lick())
+                        else:
+                            pass
+                    except IndexError:
+                        pass
+                elif "!bellyrub" in firstStr:
+                    try:
+                        message(username + " rubs " + text.split()[1] + "'s belly " + lick())
+                    except IndexError:
+                        message("Did you remember to '!bellyrub <target>'?")
+                        pass
+                elif "cobble" in text.lower().split()[:]:
+                    try:
+                        message("Eww not cobble!")
+                    except IndexError:
+                        pass
+                elif "!batnamechange" in firstStr:
+                    try:
+                        csvfile = open('followerData.csv', "rb")
+                        followerDataReader = csv.reader(csvfile, delimiter=",")
+                        followerLines = list(followerDataReader)
+                        csvfile.close()
 
-                    testFollower = False
-                    # get user index and get their follow time and date and length
-                    for i1 in xrange(len(followerList)):
-                        for i2 in xrange(len(followerList[i1])):
-                            # print i1, followerList[i1]['from_name']
-                            if followerList[i1]['from_name'].lower() == user:
-                                followAge = followAgeAll()
-                                message("Last follow was on: " + str(
-                                    followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
-                                    followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
-                                    followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
-                                user = None
-                                testFollower = True
+                        if len(text.lower().split()[1].encode("utf-8")) < 10:
+                            for i in range(len(followerLines)):
+                                if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
+                                    followerLines[i][3] = text.split()[1]
+                                    message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
+
+                        if len(text.lower().split()[1].encode("utf-8")) > 20:
+                            message("Name cannot be longer than 20 characters")
+                        csvfile = open('followerDataNew.csv', "wb")
+                        followerDataWriter = csv.writer(csvfile, delimiter=",")
+                        followerDataWriter.writerows(followerLines)
+                        csvfile.close()
+                        os.remove('followerData.csv')
+                        os.rename('followerDataNew.csv', 'followerData.csv')
+                    except IndexError:
+                        message("Did you remember to '!batnamechange <new name>'?")
+                        pass
+                elif "!batgenderchange" in firstStr:
+                    try:
+                        csvfile = open('followerData.csv', "rb")
+                        followerDataReader = csv.reader(csvfile, delimiter=",")
+                        followerLines = list(followerDataReader)
+                        csvfile.close()
+
+                        owner = False
+                        for i1 in range(len(followerLines)):
+                            if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                if text.split()[1].lower().rstrip() == "male":
+                                    if followerLines[i1][4].lower().rstrip() == "male":
+                                        message(followerLines[i1][0] + "'s bat is already male")
+                                    if followerLines[i1][4].lower().rstrip() == "female":
+                                        message(
+                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                            "female to male")
+                                        followerLines[i1][4] = "male"
+                                if text.split()[1].lower().rstrip() == "female":
+                                    if followerLines[i1][4].lower().rstrip() == "female":
+                                        message(followerLines[i1][0] + "'s bat is already female")
+                                    if followerLines[i1][4].lower().rstrip() == "male":
+                                        message(
+                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                            "male to female")
+                                        followerLines[i1][4] = "female"
+                                if not text.split()[1].lower().rstrip() == "male":
+                                    if not text.split()[1].lower().rstrip() == "female":
+                                        message("The gender can only be male or female")
+                                owner = True
+                        csvfile = open('followerDataNew.csv', "wb")
+                        followerDataWriter = csv.writer(csvfile, delimiter=",")
+                        followerDataWriter.writerows(followerLines)
+                        csvfile.close()
+                        os.remove('followerData.csv')
+                        os.rename('followerDataNew.csv', 'followerData.csv')
+                        if owner == False:
+                            message("You cannot change the gender of other people's bats")
+                    except IndexError:
+                        print message("Did you remember to '!batgenderchange <new gender>'?")
+                        print "batgenderchange error"
+                        pass
+                elif "!timemeout" in firstStr:
+                    try:
+                        if username.lower().rstrip() == "kbigliar":
+                            if 0 < int(text.split()[1]) < 3601:
+                                message("/timeout " + username + " " + text.split()[1])
+                                message("Timed out " + username + " for " + text.split()[1] + " seconds")
+                            elif int(text.split()[1]) < 0:
+                                message("You cannot go back in time unless you are the doctor or Marty McFly")
                             else:
-                                pass
-                    if testFollower == False:
-                        message("Command on cooldown")
+                                message("TimeMeOut failed")
+                        if not username == "Kbigliar":
+                            message("Only Kbigliar can time himself out")
+                    except IndexError:
+                        message("Add amount of seconds you want to be timed out after command")
+                        pass
+                elif "!uptime" in firstStr:
+                    try:
+                        message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
+                    except IndexError:
+                        print "Uptime failed"
+                elif "!fc" in firstStr or "!followdate" in firstStr:
+                    try:
+                        # get the user
+                        if len(text.lower().split()) == 1:
+                            user = username
+                        if len(text.lower().split()) == 2:
+                            user = (text.lower().split()[1])
 
-                except IndexError:
-                    pass
-                except Exception, e:
-                    message("followage failed")
-                    message(str(e))
-            if "!elfnamechange" in text.lower().split()[0]:
-                try:
-                    owner = False
-                    if (len(text.lower().split()[2])) <= 15:
-                        for i1 in range(len(subscriberLines)):
-                            if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
-                                    if text.lower().split()[1] == subscriberLines[i1][i2].lower():
+                        testFollower = False
+                        # get user index and get their follow time and date and length
+                        for i1 in xrange(len(followerList)):
+                            for i2 in xrange(len(followerList[i1])):
+                                # print i1, followerList[i1]['from_name']
+                                if followerList[i1]['from_name'].lower() == user:
+                                    followAge = followAgeAll()
+                                    message("Last follow was on: " + str(
+                                        followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
+                                        followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
+                                        followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
+                                    user = None
+                                    testFollower = True
+                                else:
+                                    pass
+                        if testFollower == False:
+                            message("Command on cooldown")
+
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("followage failed")
+                        message(str(e))
+                elif "!elfnamechange" in firstStr:
+                    try:
+                        owner = False
+                        if (len(text.lower().split()[2])) <= 15:
+                            for i1 in range(len(subscriberLines)):
+                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                    for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
+                                        if text.lower().split()[1] == subscriberLines[i1][i2].lower():
+                                            csvfile = open('subscriberData.csv', "rb")
+                                            subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                            subscriberLines = list(subscriberDataReader)
+                                            csvfile.close()
+                                            subscriberLines[i1][i2] = text.split()[2].encode("utf-8")
+                                            for i in range(1):
+                                                message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
+                                            csvfile = open('subscriberDataNew.csv', "wb")
+                                            subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                            subscriberDataWriter.writerows(subscriberLines)
+                                            csvfile.close()
+                                            os.remove('subscriberData.csv')
+                                            os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                            owner = True
+                                            break
+                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                            message("Name cannot be longer than 15 characters")
+                            owner = True
+                        if owner == False:
+                            message("You cannot change the name of other people's elves")
+                    except IndexError:
+                        message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
+                        print "elfgenderchange failed"
+                elif "!elffamilychange" in firstStr:
+                    try:
+                        owner = False
+                        if (len(text.lower().split()[2].encode("ascii"))) <= 15:
+                            for i1 in range(len(subscriberLines)):
+                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                    if text.lower().split()[1] == subscriberLines[i1][7].lower():
                                         csvfile = open('subscriberData.csv', "rb")
                                         subscriberDataReader = csv.reader(csvfile, delimiter=",")
                                         subscriberLines = list(subscriberDataReader)
                                         csvfile.close()
-                                        subscriberLines[i1][i2] = text.split()[2].encode("utf-8")
+                                        subscriberLines[i1][7] = text.split()[2]
                                         for i in range(1):
-                                            message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
+                                            message("Successfully changed family " + text.split()[1] + " to family " +
+                                                    subscriberLines[i1][7])
                                         csvfile = open('subscriberDataNew.csv', "wb")
                                         subscriberDataWriter = csv.writer(csvfile, delimiter=",")
                                         subscriberDataWriter.writerows(subscriberLines)
@@ -1322,114 +1326,83 @@ while True:
                                         os.remove('subscriberData.csv')
                                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                                         owner = True
-                                        break
-                    elif (len(text.lower().split()[2].encode("ascii"))) > 15:
-                        message("Name cannot be longer than 15 characters")
-                        owner = True
-                    if owner == False:
-                        message("You cannot change the name of other people's elves")
-                except IndexError:
-                    message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
-                    print "elfgenderchange failed"
-            if "!elffamilychange" in text.lower().split()[0]:
-                try:
-                    owner = False
-                    if (len(text.lower().split()[2].encode("ascii"))) <= 15:
+                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                            message("Family name cannot be longer than 15 characters")
+                            owner = True
+                        if owner == False:
+                            message("You cannot change the family of other people's elves")
+                    except IndexError:
+                        message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
+                        print "elffamilychange failed"
+                elif "!elfgenderchange" in firstStr:
+                    try:
+                        csvfile = open('subscriberData.csv', "rb")
+                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                        subscriberLines = list(subscriberDataReader)
+                        csvfile.close()
+                        owner = False
                         for i1 in range(len(subscriberLines)):
                             if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                if text.lower().split()[1] == subscriberLines[i1][7].lower():
-                                    csvfile = open('subscriberData.csv', "rb")
-                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                    subscriberLines = list(subscriberDataReader)
-                                    csvfile.close()
-                                    subscriberLines[i1][7] = text.split()[2]
-                                    for i in range(1):
-                                        message("Successfully changed family " + text.split()[1] + " to family " +
-                                                subscriberLines[i1][7])
-                                    csvfile = open('subscriberDataNew.csv', "wb")
-                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                    subscriberDataWriter.writerows(subscriberLines)
-                                    csvfile.close()
-                                    os.remove('subscriberData.csv')
-                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                    owner = True
-                    elif (len(text.lower().split()[2].encode("ascii"))) > 15:
-                        message("Family name cannot be longer than 15 characters")
-                        owner = True
-                    if owner == False:
-                        message("You cannot change the family of other people's elves")
-                except IndexError:
-                    message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
-                    print "elffamilychange failed"
-            if "!elfgenderchange" in text.lower().split()[0]:
-                try:
-                    csvfile = open('subscriberData.csv', "rb")
-                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                    subscriberLines = list(subscriberDataReader)
-                    csvfile.close()
-                    owner = False
-                    for i1 in range(len(subscriberLines)):
-                        if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                            for i2 in range(len(subscriberLines[i1][0:]))[9::2]:
-                                if text.lower().split()[1] == subscriberLines[i1][i2].lower():
-                                    genderIndex = (int(i2) + 1)
-                                    if text.split()[
-                                        2].lower().rstrip() == "male" or text.split()[
-                                        2].lower().rstrip() == "female" or text.split()[
-                                        2].lower().rstrip() == "androgynous":
-                                        message(
-                                            "Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
-                                            subscriberLines[i1][genderIndex] + " to " + text.split()[2])
-                                        subscriberLines[i1][genderIndex] = text.split()[2]
-                                    if not text.split()[
-                                        2].lower().rstrip() == "male" or text.split()[
-                                        2].lower().rstrip() == "female" or text.split()[
-                                        2].lower().rstrip() == "androgynous":
-                                        message("The gender can only be male, female or androgynous")
-                                    owner = True
-                    csvfile = open('subscriberDataNew.csv', "wb")
-                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                    subscriberDataWriter.writerows(subscriberLines)
-                    csvfile.close()
-                    os.remove('subscriberData.csv')
-                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                    if owner == False:
-                        message("You cannot change the gender of other people's elves")
-                except IndexError:
-                    message("Did you remember to write '!elfgenderchange <first name> <gender>'?")
-                    print "elfnamechange failed"
-            if "!smile" in text.lower().split()[0]:
-                try:
-                    message(username + " smiles at " + text.split()[1] + " " + randomEmote())
-                except IndexError:
-                    message("Remember to '!smile <someone>'!")
-                except Exception, e:
-                    message("Smile failed")
-                    message(str(e))
-            if "!multiply" in text.lower().split()[0]:
-                try:
-                    message(multiply())
-                except IndexError:
-                    pass
-                except Exception, e:
-                    message("Multiplication failed")
-                    message(str(e))
-            if "!divide" in text.lower().split()[0]:
-                try:
-                    message(divide())
-                except IndexError:
-                    pass
-                except Exception, e:
-                    message("Division failed")
-                    message(str(e))
-            if "!add" in text.lower().split()[0]:
-                try:
-                    message(add())
-                except IndexError:
-                    pass
-                except Exception, e:
-                    message("Addition failed")
-                    message(str(e))
+                                for i2 in range(len(subscriberLines[i1][0:]))[9::2]:
+                                    if text.lower().split()[1] == subscriberLines[i1][i2].lower():
+                                        genderIndex = (int(i2) + 1)
+                                        if text.split()[
+                                            2].lower().rstrip() == "male" or text.split()[
+                                            2].lower().rstrip() == "female" or text.split()[
+                                            2].lower().rstrip() == "androgynous":
+                                            message(
+                                                "Successfully changed the gender of " + subscriberLines[i1][i2] + " from " +
+                                                subscriberLines[i1][genderIndex] + " to " + text.split()[2])
+                                            subscriberLines[i1][genderIndex] = text.split()[2]
+                                        if not text.split()[
+                                            2].lower().rstrip() == "male" or text.split()[
+                                            2].lower().rstrip() == "female" or text.split()[
+                                            2].lower().rstrip() == "androgynous":
+                                            message("The gender can only be male, female or androgynous")
+                                        owner = True
+                        csvfile = open('subscriberDataNew.csv', "wb")
+                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                        subscriberDataWriter.writerows(subscriberLines)
+                        csvfile.close()
+                        os.remove('subscriberData.csv')
+                        os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                        if owner == False:
+                            message("You cannot change the gender of other people's elves")
+                    except IndexError:
+                        message("Did you remember to write '!elfgenderchange <first name> <gender>'?")
+                        print "elfnamechange failed"
+                elif "!smile" in firstStr:
+                    try:
+                        message(username + " smiles at " + text.split()[1] + " " + randomEmote())
+                    except IndexError:
+                        message("Remember to '!smile <someone>'!")
+                    except Exception, e:
+                        message("Smile failed")
+                        message(str(e))
+                elif "!multiply" in firstStr:
+                    try:
+                        message(multiply())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Multiplication failed")
+                        message(str(e))
+                elif "!divide" in text.lower().split()[0]:
+                    try:
+                        message(divide())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Division failed")
+                        message(str(e))
+                elif "!add" in firstStr:
+                    try:
+                        message(add())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Addition failed")
+                        message(str(e))
         if "USERNOTICE" in data:
             try:
                 print "Response: " + response
@@ -1444,9 +1417,9 @@ while True:
                     print str(e)
                 if msgId == "ritual":
                     message("Welcome " + username + "! " + text.encode('ascii', 'ignore'))
-                if msgId == "raid":
+                elif msgId == "raid":
                     message("Raiders are flying through the cave and climbing up the tree!")
-                if msgId == "sub":
+                elif msgId == "sub":
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     csvfile = open('subscriberData.csv', "rb")
                     subscriberDataReader = csv.reader(csvfile, delimiter=",")
@@ -1456,7 +1429,7 @@ while True:
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
                             subscriberLines[i][1] = 1
                     message("Spam all the hearts you have!!! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
-                if msgId == "resub":
+                elif msgId == "resub":
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     csvfile = open('subscriberData.csv', "rb")
                     subscriberDataReader = csv.reader(csvfile, delimiter=",")
@@ -1467,7 +1440,7 @@ while True:
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
                             subscriberLines[i][1] = subStreak
                     message("Spam all the hearts you have!!! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
-                if msgId == "subgift":
+                elif msgId == "subgift":
                     recipientUserName = re.search(r'(?<=msg-param-recipient-display-name=)(.*?);', response).group(1)
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     message("Thank you so much " + username + " for gifting that tier " +
@@ -1501,7 +1474,7 @@ while True:
                         if msgParamSubPlan.encode('ascii', 'ignore') == "3000":
                             subscriberLines.append(
                                 [username] + ["0"] + ["0"] + ["1"] + ["6"] + ["0"] + ([""] * 4))
-                if msgId == "anonsubgift":
+                elif msgId == "anonsubgift":
                     recipientUserName = re.search(r'(?<=msg-param-recipient-user-name=)(.*?);', response).group(1)
                     msgParamSubPlan = re.search(r'(?<=msg-param-sub-plan=)\w+', response).group(0)
                     message("Thank you for giving that anonymous tier " + msgParamSubPlan.encode('ascii', 'ignore')[

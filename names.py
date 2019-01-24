@@ -120,5 +120,5 @@ timeout1 = ["https://", "http://"]
 timeout10 = ["retard"]
 # Ban
 banReasons = ["nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
-              "going around leavins scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew"]
+              "going around leavins scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated"]
 

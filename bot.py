@@ -1003,7 +1003,7 @@ while True:
                                 gender = 'His'
                             if elfInfo[9].lower() == 'female':
                                 gender = 'Her'
-                            if elfInfo[9] == 'Androgynous':
+                            if elfInfo[9].lower() == 'androgynous':
                                 gender = 'Their'
                             if elfInfo[6] == "1":
                                 message(
@@ -1032,19 +1032,19 @@ while True:
                                 gender = 'His'
                             if elfInfo[9].lower() == 'female':
                                 gender = 'Her'
-                            if elfInfo[9] == 'Androgynous':
+                            if elfInfo[9].lower() == 'androgynous':
                                 gender = 'Their'
                             if elfInfo[6] == "1":
-                                message(
-                                    "Your bat morphed into 1 elf. " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
+                                message(username +
+                                    "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
                             if elfInfo[6] == "2":
-                                message(
-                                    "Your bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
+                                message(username +
+                                    "'s bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
                                     elfInfo[10] + " " + elfInfo[7])
                             if int(elfInfo[6]) > 2:
                                 maxElf = (int(elfInfo[6]) * 2) + 6
                                 elves = elfInfo[8:maxElf:2]
-                                message("Your bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
+                                message(username + "'s bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
                                         elfInfo[maxElf] + " " + elfInfo[7])
                     except IndexError, e:
                         print str(e)

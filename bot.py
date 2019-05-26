@@ -19,7 +19,7 @@ from decimal import *
 s = socket.socket()
 s.connect((Host, Port))
 s.send("PASS {}\r\n".format("oauth:" + FollowerToken).encode("utf-8"))
-s.send("NICK {}\r\n".format(Nickname).encode("utf-8"))
+s.send("NICK {}\r\n".format(Nickname.lower()).encode("utf-8"))
 s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
 s.send("CAP REQ :twitch.tv/membership\r\n")
 s.send("CAP REQ :twitch.tv/commands\r\n")
@@ -425,7 +425,7 @@ while True:
             username = re.search(r'(?<=display-name=)\w+', response).group(0)
             text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)
             print(username + ": " + text)
-            badges = re.search(r'(?:@badges=)(.*?);', response).group(1).encode("utf-8").split(",")
+            badges = re.search(r'(?:badges=)(.*?);', response).group(1).encode("utf-8").split(",")
             print "Badges: " + str(badges[:])
             print "Response: " + response  ### These are all the responses that are not message related
             try:
@@ -510,10 +510,10 @@ while True:
                     os.rename('followerDataNew.csv', 'followerData.csv')
                     if len(newFollowers) == 1:
                         message("Thank you for following the channel " + " ".join(
-                            newFollowers) + "! Type !bat to see your the information on your :bat:")
+                            newFollowers) + "! Type !" + FolPet + " to see your the information on your " + FolPet + " :bat: :bat: :bat:")
                     if len(newFollowers) > 1:
                         message("Thank you for following the channel " + ", ".join(newFollowers[0:-1]) + " and " +
-                                newFollowers[-1] + "! Type !bat to see the information on your :bat:")
+                                newFollowers[-1] + "! Type !" + FolPet + " to see the information on your " + FolPet + " :bat: :bat: :bat:")
                 # If someone is a follower set isFollower to 1
                 for i1 in range(len(followerList)):
                     for i2 in range(len(followerLines)):
@@ -607,10 +607,10 @@ while True:
                                     if (blackBatScore == brownBatScore) and (brownBatScore == redBatScore):
                                         followerLines[i][5] = 'Black'
                             except Exception, e:
-                                print "could not decide bat color"
+                                print "could not decide " + FolPet + " color"
                                 print(str(e))
 
-                        # check for which bat to add next
+                        # check for which " + FolPet + " to add next
                         if followerLines[i][5] == 'Black':
                             totalBlackBats = totalBlackBats + 1
                         if followerLines[i][5] == 'Brown':
@@ -622,7 +622,7 @@ while True:
                 except IndexError:
                     pass
                 except Exception, e:
-                    print "could not add bat color"
+                    print "could not add " + FolPet + " color"
                     print (str(e))
 
                 # Check if subscriber or not.
@@ -666,8 +666,7 @@ while True:
                                 # Check for upgrades of existing subscriptions
                                 if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for resubscribing! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') + " for resubscribing! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                                     if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
                                         message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
                                             'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
@@ -718,10 +717,10 @@ while True:
                              "Elf6Name", "Elf6Gender"])
                     if len(newSelfSubscribers) == 1:
                         message("Thank you for subscribing " + " ".join(
-                            newSelfSubscribers) + "! Type !elf to see your elf's information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                            newSelfSubscribers) + "! Type !" + SubPet + " to see your " + SubPet + "'s information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     if len(newSelfSubscribers) > 1:
                         message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " +
-                                newSelfSubscribers[-1] + "! Type !elf to see your elf's information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                                newSelfSubscribers[-1] + "! Type !" + SubPet + "  to see your " + SubPet + "'s information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     for i1 in range(len(newSubscribers)):
                         for i2 in range(len(subscriberResponse['subscriptions'])):
                             if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
@@ -741,17 +740,17 @@ while True:
                                                                "6"] + ([""] * 4))
                     if len(newGiftedSubscribers) == 1:
                         message(newGifters + " has given a subscription to " + " ".join(
-                            newGiftedSubscribers) + "! Type !elf to see your elf's information")
+                            newGiftedSubscribers) + "! Type !" + SubPet + " to see your " + SubPet + "'s information")
                     if len(newGiftedSubscribers) > 1:
                         if len(newGifters) == 1:
                                 message(" ".join(newGifters) + "Has gifted a sub to the lucky " + ", ".join(
                                     newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[
-                                            -1] + "! Type !elf to see your elf's information")
+                                            -1] + "! Type !" + SubPet + " to see your " + SubPet + "'s information")
                         if len(newGifters) > 1:
                                 message(" ".join(newGifters) + "have gifted " + str(
                                     len(newGiftedSubscribers)) + " subs in total to the lucky " + ", ".join(
                                     newGiftedSubscribers[0:-1]) + " and " + newGiftedSubscribers[
-                                            -1] + "! Type !elf to see your elf's information")
+                                            -1] + "! Type !" + SubPet + " to see your " + SubPet + "'s information")
                     if len(newGiftedSubscribers) > 0:
                         newGifter = True
                         for i1 in range(len(newGifters)):
@@ -763,7 +762,7 @@ while True:
 
                 # add sub and gift points
                 for i in range(len(subscriberLines)):
-                    if not subscriberLines[i][0] == "Username":
+                    if i > 0:
                         if subscriberLines[i][4] == "":
                             subscriberLines[i][4] = "0"
                         if subscriberLines[i][5] == "":
@@ -807,12 +806,12 @@ while True:
                                 elfLastName = elfLastNames[randomNumber]
                                 subscriberLines[i1][7] = elfLastName
                     except IndexError:
-                        print 'Skipped adding elf name or gender. Will add next time this loops'
+                        print 'Skipped adding " + SubPet + " name or gender. Will add next time this loops'
                         pass
 
-                # add parameters for elves if gifts subs have been given
+                # add parameters for " + SubPetPlural + " if gifts subs have been given
                 for i1 in range(len(subscriberLines)):
-                    if not subscriberLines[i1][0] == "Username":
+                    if i1 > 0:
                         if (int(subscriberLines[i1][6]) * 2) > len(subscriberLines[i1][8:]):
                             for i2 in range(((int(subscriberLines[i1][6]) * 2) - len(subscriberLines[i1][8:]))):
                                 subscriberLines[i1].append("")
@@ -857,10 +856,19 @@ while True:
                         message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
                     except IndexError:
                         pass
+                elif "!song" in firstStr:
+                    try:
+                        csvfile = open('D:\Programs\Snip\Snip-v6.10.2\Snip\Snip.txt', "rb")
+                        songDataReader = csv.reader(csvfile, delimiter=",")
+                        songLines = list(songDataReader)
+                        song = str(songLines[0][0]).decode("utf-8")
+                        message(song.encode('ascii', 'ignore'))
+                    except IndexError:
+                        pass
                 elif "!ctt" in firstStr or "!tweet" in text.lower().split()[0]:
                     try:
                         subscriber = False
-                        title = channelInfo()['status'].encode('ascii', 'ignore')
+                        title = channelInfo()['status'].encode('utf', 'ignore')
                         title = title.replace(" ", "%20")
                         for i1 in range(len(subscriberLines)):
                             if username.lower().rstrip() == subscriberLines[i1][0].lower().rstrip() and int(
@@ -868,10 +876,10 @@ while True:
                                 if not subscriberLines[i1][0] == "Username":
                                     subscriber = True
                                     if int(subscriberLines[i1][6]) == 1:
-                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elf%20" + subscriberLines[i1][8] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
+                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20" + SubPet + "%20" + subscriberLines[i1][8] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
                                     if int(subscriberLines[i1][6]) > 1:
                                         maxElf = (int(subscriberLines[i1][6]) * 2) + 7
-                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20elves%20" + ",%20".join(subscriberLines[i1][8:maxElf:2]) + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20%23ModdedMinecraft%20%23SevTech")
+                                        tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20" + SubPetPlural + "%20" + ",%20".join(subscriberLines[i1][8:maxElf:2]) + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20%23ModdedMinecraft%20%23SevTech")
                         if subscriber == False:
                             follower = False
                             for i1 in range(len(followerLines)):
@@ -879,7 +887,7 @@ while True:
                                     if username.lower().rstrip() == followerLines[i1][0].lower().rstrip():
                                         if int(followerLines[i1][2]) == 1:
                                             follower = True
-                                            tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20bat%20" + followerLines[i1][3] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
+                                            tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=My%20" + FolPet + "%20" + followerLines[i1][3] + "%20and%20I%20are%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20us%20at%20Twitch.tv/Ridgure%20#ModdedMinecraft%20#SevTech")
                             if follower == False:
                                     tweet = tinyurl.create_one("https://twitter.com/intent/tweet?text=I%20am%20watching%20@Ridgure%20doing%20" + title + "%20come%20join%20me%20at%20Twitch.tv/Ridgure%20#Asylumcraft%20#ModdedMinecraft%20#SevTech")
                         message("This link is only for " + username + "! " + tweet + " get your link by doing !ctt")
@@ -919,7 +927,7 @@ while True:
                         pass
                 elif "!lurk" in firstStr:
                     try:
-                        message(username + "'s bat is going in hybernation")
+                        message(username + "'s " + FolPet + " is going in hybernation")
                     except IndexError:
                         pass
                 elif "!twitter" in firstStr:
@@ -944,10 +952,10 @@ while True:
                         pass
                 elif "!benefits" in firstStr:
                     try:
-                        message("Per sub point you contribute to the stream one bat morphs into an elf. If you are subscribed you will also have access to my sub emote")
+                        message("Per sub point you contribute to the stream one " + FolPet + " morphs into an " + SubPet + ". If you are subscribed you will also have access to my sub emote")
                     except IndexError:
                         pass
-                elif "!bat" == firstStr:
+                elif ("!" + FolPet) == firstStr:
                     try:
                         if len(text.lower().split()) == 1:
                             for i in range(len(followerLines)):
@@ -960,11 +968,11 @@ while True:
                                         message("User is not following the channel")
                                     if followerLines[i][2] == "1":
                                         if followerLines[i][6] == 0:
-                                            message(username + "'s :bat: is called " + followerLines[i][
-                                                3] + " " + gender + " is colored " + followerLines[i][5].lower())
+                                            message(username + "'s " + FolPet + " is called " + followerLines[i][
+                                                3] + " " + gender + " is colored " + followerLines[i][5].lower() + " :bat: :bat: :bat:")
                                         if followerLines[i][6] == 1:
                                             message(
-                                                username + "'s :bat: has morphed into an elf. !elf to see information on your elf.")
+                                                username + "'s " + FolPet + " has morphed into an " + SubPet + ". !" + SubPet + " to see information on your " + SubPet + ".")
                         if len(text.lower().split()) == 2:
                             for i in range(len(followerLines)):
                                 if followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
@@ -976,12 +984,12 @@ while True:
                                         message("User is not following the channel")
                                     if followerLines[i][2] == "1":
                                         if followerLines[i][6] == 0:
-                                            message(text.split()[1] + "'s :bat: is called " + followerLines[i][
-                                                3] + ". " + gender + " is colored " + followerLines[i][5].lower())
+                                            message(text.split()[1] + "'s " + FolPet + " is called " + followerLines[i][
+                                                3] + ". " + gender + " is colored " + followerLines[i][5].lower() + " :bat: :bat: :bat:")
                                         if followerLines[i][6] == 1:
                                             message(
-                                                text.split()[1] + "'s :bat: has morphed into an elf. !elf " + text.split()[
-                                                    1] + " to see information on their elf.")
+                                                text.split()[1] + "'s " + FolPet + " has morphed into an " + SubPet + ". !" + subPet + " " + text.split()[
+                                                    1] + " to see information on their " + SubPet + ".")
                                     if not followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
                                         message("Follower not found")
                                 elif followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
@@ -990,7 +998,7 @@ while True:
                         pass
                     except Exception, e:
                         pass
-                elif "!elf" == firstStr:
+                elif ("!" + SubPet) == firstStr:
                     try:
                         elfInfo = None
                         if len(text.lower().split()) == 2:
@@ -1007,20 +1015,20 @@ while True:
                                 gender = 'Their'
                             if elfInfo[6] == "1":
                                 message(
-                                    text.split()[1] + "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[
+                                    text.split()[1] + "'s " + FolPet + " morphed into 1 " + SubPet + ". " + gender + " name is " + elfInfo[
                                         8] + " " +
                                     elfInfo[7])
                             if elfInfo[6] == "2":
                                 message(
-                                    text.split()[1] + "'s bat morphed into 2 elves. Their names are " + elfInfo[
+                                    text.split()[1] + "'s " + FolPet + " morphed into 2 " + SubPetPlural + ". Their names are " + elfInfo[
                                         8] + " and " +
                                     elfInfo[10] + " " + elfInfo[7])
                             if int(elfInfo[6]) > 2:
                                 if int(elfInfo[6]) > 2:
                                     maxElf = (int(elfInfo[6]) * 2) + 6
-                                    elves = elfInfo[8:maxElf:2]
-                                    message(text.split()[1] + "'s bat morphed into " + elfInfo[
-                                        6] + " elves. Their names are " + ", ".join(elves) + " and " + elfInfo[
+                                    elfFirstNames = elfInfo[8:maxElf:2]
+                                    message(text.split()[1] + "'s " + FolPet + " morphed into " + elfInfo[
+                                        6] + " " + SubPetPlural + ". Their names are " + ", ".join(elfFirstNames) + " and " + elfInfo[
                                                 maxElf] + " " + elfInfo[7])
                         if len(text.lower().split()) == 1:
                             for i in range(len(subscriberLines)):
@@ -1036,15 +1044,15 @@ while True:
                                 gender = 'Their'
                             if elfInfo[6] == "1":
                                 message(username +
-                                    "'s bat morphed into 1 elf. " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
+                                    "'s " + FolPet + " morphed into 1 " + SubPet + ". " + gender + " name is " + elfInfo[8] + " " + elfInfo[7])
                             if elfInfo[6] == "2":
                                 message(username +
-                                    "'s bat morphed into 2 elves. Their names are " + elfInfo[8] + " and " +
+                                    "'s " + FolPet + " morphed into 2 " + SubPetPlural + ". Their names are " + elfInfo[8] + " and " +
                                     elfInfo[10] + " " + elfInfo[7])
                             if int(elfInfo[6]) > 2:
                                 maxElf = (int(elfInfo[6]) * 2) + 6
-                                elves = elfInfo[8:maxElf:2]
-                                message(username + "'s bat morphed into " + elfInfo[6] + " elves. Their names are " + ", ".join(elves) + " and " +
+                                elfFirstNames = elfInfo[8:maxElf:2]
+                                message(username + "'s " + FolPet + " morphed into " + elfInfo[6] + " " + SubPetPlural + ". Their names are " + ", ".join(elfFirstNames) + " and " +
                                         elfInfo[maxElf] + " " + elfInfo[7])
                     except IndexError, e:
                         print str(e)
@@ -1139,7 +1147,7 @@ while True:
                         pass
                 elif "!lick" in firstStr:
                     try:
-                        if username == 'pupgirl22':
+                        if username.lower() == 'wolfpupgirl24':
                             message(username + " licks " + text.split()[1] + lick())
                         else:
                             pass
@@ -1167,7 +1175,7 @@ while True:
                             for i in range(len(followerLines)):
                                 if followerLines[i][0].lower().rstrip() == username.lower().rstrip():
                                     followerLines[i][3] = text.split()[1]
-                                    message("Successfully changed the name of " + username + "'s bat to " + text.split()[1])
+                                    message("Successfully changed the name of " + username + "'s " + FolPet + " to " + text.split()[1])
 
                         if len(text.lower().split()[1].encode("utf-8")) > 20:
                             message("Name cannot be longer than 20 characters")
@@ -1192,18 +1200,18 @@ while True:
                             if followerLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                 if text.split()[1].lower().rstrip() == "male":
                                     if followerLines[i1][4].lower().rstrip() == "male":
-                                        message(followerLines[i1][0] + "'s bat is already male")
+                                        message(followerLines[i1][0] + "'s " + FolPet + " is already male")
                                     if followerLines[i1][4].lower().rstrip() == "female":
                                         message(
-                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s " + folPet + " from " +
                                             "female to male")
                                         followerLines[i1][4] = "male"
                                 if text.split()[1].lower().rstrip() == "female":
                                     if followerLines[i1][4].lower().rstrip() == "female":
-                                        message(followerLines[i1][0] + "'s bat is already female")
+                                        message(followerLines[i1][0] + "'s " + FolPet + " is already female")
                                     if followerLines[i1][4].lower().rstrip() == "male":
                                         message(
-                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s bat from " +
+                                            "Successfully changed the gender of " + followerLines[i1][0] + "'s " + FolPet + " from " +
                                             "male to female")
                                         followerLines[i1][4] = "female"
                                 if not text.split()[1].lower().rstrip() == "male":
@@ -1217,7 +1225,7 @@ while True:
                         os.remove('followerData.csv')
                         os.rename('followerDataNew.csv', 'followerData.csv')
                         if owner == False:
-                            message("You cannot change the gender of other people's bats")
+                            message("You cannot change the gender of other people's " + FolPetPlural)
                     except IndexError:
                         print message("Did you remember to '!batgenderchange <new gender>'?")
                         print "batgenderchange error"
@@ -1300,7 +1308,7 @@ while True:
                             message("Name cannot be longer than 15 characters")
                             owner = True
                         if owner == False:
-                            message("You cannot change the name of other people's elves")
+                            message("You cannot change the name of other people's " + SubPetPlural)
                     except IndexError:
                         message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
                         print "elfgenderchange failed"
@@ -1330,7 +1338,7 @@ while True:
                             message("Family name cannot be longer than 15 characters")
                             owner = True
                         if owner == False:
-                            message("You cannot change the family of other people's elves")
+                            message("You cannot change the family of other people's " + SubPetPlural)
                     except IndexError:
                         message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
                         print "elffamilychange failed"
@@ -1367,7 +1375,7 @@ while True:
                         os.remove('subscriberData.csv')
                         os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                         if owner == False:
-                            message("You cannot change the gender of other people's elves")
+                            message("You cannot change the gender of other people's " + SubPetPlural)
                     except IndexError:
                         message("Did you remember to write '!elfgenderchange <first name> <gender>'?")
                         print "elfnamechange failed"

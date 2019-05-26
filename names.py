@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # bot.py
 elfNamesFemale = ["Aelene", "Aelinor", "Aemma", "Akash", "Alaesa", "Alaglossa", "Alais", "Alauthshae", "Alavara",
-                  "Alea", "Alerathla", "Allannia", "Alloralla", "Alys", "Amaryll" "Aquilaen", "Aredhel", "Arwen",
+                  "Alea", "Alerathla", "Allannia", "Alloralla", "Alys", "Amaryll", "Aquilaen", "Aredhel", "Arwen",
                   "Axilia", "Ayaeqlarune", "Azariah", "Baelen", "Beala", "Bhuraelea", "Blythswana", "Bonnalurie",
                   "Braerindra", "Caerthynna", "Calarel", "Cauladra", "Celebrían", "Chandrelle", "Chasianna",
                   "Chichlandra", "Chin’nesstre", "Chomylla", "Ciyradyl", "Daealla", "Daena", "Daenestra", "Daenys",

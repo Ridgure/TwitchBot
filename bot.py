@@ -1315,32 +1315,31 @@ while True:
                 elif "!elffamilychange" in firstStr:
                     try:
                         owner = False
-                        if (len(text.lower().split()[2].encode("ascii"))) <= 15:
+                        if (len(text.lower().split()[1].encode("ascii"))) <= 15:
                             for i1 in range(len(subscriberLines)):
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                    if text.lower().split()[1] == subscriberLines[i1][7].lower():
-                                        csvfile = open('subscriberData.csv', "rb")
-                                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                        subscriberLines = list(subscriberDataReader)
-                                        csvfile.close()
-                                        subscriberLines[i1][7] = text.split()[2]
-                                        for i in range(1):
-                                            message("Successfully changed family " + text.split()[1] + " to family " +
-                                                    subscriberLines[i1][7])
-                                        csvfile = open('subscriberDataNew.csv', "wb")
-                                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                        subscriberDataWriter.writerows(subscriberLines)
-                                        csvfile.close()
-                                        os.remove('subscriberData.csv')
-                                        os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                        owner = True
-                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                                    csvfile = open('subscriberData.csv', "rb")
+                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                    subscriberLines = list(subscriberDataReader)
+                                    csvfile.close()
+                                    subscriberLines[i1][7] = text.split()[1]
+                                    for i in range(1):
+                                        message("Successfully changed family to " +
+                                                subscriberLines[i1][7]) + " family."
+                                    csvfile = open('subscriberDataNew.csv', "wb")
+                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                    subscriberDataWriter.writerows(subscriberLines)
+                                    csvfile.close()
+                                    os.remove('subscriberData.csv')
+                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                    owner = True
+                        else:
                             message("Family name cannot be longer than 15 characters")
                             owner = True
                         if owner == False:
                             message("You cannot change the family of other people's " + SubPetPlural)
                     except IndexError:
-                        message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
+                        message("Did you remember to write '!elffamilychange <new last name>'?")
                         print "elffamilychange failed"
                 elif "!elfgenderchange" in firstStr:
                     try:

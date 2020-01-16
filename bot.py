@@ -24,7 +24,7 @@ s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
 s.send("CAP REQ :twitch.tv/membership\r\n")
 s.send("CAP REQ :twitch.tv/commands\r\n")
 s.send("CAP REQ :twitch.tv/tags\r\n")
-
+BugMessages = 0
 
 def randomEmote():
     randomNumber = random.randint(0, len(emotes))
@@ -59,6 +59,9 @@ def divide():
     everythingTogether = ' / '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
 
+def bugCounter():
+    global BugMessages
+    BugMessages = BugMessages + 1
 
 def lick():
     over = " over and "
@@ -66,6 +69,19 @@ def lick():
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
 
+def mess():
+    randomNumber = random.randint(0, len(messes))
+    return messes[randomNumber]
+
+# def token():
+#     url = "https://id.twitch.tv/oauth2/token?client_id=" + ClientID + "&client_secret=" + ClientSecret + "&grant_type=client_credentials"
+#     response = requests.post(url)
+#     tokenResponse = response.json()
+#     if response.status_code == 404:
+#         print "error"
+#     if response.status_code == 429:
+#         print "Too many subscriber requests"
+#     tokenResponse = response.json()
 
 def subscribers():
     url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
@@ -411,7 +427,8 @@ def uptime():
 def message(msg):
     try:
         s.send("PRIVMSG " + Channel + " :" + msg + "\n")
-        print "Riboture: " + msg
+        print Nickname + ": " + msg
+        sleep(30/100)
     except IndexError:
         pass
 
@@ -455,6 +472,14 @@ while True:
                                     except IndexError, e:
                                         print str(e)
                                         pass
+                            for i6 in disney:
+                                if i6 in text.lower().encode('ascii', 'ignore'):
+                                    try:
+                                        message("/timeout " + username + " 1")
+                                        print "Timed out " + username + " for 1 second because of " + i6
+                                    except IndexError, e:
+                                        print str(e)
+                                        pass
                             for i4 in timeout10:
                                 if i4 in text.lower().encode('ascii', 'ignore'):
                                     try:
@@ -472,6 +497,15 @@ while True:
                                     print str(e)
                                     pass
 
+                # Ban people posting sensitive information about going to a certain school
+                try:
+                    banreason = re.search(r'(?:\w+\W+){1,3}?\bWent to\W+(?:\w+\W+){1,2}?High\b', text).group(0)
+                    if banreason.lower() in text.lower():
+                        message("/ban " + username)
+                        print username + " has been banned"
+                except:
+                    pass
+
                 # Get new follower list and format it to compare with unfollowers
                 followers()
 
@@ -480,7 +514,7 @@ while True:
                     test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
                 test = map(str.strip, test)
 
-                # Get existing follower list
+                # Get existing follower list    
                 if not os.path.exists('followerData.csv'):
                     open('followerData.csv', "w+").close()
                 csvfile = open('followerData.csv', "rb")
@@ -823,7 +857,7 @@ while True:
                         if subStreak == "0":
                             subStreak = "1"
                         for i2 in range(len(subscriberLines)):
-                            if subscriberLines[i2][0].lower().rstrip() == username.rstrip().lower():
+                            if subscriberLines[i2][0].lower().rstrip() == username.rstrip().lower().encode('ascii', 'ignore'):
                                 if subStreak > subscriberLines[i2][1]:
                                     subscriberLines[i2][1] = subStreak
 
@@ -854,6 +888,17 @@ while True:
                 if "!commands" in firstStr:
                     try:
                         message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
+                    except IndexError:
+                        pass
+                if username.lower() == "bugmacgregor":
+                    try:
+                        bugCounter()
+                        print BugMessages
+                        if BugMessages % 5 == 0:
+                            randomNumber = random.randint(0, (len(bedTime) - 1))
+                            message(bedTime[randomNumber])
+                    except Exception, e:
+                        print str(e)
                     except IndexError:
                         pass
                 elif "!song" in firstStr:
@@ -925,11 +970,6 @@ while True:
                         message("Add me on Facebook: fb.com/Ridgure")
                     except IndexError:
                         pass
-                elif "!lurk" in firstStr:
-                    try:
-                        message(username + "'s " + FolPet + " is going in hybernation")
-                    except IndexError:
-                        pass
                 elif "!twitter" in firstStr:
                     try:
                         message("Add me on Facebook: Twitter.com/RigidStructure")
@@ -938,6 +978,11 @@ while True:
                 elif "!instagram" in firstStr:
                     try:
                         message("Add me on Facebook: Instagram.com/RigidStructure")
+                    except IndexError:
+                        pass
+                elif "!lurk" in firstStr:
+                    try:
+                        message(username + "'s " + FolPet + " is going in hybernation")
                     except IndexError:
                         pass
                 elif "!english" in firstStr:
@@ -998,7 +1043,7 @@ while True:
                         pass
                     except Exception, e:
                         pass
-                elif ("!" + SubPet) == firstStr:
+                elif ("!" + SubPet) == firstStr or ("!" + SubPetPlural) == firstStr:
                     try:
                         elfInfo = None
                         if len(text.lower().split()) == 2:
@@ -1032,7 +1077,7 @@ while True:
                                                 maxElf] + " " + elfInfo[7])
                         if len(text.lower().split()) == 1:
                             for i in range(len(subscriberLines)):
-                                if subscriberLines[i][0].lower() == username.lower():
+                                if subscriberLines[i][0].lower() == username.lower().encode('ascii', 'ignore'):
                                     elfInfo = subscriberLines[i]
                             if elfInfo == None:
                                 message("User is not a subscriber")
@@ -1063,12 +1108,25 @@ while True:
                 elif "!raid" in text.lower().split()[0]:
                     try:
                         if username.lower() == broadcaster:
-                            message("Please raid Twitch.tv/" + text.split()[
-                                1] + " msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                            message("Please raid Twitch.tv/" + text.split()[1])
+                            message('Followers: "/me Ridgure raid" + any heart you have')
+                            message('Subs: "/me Ridgure raid ridgurHeart ridgurHeart ridgurHeart "')
                         else:
                             pass
                     except IndexError:
-                        message("Msg: Ridgure raid twitchRaid twitchRaid twitchRaid")
+                        message("Msg: /me Ridgure raid twitchRaid twitchRaid twitchRaid")
+                        pass
+                elif "!server" in firstStr or "!ip" in firstStr:
+                    try:
+                        message(
+                            "the Rigidification server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP")
+                    except IndexError:
+                        pass
+                elif "!vip" in firstStr or "!straitjacket" in firstStr:
+                    try:
+                        message(
+                            "If you redeem the VIP/Discord ticket reward with your points you will be made VIP and get a special role in the discord")
+                    except IndexError:
                         pass
                 elif "!pack" in firstStr or "!sevtech" in firstStr:
                     try:
@@ -1077,9 +1135,20 @@ while True:
                             "through the twitch launcher, curse and the AT launcher")
                     except IndexError:
                         pass
+                elif "!version" in firstStr or "!vanilla" in firstStr:
+                    try:
+                        message("The version of minecraft I am currently playing is 1.15.1")
+                    except IndexError:
+                        pass
+                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr:
+                    try:
+                        message(
+                            "Place your units over at https://www.streamcaptain.com/ and help us win!")
+                    except IndexError:
+                        pass
                 elif "!test" in firstStr or "!t3st" in firstStr:
                     try:
-                        print "test"
+                        print str(datetime.datetime.now().strftime("%M:%S"))
                     except IndexError:
                         pass
                 elif "!scrowl" in firstStr:
@@ -1120,16 +1189,6 @@ while True:
                         message("You can support the stream by hosting, tweeting out the stream -> !ctt")
                     except IndexError:
                         pass
-                elif "!jc747" in firstStr:
-                    try:
-                        message("It's JSea474 you fool!")
-                    except IndexError:
-                        pass
-                elif "!octo" in firstStr:
-                    try:
-                        message("Squid3 Squid3 Squid3 Squid3 Squid3")
-                    except IndexError:
-                        pass
                 elif "!asylumcraft" in firstStr:
                     try:
                         message("See all the members of asylumcraft in the panel below and follow like you have never followerd before")
@@ -1145,6 +1204,136 @@ while True:
                         message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
                     except IndexError:
                         pass
+                elif "!bellyrub" in firstStr:
+                    try:
+                        message(username + " rubs " + text.split()[1] + "'s belly " + lick())
+                    except IndexError:
+                        message("Did you remember to '!bellyrub <target>'?")
+                        pass
+                elif "!uptime" in firstStr:
+                    try:
+                        message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
+                    except IndexError:
+                        print "Uptime failed"
+                elif "!fc" in firstStr or "!followdate" in firstStr:
+                    try:
+                        # get the user
+                        if len(text.lower().split()) == 1:
+                            user = username
+                        if len(text.lower().split()) == 2:
+                            user = (text.lower().split()[1])
+
+                        testFollower = False
+                        # get user index and get their follow time and date and length
+                        for i1 in xrange(len(followerList)):
+                            for i2 in xrange(len(followerList[i1])):
+                                # print i1, followerList[i1]['from_name']
+                                if followerList[i1]['from_name'].lower() == user:
+                                    followAge = followAgeAll()
+                                    message("Last follow was on: " + str(
+                                        followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
+                                        followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
+                                        followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
+                                    user = None
+                                    testFollower = True
+                                else:
+                                    pass
+                        if testFollower == False:
+                            message("Command on cooldown")
+
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("followage failed")
+                        message(str(e))
+                elif "!smile" in firstStr:
+                    try:
+                        message(username + " smiles at " + text.split()[1] + " " + randomEmote())
+                    except IndexError:
+                        message("Remember to '!smile <someone>'!")
+                    except Exception, e:
+                        message("Smile failed")
+                        message(str(e))
+                elif "!multiply" in firstStr:
+                    try:
+                        message(multiply())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Multiplication failed")
+                        message(str(e))
+                elif "!divide" in text.lower().split()[0]:
+                    try:
+                        message(divide())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Division failed")
+                        message(str(e))
+                elif "!add" in firstStr:
+                    try:
+                        message(add())
+                    except IndexError:
+                        pass
+                    except Exception, e:
+                        message("Addition failed")
+                        message(str(e))
+                elif "!elfnamechange" in firstStr:
+                    try:
+                        owner = False
+                        if (len(text.lower().split()[2])) <= 15:
+                            for i1 in range(len(subscriberLines)):
+                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
+                                    for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
+                                        if text.lower().split()[1] == subscriberLines[i1][i2].lower():
+                                            csvfile = open('subscriberData.csv', "rb")
+                                            subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                            subscriberLines = list(subscriberDataReader)
+                                            csvfile.close()
+                                            subscriberLines[i1][i2] = text.split()[2].encode("utf-8")
+                                            for i in range(1):
+                                                message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
+                                            csvfile = open('subscriberDataNew.csv', "wb")
+                                            subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                            subscriberDataWriter.writerows(subscriberLines)
+                                            csvfile.close()
+                                            os.remove('subscriberData.csv')
+                                            os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                            owner = True
+                                            break
+                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                            message("Name cannot be longer than 15 characters")
+                            owner = True
+                        if owner == False:
+                            message("You cannot change the name of other people's " + SubPetPlural)
+                    except IndexError:
+                        message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
+                        print "elfgenderchange failed"
+
+                # Automatic responses
+                elif "uwu" in text.lower():
+                    message("ᵘʷᵘ")
+                elif "rawr" in text.lower():
+                    message("Rawr XD")
+                elif "cobble" in text.lower().split()[:]:
+                    try:
+                        message("Eww not cobble!")
+                    except IndexError:
+                        pass
+                if "(╯°□°）╯︵ ┻━┻" in text.lower().encode("utf-8"):
+                    message("┬─┬ノ( º _ ºノ)")
+
+                # User specific commands
+                elif "!jc747" in firstStr:
+                    try:
+                        message("It's JSea474 you fool!")
+                    except IndexError:
+                        pass
+                elif "!octo" in firstStr:
+                    try:
+                        message("Squid3 Squid3 Squid3 Squid3 Squid3")
+                    except IndexError:
+                        pass
                 elif "!lick" in firstStr:
                     try:
                         if username.lower() == 'wolfpupgirl24':
@@ -1153,17 +1342,31 @@ while True:
                             pass
                     except IndexError:
                         pass
-                elif "!bellyrub" in firstStr:
+                elif "!ruffle" in firstStr:
                     try:
-                        message(username + " rubs " + text.split()[1] + "'s belly " + lick())
-                    except IndexError:
-                        message("Did you remember to '!bellyrub <target>'?")
-                        pass
-                elif "cobble" in text.lower().split()[:]:
-                    try:
-                        message("Eww not cobble!")
+                        if username.lower() == 'ivanabcroftin' or username.lower() == 'ridgure':
+                            message("IvanaBCroftin sneaks up to Ridgure and puts " + mess() + " in his hair")
+                        else:
+                            pass
                     except IndexError:
                         pass
+                elif "!timemeout" in firstStr:
+                    try:
+                        if username.lower().rstrip() == "kbigliar":
+                            if 0 < int(text.split()[1]) < 3601:
+                                message("/timeout " + username + " " + text.split()[1])
+                                message("Timed out " + username + " for " + text.split()[1] + " seconds")
+                            elif int(text.split()[1]) < 0:
+                                message("You cannot go back in time unless you are the doctor or Marty McFly")
+                            else:
+                                message("TimeMeOut failed")
+                        if not username == "Kbigliar":
+                            message("Only Kbigliar can time himself out")
+                    except IndexError:
+                        message("Add amount of seconds you want to be timed out after command")
+                        pass
+
+                # Pet commands
                 elif "!batnamechange" in firstStr:
                     try:
                         csvfile = open('followerData.csv', "rb")
@@ -1230,88 +1433,6 @@ while True:
                         print message("Did you remember to '!batgenderchange <new gender>'?")
                         print "batgenderchange error"
                         pass
-                elif "!timemeout" in firstStr:
-                    try:
-                        if username.lower().rstrip() == "kbigliar":
-                            if 0 < int(text.split()[1]) < 3601:
-                                message("/timeout " + username + " " + text.split()[1])
-                                message("Timed out " + username + " for " + text.split()[1] + " seconds")
-                            elif int(text.split()[1]) < 0:
-                                message("You cannot go back in time unless you are the doctor or Marty McFly")
-                            else:
-                                message("TimeMeOut failed")
-                        if not username == "Kbigliar":
-                            message("Only Kbigliar can time himself out")
-                    except IndexError:
-                        message("Add amount of seconds you want to be timed out after command")
-                        pass
-                elif "!uptime" in firstStr:
-                    try:
-                        message("The stream has been live for " + str(uptime().hour) + "h " + str(uptime().minute) + "m")
-                    except IndexError:
-                        print "Uptime failed"
-                elif "!fc" in firstStr or "!followdate" in firstStr:
-                    try:
-                        # get the user
-                        if len(text.lower().split()) == 1:
-                            user = username
-                        if len(text.lower().split()) == 2:
-                            user = (text.lower().split()[1])
-
-                        testFollower = False
-                        # get user index and get their follow time and date and length
-                        for i1 in xrange(len(followerList)):
-                            for i2 in xrange(len(followerList[i1])):
-                                # print i1, followerList[i1]['from_name']
-                                if followerList[i1]['from_name'].lower() == user:
-                                    followAge = followAgeAll()
-                                    message("Last follow was on: " + str(
-                                        followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
-                                        followAge[i1][1]) + " days, " + str(followAge[i1][2]) + " hours, " + str(
-                                        followAge[i1][3]) + " minutes and " + str(followAge[i1][4]) + " seconds")
-                                    user = None
-                                    testFollower = True
-                                else:
-                                    pass
-                        if testFollower == False:
-                            message("Command on cooldown")
-
-                    except IndexError:
-                        pass
-                    except Exception, e:
-                        message("followage failed")
-                        message(str(e))
-                elif "!elfnamechange" in firstStr:
-                    try:
-                        owner = False
-                        if (len(text.lower().split()[2])) <= 15:
-                            for i1 in range(len(subscriberLines)):
-                                if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                    for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
-                                        if text.lower().split()[1] == subscriberLines[i1][i2].lower():
-                                            csvfile = open('subscriberData.csv', "rb")
-                                            subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                            subscriberLines = list(subscriberDataReader)
-                                            csvfile.close()
-                                            subscriberLines[i1][i2] = text.split()[2].encode("utf-8")
-                                            for i in range(1):
-                                                message("Successfully changed " + text.split()[1] + "'s name to " + text.split()[2] + " " + subscriberLines[i1][7])
-                                            csvfile = open('subscriberDataNew.csv', "wb")
-                                            subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                            subscriberDataWriter.writerows(subscriberLines)
-                                            csvfile.close()
-                                            os.remove('subscriberData.csv')
-                                            os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                            owner = True
-                                            break
-                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
-                            message("Name cannot be longer than 15 characters")
-                            owner = True
-                        if owner == False:
-                            message("You cannot change the name of other people's " + SubPetPlural)
-                    except IndexError:
-                        message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
-                        print "elfgenderchange failed"
                 elif "!elffamilychange" in firstStr:
                     try:
                         owner = False
@@ -1379,38 +1500,6 @@ while True:
                     except IndexError:
                         message("Did you remember to write '!elfgenderchange <first name> <gender>'?")
                         print "elfnamechange failed"
-                elif "!smile" in firstStr:
-                    try:
-                        message(username + " smiles at " + text.split()[1] + " " + randomEmote())
-                    except IndexError:
-                        message("Remember to '!smile <someone>'!")
-                    except Exception, e:
-                        message("Smile failed")
-                        message(str(e))
-                elif "!multiply" in firstStr:
-                    try:
-                        message(multiply())
-                    except IndexError:
-                        pass
-                    except Exception, e:
-                        message("Multiplication failed")
-                        message(str(e))
-                elif "!divide" in text.lower().split()[0]:
-                    try:
-                        message(divide())
-                    except IndexError:
-                        pass
-                    except Exception, e:
-                        message("Division failed")
-                        message(str(e))
-                elif "!add" in firstStr:
-                    try:
-                        message(add())
-                    except IndexError:
-                        pass
-                    except Exception, e:
-                        message("Addition failed")
-                        message(str(e))
         if "USERNOTICE" in data:
             try:
                 print "Response: " + response

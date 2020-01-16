@@ -40,6 +40,9 @@ Stating emotion:<br>
 !smile,
 
 Minecraft related:<br>
+!server,
+!ip,
+!version,
 !pack,
 !sevtech,
 !tp,
@@ -75,10 +78,11 @@ Elf tree:<br>
 !breakdance
 
 ###### User specific commands:
-!lick,<br>
-!timemeout<br>
-!jc747<br>
-!octo
+!lick - Wolfpupgirl<br>
+!timemeout - KbigLiar<br>
+!jc747 - JC747<br>
+!octo - Octostarx<br>
+!ruffle - IvanabCroftin
 
 **Automated functions:**
 
@@ -87,7 +91,9 @@ Subscriber notification,<br>
 Output last 20 messages in chat to a file,<br>
 "Eww cobble" every time cobble is mentioned,<br>
 Times out non vip/moderators if they post links<br>
-Bans users that use bad language
+Bans users that use bad language<br>
+Bedbug - Tells BugMacGregor to go to bed every so often
+
 
 ## Getting started
 

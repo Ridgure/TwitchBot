@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # bot.py
 elfNamesFemale = ["Aelene", "Aelinor", "Aemma", "Akash", "Alaesa", "Alaglossa", "Alais", "Alauthshae", "Alavara",
-                  "Alea", "Alerathla", "Allannia", "Alloralla", "Alys", "Amaryll", "Aquilaen", "Aredhel", "Arwen",
+                  "Alea", "Alerathla", "Allannia", "Alloralla", "Alys", "Amaryll" "Aquilaen", "Aredhel", "Arwen",
                   "Axilia", "Ayaeqlarune", "Azariah", "Baelen", "Beala", "Bhuraelea", "Blythswana", "Bonnalurie",
                   "Braerindra", "Caerthynna", "Calarel", "Cauladra", "Celebrían", "Chandrelle", "Chasianna",
                   "Chichlandra", "Chin’nesstre", "Chomylla", "Ciyradyl", "Daealla", "Daena", "Daenestra", "Daenys",
@@ -119,11 +119,6 @@ timeout1 = ["https://", "http://"]
 # Timeout 10 minutes
 timeout10 = ["retard"]
 # Ban
-banReasons = ["knee", "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
+banReasons = ["nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
               "going around leavins scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated"]
 
-disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]
-
-messes = ["thermal paste", "pink bows", "rainbow colored bows", "glitter"]
-
-bedTime = ["Go to bed Bug", "It is bedtime Bug", "Go to bed Bug! How many times do I have to tell you...", "Are you in bed yet Bug?", "Mr. Sandman is coming to get you Bug", "*Sings a lullaby for Bug*", "I think you are feeling sleepy Bug", "How long has it been since your last nap Bug?", "*Hands Bug a pillow*"]

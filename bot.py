@@ -1140,8 +1140,8 @@ while True:
                         message("The version of minecraft I am currently playing is 1.15.1")
                     except IndexError:
                         pass
-                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr:
-                    try:
+                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!raiders" in firstStr:
+                    try: 
                         message(
                             "Place your units over at https://www.streamcaptain.com/ and help us win!")
                     except IndexError:
@@ -1254,6 +1254,14 @@ while True:
                     except Exception, e:
                         message("Smile failed")
                         message(str(e))
+                elif "!pet" in firstStr:
+                    try:
+                        message(username + " pets " + text.split()[1])
+                    except IndexError:
+                        message("Remember to '!pet <someone>'!")
+                    except Exception, e:
+                        message("Pet failed")
+                        message(str(e))
                 elif "!multiply" in firstStr:
                     try:
                         message(multiply())
@@ -1342,7 +1350,7 @@ while True:
                             pass
                     except IndexError:
                         pass
-                elif "!ruffle" in firstStr:
+                elif "!ruffle" in firstStr or "!ruffles" in firstStr:
                     try:
                         if username.lower() == 'ivanabcroftin' or username.lower() == 'ridgure':
                             message("IvanaBCroftin sneaks up to Ridgure and puts " + mess() + " in his hair")

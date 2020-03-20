@@ -89,7 +89,7 @@ def subscribers():
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
-        print "Too many subscriber requests"
+        print ("Too many subscriber requests")
     global subscriberResponse
     subscriberResponse = response.json()
     return subscriberResponse
@@ -124,7 +124,7 @@ def channelInfo():
     params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
     response = requests.get(url, headers=params)
     if response.status_code == 429:
-        print "Too many stream info requests"
+        print ("Too many stream info requests")
     channelInfoResponse = response.json()
     return channelInfoResponse
 
@@ -160,7 +160,7 @@ def followers():
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 429:
-            print "Too many follower requests"
+            print ("Too many follower requests")
 
         global pagination
         pagination = responseFirst100['pagination']['cursor']
@@ -175,12 +175,13 @@ def followers():
             response = requests.get(url200, headers=params)
             responseRest = response.json()
             if response.status_code == 429:
-                print "Too many follower requests"
+                print ("Too many follower requests")
             pagination = responseRest['pagination']['cursor']
             followerList = followerList + responseRest['data']
 
         return followerList
-    except Exception, e:
+    except Exception as e:
+        print (str(e))
         pass
 
     # print response
@@ -381,7 +382,7 @@ def uptime():
     response = requests.get(url, headers=params)
     streamData = response.json()
     if response.status_code == 429:
-        print "Too many uptime requests"
+        print ("Too many uptime requests")
     if streamData['data'] == []:
         message("Twitch has not realized stream is live")
     StreamStart = streamData['data'][0]
@@ -427,7 +428,7 @@ def uptime():
 def message(msg):
     try:
         s.send("PRIVMSG " + Channel + " :" + msg + "\n")
-        print Nickname + ": " + msg
+        print (Nickname + ": " + msg)
         sleep(30/100)
     except IndexError:
         pass
@@ -443,8 +444,8 @@ while True:
             text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)
             print(username + ": " + text)
             badges = re.search(r'(?:badges=)(.*?);', response).group(1).encode("utf-8").split(",")
-            print "Badges: " + str(badges[:])
-            print "Response: " + response  ### These are all the responses that are not message related
+            print ("Badges: " + str(badges[:]))
+            print ("Response: " + response)  ### These are all the responses that are not message related
             try:
                 # Timeout misbehaving users
                 if not "clips.twitch.tv/" in text.lower():
@@ -460,7 +461,7 @@ while True:
                                         if i2 in text.lower().encode('ascii', 'ignore'):
                                             try:
                                                 message("/timeout " + username + " 1")
-                                                print "Timed out " + username + " for 1 second because of " + i2
+                                                print ("Timed out " + username + " for 1 second because of " + i2)
                                             except IndexError, e:
                                                 print str(e)
                                                 pass
@@ -468,7 +469,7 @@ while True:
                                 if i3 in text.lower().encode('ascii', 'ignore'):
                                     try:
                                         message("/timeout " + username + " 1")
-                                        print "Timed out " + username + " for 1 second because of " + i3
+                                        print ("Timed out " + username + " for 1 second because of " + i3)
                                     except IndexError, e:
                                         print str(e)
                                         pass
@@ -476,24 +477,24 @@ while True:
                                 if i6 in text.lower().encode('ascii', 'ignore'):
                                     try:
                                         message("/timeout " + username + " 1")
-                                        print "Timed out " + username + " for 1 second because of " + i6
-                                    except IndexError, e:
-                                        print str(e)
+                                        print ("Timed out " + username + " for 1 second because of " + i6)
+                                    except IndexError as e:
+                                        print (str(e))
                                         pass
                             for i4 in timeout10:
                                 if i4 in text.lower().encode('ascii', 'ignore'):
                                     try:
                                         message("/timeout " + username + " 600")
                                         print "Timed out " + username + " for 10 minutes because of " + i4
-                                    except IndexError, e:
-                                        print str(e)
+                                    except IndexError as e:
+                                        print (str(e))
                                         pass
                         for i5 in banReasons:
                             if i5 in text.lower().encode('ascii', 'ignore'):
                                 try:
                                     message("/ban " + username)
                                     print "Banned " + username + " because of " + i5
-                                except IndexError, e:
+                                except IndexError as e:
                                     print str(e)
                                     pass
 
@@ -977,7 +978,7 @@ while True:
                         pass
                 elif "!instagram" in firstStr:
                     try:
-                        message("Add me on Facebook: Instagram.com/RigidStructure")
+                        message("Add me on Instagram: Instagram.com/RigidStructure")
                     except IndexError:
                         pass
                 elif "!lurk" in firstStr:
@@ -1112,9 +1113,37 @@ while True:
                             message('Followers: "/me Ridgure raid" + any heart you have')
                             message('Subs: "/me Ridgure raid ridgurHeart ridgurHeart ridgurHeart "')
                         else:
-                            pass
+                            message("This command is broadcaster only")
                     except IndexError:
                         message("Msg: /me Ridgure raid twitchRaid twitchRaid twitchRaid")
+                        pass
+                elif "!dance" in firstStr:
+                    try:
+                        message("<o/")
+                        message("\o>")
+                        message(",o/")
+                        message("\o,")
+                        message("_o>")
+                        message("<o_")
+                        message("<o>")
+                        message("\o/")
+                    except IndexError:
+                        pass
+                elif "!fu" in firstStr:
+                    try:
+                        if username.lower() == broadcaster:
+                            message("( ︶︿︶)_╭∩╮")
+                        else:
+                            message("This command is broadcaster only")
+                    except IndexError:
+                        pass
+                elif "!break" in firstStr:
+                    try:
+                        if username.lower() == broadcaster:
+                            message("Breakdancing is happening while chat completely breaks out in applause ")
+                        else:
+                            message("This command is broadcaster only")
+                    except IndexError:
                         pass
                 elif "!server" in firstStr or "!ip" in firstStr:
                     try:
@@ -1140,12 +1169,14 @@ while True:
                         message("The version of minecraft I am currently playing is 1.15.1")
                     except IndexError:
                         pass
-                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!raiders" in firstStr:
-                    try: 
+                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!boss" in firstStr or "!sc" in firstStr:
+                    try:
                         message(
                             "Place your units over at https://www.streamcaptain.com/ and help us win!")
                     except IndexError:
                         pass
+                elif username == "couch_potato135":
+                    message("This message is brought to yuo by the e.p.a")
                 elif "!test" in firstStr or "!t3st" in firstStr:
                     try:
                         print str(datetime.datetime.now().strftime("%M:%S"))
@@ -1165,7 +1196,7 @@ while True:
                     try:
                         message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
                     except IndexError:
-                        pass
+                        pass    
                 elif "!oclock" in firstStr:
                     try:
                         message("The time for me right now is " + datetime.datetime.now().strftime(
@@ -1444,33 +1475,37 @@ while True:
                 elif "!elffamilychange" in firstStr:
                     try:
                         owner = False
-                        if (len(text.lower().split()[2].encode("ascii"))) <= 15:
+                        if (len(text.lower().split()[1].encode("ascii"))) <= 15:
                             for i1 in range(len(subscriberLines)):
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
-                                    if text.lower().split()[1] == subscriberLines[i1][7].lower():
-                                        csvfile = open('subscriberData.csv', "rb")
-                                        subscriberDataReader = csv.reader(csvfile, delimiter=",")
-                                        subscriberLines = list(subscriberDataReader)
-                                        csvfile.close()
-                                        subscriberLines[i1][7] = text.split()[2]
-                                        for i in range(1):
-                                            message("Successfully changed family " + text.split()[1] + " to family " +
-                                                    subscriberLines[i1][7])
-                                        csvfile = open('subscriberDataNew.csv', "wb")
-                                        subscriberDataWriter = csv.writer(csvfile, delimiter=",")
-                                        subscriberDataWriter.writerows(subscriberLines)
-                                        csvfile.close()
-                                        os.remove('subscriberData.csv')
-                                        os.rename('subscriberDataNew.csv', 'subscriberData.csv')
-                                        owner = True
-                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
+                                    csvfile = open('subscriberData.csv', "rb")
+                                    subscriberDataReader = csv.reader(csvfile, delimiter=",")
+                                    subscriberLines = list(subscriberDataReader)
+                                    csvfile.close()
+                                    oldFamilyName = subscriberLines[i1][7]
+                                    subscriberLines[i1][7] = text.split()[1]
+                                    for i in range(1):
+                                        message("Successfully changed family " + oldFamilyName + " to family " +
+                                                subscriberLines[i1][7])
+                                    csvfile = open('subscriberDataNew.csv', "wb")
+                                    subscriberDataWriter = csv.writer(csvfile, delimiter=",")
+                                    subscriberDataWriter.writerows(subscriberLines)
+                                    csvfile.close()
+                                    os.remove('subscriberData.csv')
+                                    os.rename('subscriberDataNew.csv', 'subscriberData.csv')
+                                    owner = True
+                        elif (len(text.lower().split()[1].encode("ascii"))) > 15:
                             message("Family name cannot be longer than 15 characters")
                             owner = True
                         if owner == False:
                             message("You cannot change the family of other people's " + SubPetPlural)
                     except IndexError:
-                        message("Did you remember to write '!elffamilychange <old last name> <new last name>'?")
+                        message("Did you remember to write '!elffamilychange <new last name>'?")
                         print "elffamilychange failed"
+                    except UnicodeEncodeError:
+                        print message("You cannot use one of those characters")
+                        print ("UnicodeEncodeError")
+
                 elif "!elfgenderchange" in firstStr:
                     try:
                         csvfile = open('subscriberData.csv', "rb")

@@ -32,7 +32,7 @@ elfNameMale = ["Aego", "Aelrindel", "Aerendyl", "Aeson", "Afamrail", "Agis", "Ai
                "Dalyor", "Darcassan", "Dior", "Earendil", "Edrahil", "Eladithas", "Elanjar", "Elaran", "Elashor",
                "Elbauthin", "Elbereth", "Eldaernth", "Eldar", "Eldrin", "Elenaril", "Elenshaer", "Elrond", "Eluchil",
                "Elwin", "Erlan", "Erlathan", "Eroan", "Erolith", "Eschallus", "Estelar", "Etchelion", "Ethlando",
-               "Ettrian", "Evindal", "Eyrynnhv", "Eyrynnhv", "Faelar", "Faelyn", "Faeranduil", "Falael", "Fëanor",
+               "Ettrian", "Evindal", "Eyrynnhv", "Eyrynnhv", "Faelar", "Faelyn", "Faeranduil", "Falael", "Feanor",
                "Fenris", "Filvendor", "Fingolfin", "Finrod", "Folduin", "Gael", "Gaemon", "Gil-galad", "Glynkas",
                "Haemir", "Hagduin", "Haladavar", "Halafarin", "Haryk", "Hastos", "Hatharal", "Herbalar", "Horith",
                "Hubyr", "Iarmenor", "Iefyr", "Ievos", "Ilbryn", "Iliven", "Ilthuryn", "Inarie", "Inchel", "Inialos",
@@ -119,7 +119,7 @@ timeout1 = ["https://", "http://"]
 # Timeout 10 minutes
 timeout10 = ["retard"]
 # Ban
-banReasons = ["knee", "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
+banReasons = [  "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
               "going around leavins scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated", "Wanna become famous?"]
 
 disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]

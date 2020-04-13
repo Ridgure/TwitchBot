@@ -902,6 +902,8 @@ while True:
                         print str(e)
                     except IndexError:
                         pass
+                # if username == "couch_potato135":
+                #     message("This message is brought to you by the e.p.a")
                 elif "!song" in firstStr:
                     try:
                         csvfile = open('D:\Programs\Snip\Snip-v6.10.2\Snip\Snip.txt', "rb")
@@ -1175,8 +1177,6 @@ while True:
                             "Place your units over at https://www.streamcaptain.com/ and help us win!")
                     except IndexError:
                         pass
-                elif username == "couch_potato135":
-                    message("This message is brought to yuo by the e.p.a")
                 elif "!test" in firstStr or "!t3st" in firstStr:
                     try:
                         print str(datetime.datetime.now().strftime("%M:%S"))
@@ -1203,7 +1203,7 @@ while True:
                             "%H:%M") + " o'clock" + " CET")
                     except IndexError:
                         pass
-                elif "!shout" in firstStr:
+                elif "!shout" in firstStr or "!so" in firstStr:
                     if username.lower().rstrip() == broadcaster:
                         try:
                             message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
@@ -1637,11 +1637,24 @@ while True:
                     try:
                         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
                         print "Reply: PONG :tmi.twitch.tv"
+                        s.shutdown(1)
+                        s.close()
+                        s = socket.socket()
+                        s.connect((Host, Port))
+                        s.send("PASS {}\r\n".format("oauth:" + FollowerToken).encode("utf-8"))
+                        s.send("NICK {}\r\n".format(Nickname.lower()).encode("utf-8"))
+                        s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
+                        s.send("CAP REQ :twitch.tv/membership\r\n")
+                        s.send("CAP REQ :twitch.tv/commands\r\n")
+                        s.send("CAP REQ :twitch.tv/tags\r\n")
                     except IndexError:
                         pass
                     except Exception, e:
                         print("Pong error")
                         print(str(e))
+                if response == "":
+                    print "lost connection"
+                    exit()
                 if "PRIVMSG" in data:
                     username = re.search(r'(?<=display-name=)\w+', response).group(0)
                     text = re.search(r'(?<=PRIVMSG)\W+\w+\s\:(.*)', response).group(1)

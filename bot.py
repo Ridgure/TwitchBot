@@ -427,9 +427,13 @@ def uptime():
 
 def message(msg):
     try:
-        s.send("PRIVMSG " + Channel + " :" + msg + "\n")
-        print (Nickname + ": " + msg)
-        sleep(30/100)
+        if len(msg) > 450:
+            s.send("PRIVMSG " + Channel + " :Message too long\n")
+            print ("Riboture: Message too long")
+        else:
+            s.send("PRIVMSG " + Channel + " :" + msg + "\n")
+            print (Nickname + ": " + msg)
+            sleep(30/100)
     except IndexError:
         pass
 
@@ -473,14 +477,14 @@ while True:
                                     except IndexError, e:
                                         print str(e)
                                         pass
-                            for i6 in disney:
-                                if i6 in text.lower().encode('ascii', 'ignore'):
-                                    try:
-                                        message("/timeout " + username + " 1")
-                                        print ("Timed out " + username + " for 1 second because of " + i6)
-                                    except IndexError as e:
-                                        print (str(e))
-                                        pass
+                            # for i6 in disney:
+                            #     if i6 in text.lower().encode('ascii', 'ignore'):
+                            #         try:
+                            #             message("/timeout " + username + " 1")
+                            #             print ("Timed out " + username + " for 1 second because of " + i6)
+                            #         except IndexError as e:
+                            #             print (str(e))
+                            #             pass
                             for i4 in timeout10:
                                 if i4 in text.lower().encode('ascii', 'ignore'):
                                     try:
@@ -515,7 +519,7 @@ while True:
                     test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
                 test = map(str.strip, test)
 
-                # Get existing follower list    
+                # Get existing follower list
                 if not os.path.exists('followerData.csv'):
                     open('followerData.csv', "w+").close()
                 csvfile = open('followerData.csv', "rb")
@@ -949,6 +953,11 @@ while True:
                         message("The texture pack I am currently using is Soartex Fanver Modded Universal")
                     except IndexError:
                         pass
+                # elif "!multi" in firstStr or "kadgar" in firstStr:
+                #     try:
+                #         message("https://multistre.am/ridgure/blushingcrafter/layout4/")
+                #     except IndexError:
+                #         pass
                 elif "!nextbreak" in firstStr:
                     try:
                         if uptime().hour % 2 == 0:
@@ -963,24 +972,35 @@ while True:
                         pass
                 elif "!social" in firstStr:
                     try:
-                        message("Add me on Facebook: fb.com/Ridgure")
-                        message("Add me on Twitter: Twitter.com/RigidStructure")
-                        message("Add me on Instagram: Instagram.com/Ridgure")
+                        message("Find me on Facebook: fb.com/Ridgure    ")
+                        message("Find me on Twitter: Twitter.com/RigidStructure")
+                        message("Find me on Instagram: Instagram.com/Ridgure")
+                        message("Join the discord! https://discord.gg/yddBmCE")
                     except IndexError:
                         pass
                 elif "!facebook" in firstStr:
                     try:
-                        message("Add me on Facebook: fb.com/Ridgure")
+                        message("Find me on Facebook: fb.com/Ridgure")
                     except IndexError:
                         pass
                 elif "!twitter" in firstStr:
                     try:
-                        message("Add me on Facebook: Twitter.com/RigidStructure")
+                        message("Find me on Facebook: Twitter.com/RigidStructure")
                     except IndexError:
                         pass
                 elif "!instagram" in firstStr:
                     try:
-                        message("Add me on Instagram: Instagram.com/RigidStructure")
+                        message("Find me on Instagram: Instagram.com/RigidStructure")
+                    except IndexError:
+                        pass
+                elif "!insomniac" in firstStr:
+                    try:
+                        message("/timeout " + text.split()[1] + "14400")
+                    except IndexError:
+                        pass
+                elif "!sr" in firstStr:
+                    try:
+                        message("If the song you want me to play is on pretzel.rocks I will play it for you")
                     except IndexError:
                         pass
                 elif "!lurk" in firstStr:
@@ -1150,7 +1170,7 @@ while True:
                 elif "!server" in firstStr or "!ip" in firstStr:
                     try:
                         message(
-                            "the Rigidification server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP")
+                            "the Funneling server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP")
                     except IndexError:
                         pass
                 elif "!vip" in firstStr or "!straitjacket" in firstStr:
@@ -1159,7 +1179,7 @@ while True:
                             "If you redeem the VIP/Discord ticket reward with your points you will be made VIP and get a special role in the discord")
                     except IndexError:
                         pass
-                elif "!pack" in firstStr or "!sevtech" in firstStr:
+                elif "!pack" in firstStr or "!sevtech" in firstStr or "modpack" in firstStr:
                     try:
                         message(
                             "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
@@ -1174,7 +1194,7 @@ while True:
                 elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!boss" in firstStr or "!sc" in firstStr:
                     try:
                         message(
-                            "Place your units over at https://www.streamcaptain.com/ and help us win!")
+                            "Place your units over at https://www.streamcaptain.com/t/ridgure and help us win!")
                     except IndexError:
                         pass
                 elif "!test" in firstStr or "!t3st" in firstStr:
@@ -1196,11 +1216,11 @@ while True:
                     try:
                         message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
                     except IndexError:
-                        pass    
+                        pass
                 elif "!oclock" in firstStr:
                     try:
                         message("The time for me right now is " + datetime.datetime.now().strftime(
-                            "%H:%M") + " o'clock" + " CET")
+                            "%H:%M") + " o'clock" + " CEST")
                     except IndexError:
                         pass
                 elif "!shout" in firstStr or "!so" in firstStr:
@@ -1208,6 +1228,7 @@ while True:
                         try:
                             message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
                         except IndexError:
+                            message("This command is broadcaster onlys")
                             pass
                 elif "!breakdance" in firstStr:
                     if username.lower().rstrip() == broadcaster:
@@ -1320,7 +1341,7 @@ while True:
                 elif "!elfnamechange" in firstStr:
                     try:
                         owner = False
-                        if (len(text.lower().split()[2])) <= 15:
+                        if (len(text.lower().split()[2])) <= 16:
                             for i1 in range(len(subscriberLines)):
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                     for i2 in range(len(subscriberLines[i1][0:]))[8::2]:
@@ -1340,8 +1361,8 @@ while True:
                                             os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                                             owner = True
                                             break
-                        elif (len(text.lower().split()[2].encode("ascii"))) > 15:
-                            message("Name cannot be longer than 15 characters")
+                        elif (len(text.lower().split()[2].encode("ascii"))) > 16:
+                            message("Name cannot be longer than 16 characters")
                             owner = True
                         if owner == False:
                             message("You cannot change the name of other people's " + SubPetPlural)
@@ -1373,9 +1394,19 @@ while True:
                         message("Squid3 Squid3 Squid3 Squid3 Squid3")
                     except IndexError:
                         pass
+                elif "!ras2709" in firstStr or "!ras" in firstStr:
+                    try:
+                        message("its the Ras patas! LUL")
+                    except IndexError:
+                        pass
+                elif "!quote" in firstStr:
+                    try:
+                        message("You can redeem a quote with your channel points and I will bestow some r   idgurWisdom upon you")
+                    except IndexError:
+                        pass
                 elif "!lick" in firstStr:
                     try:
-                        if username.lower() == 'wolfpupgirl24':
+                        if username.lower() == 'wolvesarecool24':
                             message(username + " licks " + text.split()[1] + lick())
                         else:
                             pass
@@ -1475,7 +1506,7 @@ while True:
                 elif "!elffamilychange" in firstStr:
                     try:
                         owner = False
-                        if (len(text.lower().split()[1].encode("ascii"))) <= 15:
+                        if (len(text.lower().split()[1].encode("ascii"))) <= 16:
                             for i1 in range(len(subscriberLines)):
                                 if subscriberLines[i1][0].rstrip().lower() == username.rstrip().lower():
                                     csvfile = open('subscriberData.csv', "rb")
@@ -1494,8 +1525,8 @@ while True:
                                     os.remove('subscriberData.csv')
                                     os.rename('subscriberDataNew.csv', 'subscriberData.csv')
                                     owner = True
-                        elif (len(text.lower().split()[1].encode("ascii"))) > 15:
-                            message("Family name cannot be longer than 15 characters")
+                        elif (len(text.lower().split()[1].encode("ascii"))) > 16:
+                            message("Family name cannot be longer than 16 characters")
                             owner = True
                         if owner == False:
                             message("You cannot change the family of other people's " + SubPetPlural)

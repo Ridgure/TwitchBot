@@ -97,13 +97,13 @@
 
 | User specific:| 
 | ------------- |
-| !lick         |
-| !timemeout    |
-| !jc747        |
-| !octo         | 
+| !lick - Wolfpupgirl|
+| !timemeout - KbigLiar|
+| !jc747 - JC747|
+| !octo - Octostarx|
+| !ruffle - IvanabCroftin|
 
-
-**Automated functions:**
+###### Automated functions:
 
 | Done by the bot automatically:| 
 | ------------- |

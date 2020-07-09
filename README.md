@@ -23,77 +23,96 @@
 
 ###### Commands for everyone:
 
-General:<br>
-!commands,
-!lurk,
-!fc,
-!followdate,
-!oclock,
-!uptime,
-!asylumcraft,
-!bot,
-!support
+| General:      | 
+| ------------- |
+| !commands     | 
+| !lurk         | 
+| !fc           | 
+| !followdate   | 
+| !oclock       | 
+| !uptime       | 
+| !asylumcraft  |  
+| !bot          | 
+| !support      | 
 
-Stating emotion:<br>
-!bellyrub,
-!scrowl,
-!smile,
 
-Minecraft related:<br>
-!server,
-!ip,
-!version,
-!pack,
-!sevtech,
-!tp,
-!java
+|Stating emotion:| 
+| ------------- | 
+| !bellyrub     | 
+| !scrowl       | 
+| !smile        | 
 
-Social media:<br>
-!social,
-!instagram,
-!facebook,
-!twitter,
-!discord,
-!ctt
 
-Calculator:<br>
-!add,
-!multipy,
-!divide
+| Minecraft related:|                        
+| -------------   |
+| !pack           |
+| !sevtech        |
+| !tp             |
+| !java           | 
 
-Bat cave:<br>
-!bat,
-!batnamechange,
-!batgenderchange
+
+| Socials:       |Links to socials: |                  
+| ------------- |:-------------:|
+| !social       | command that gives the user Ridgure's socials in the Twitch chat| 
+| !instagram    | [link to Instagram](https://www.instagram.com/rigidstructure/?hl=en)|
+| !facebook     | [link to Facebook](https://www.facebook.com/ridgidstructure)|    
+| !twitter      | [link to Twitter](https://twitter.com/ridgure)|  
+| !discord      | [link to Discord](https://discord.com/invite/yddBmCE)|  
+| !ctt          | [link to CTT](https://www.instagram.com/rigidstructure/?hl=en)|    
+
+
+| Calculator:   | 
+| ------------- |
+| !add          | 
+| !multipy      | 
+| !divide       | 
+
+
+| Bat cave:     | 
+| ------------- |
+| !bat          | 
+| !batnamechange| 
+| !batgenderchange| 
 
 ###### Subscriber commands:
-Elf tree:<br>
-!elf,
-!elfnamechange,
-!elfgenderchange
+
+
+| Elf tree:     | 
+| ------------- |
+| !elf           |
+| !elfnamechange  |
+| !elfgenderchange| 
+
 
 ###### Broadcaster commands:
-!raid,
-!shout,
-!breakdance
+
+| Tables:       | 
+| ------------- |
+| !raid         |
+| !shout        |
+| !breakdance   | 
+
 
 ###### User specific commands:
-!lick - Wolfpupgirl<br>
-!timemeout - KbigLiar<br>
-!jc747 - JC747<br>
-!octo - Octostarx<br>
-!ruffle - IvanabCroftin
+
+| User specific:| 
+| ------------- |
+| !lick         |
+| !timemeout    |
+| !jc747        |
+| !octo         | 
+
 
 **Automated functions:**
 
-Follower notification,<br>
-Subscriber notification,<br>
-Output last 20 messages in chat to a file,<br>
-"Eww cobble" every time cobble is mentioned,<br>
-Times out non vip/moderators if they post links<br>
-Bans users that use bad language<br>
-Bedbug - Tells BugMacGregor to go to bed every so often
-
+| Done by the bot automatically:| 
+| ------------- |
+|Follower notification|
+|Subscriber notification|
+|Output last 20 messages in chat to a file|
+|`"Eww cobble"` every time cobble is mentioned|
+|Times out non vip/moderators if they post links|
+|Bans users that use bad language|
 
 ## Getting started
 
@@ -104,10 +123,10 @@ Clone this repository to your local machine using
 
 **Setup**
 
-In order to be able to run the bot add a file config.py in the same folder as the bot and go through the steps below:
-config.py should look something like this:
+In order to be able to run the bot add a file `config.py` in the same folder as the bot and go through the steps below:
+`config.py` should look something like this:
 
-```
+```python
 Host = "irc.twitch.tv"         # The Twitch IRC server
 Port = 6667                    # Always use port 6667!
 Nickname = "<Name>"            # Your Twitch username, lowercase
@@ -121,20 +140,21 @@ x
 - Create a Twitch account with the name of your bot
 - Register your application on the [Twitch developer site](https://glass.twitch.tv/login)
   - Set the Name to the name of the account you just created
-  - Set the redirect uri to http://localhost
+  - Set the redirect uri to `http://localhost`
   - Set the application directory to Chat Bot
   - Agree to the terms and conditions
-  - Get a Client_ID and a Client_Secret
+  - Get a `Client_ID` and a `Client_Secret`
 - Generate your token for accessing follower data and chat
-  - Go to twitchapps.com/tmi and click connect with twitch
+  - Go to  [Get token here](twitchapps.com/tmi) and click connect with twitch
   - Click Authorize
-  - Your token should look something like this: oauth:a1b2c3d4e5f6g7h8i9j1k2l3m5n6o7
+  - Your token should look something like this: `oauth:a1b2c3d4e5f6g7h8i9j1k2l3m5n6o7`
 - Generate your token for accessing subscriber data
   - Go to the link underneath 
-  - Remember to swap out <clientID> with your client id!
+  - Remember to swap out `<clientID>` with your `client id!`
   - Click Authenticate
   - It will look like you got a blank page but your url should look like the second url
   - Your access token is the gibberish where it says Token in the url 
+
 ```
 https://id.twitch.tv/oauth2/authorize?client_id=<clientID>&redirect_uri=http://localhost&response_type=token&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login
 http://localhost/#access_token=<Token>&scope=channel_subscriptions+user_read+channel_check_subscription+chat_login&token_type=bearer
@@ -153,7 +173,7 @@ You will need to install these things to run the bot
 
 Run [bot.py](docs/bot.py) by going to its location and running this command:
 
-```
+```python
 python bot.py
 ```
 

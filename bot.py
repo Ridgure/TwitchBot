@@ -674,7 +674,8 @@ while True:
                             'display_name'].lower():
                                 followerLines[i1][6] = 1
 
-                # After all the editing has been done write back all the followerLines
+                # After all the editing has been do
+                # ne write back all the followerLines
                 # I had to write back to a new file and rename it because of lack of memory
 
                 if not os.path.exists('followerDataNew.csv'):
@@ -890,7 +891,7 @@ while True:
                 print(str(e))
             if "!" in text.lower().split()[0][0]:
                 firstStr = text.lower().split()[0]
-                if "!commands" in firstStr:
+                if "!commands" in firstStr or "!cmds" in firstStr:
                     try:
                         message("See what the bot can do here: https://github.com/ridgure/twitchbot#features")
                     except IndexError:
@@ -955,7 +956,7 @@ while True:
                         pass
                 # elif "!multi" in firstStr or "kadgar" in firstStr:
                 #     try:
-                #         message("https://multistre.am/ridgure/blushingcrafter/layout4/")
+                #         message("https://multistre.am/ridgure/lilgamerhelle/xman657483/")
                 #     except IndexError:
                 #         pass
                 elif "!nextbreak" in firstStr:
@@ -985,7 +986,7 @@ while True:
                         pass
                 elif "!twitter" in firstStr:
                     try:
-                        message("Find me on Facebook: Twitter.com/RigidStructure")
+                        message("Find me on Twitter: Twitter.com/RigidStructure")
                     except IndexError:
                         pass
                 elif "!instagram" in firstStr:
@@ -1016,6 +1017,16 @@ while True:
                 elif "!rhino" in firstStr:
                     try:
                         message("The program I am using to generate the bat cave and sub tree is called Rhinoceros3D")
+                    except IndexError:
+                        pass
+                elif "!ob" in firstStr:
+                    try:
+                        message('If you feel like your message was not seen please write "^" and it might still be read')
+                    except IndexError:
+                        pass
+                elif "!pokemon" in firstStr:
+                    try:
+                        message("Here is my trainer code: 8164 5829 3574 Feel free to add me")
                     except IndexError:
                         pass
                 elif "!benefits" in firstStr:
@@ -1173,13 +1184,13 @@ while True:
                             "the Funneling server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP")
                     except IndexError:
                         pass
-                elif "!vip" in firstStr or "!straitjacket" in firstStr:
+                elif "!vip" in firstStr or "!straitjacket" in firstStr or "!join" in firstStr:
                     try:
                         message(
                             "If you redeem the VIP/Discord ticket reward with your points you will be made VIP and get a special role in the discord")
                     except IndexError:
                         pass
-                elif "!pack" in firstStr or "!sevtech" in firstStr or "modpack" in firstStr:
+                elif "!pack" in firstStr == "!sevtech" in firstStr or "modpack" in firstStr or "sev" in firstStr:
                     try:
                         message(
                             "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
@@ -1188,10 +1199,10 @@ while True:
                         pass
                 elif "!version" in firstStr or "!vanilla" in firstStr:
                     try:
-                        message("The version of minecraft I am currently playing is 1.15.1")
+                        message("The version of minecraft I am currently playing is 1.12.2")
                     except IndexError:
                         pass
-                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!boss" in firstStr or "!sc" in firstStr:
+                elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!boss" in firstStr or "!sc" == firstStr:
                     try:
                         message(
                             "Place your units over at https://www.streamcaptain.com/t/ridgure and help us win!")
@@ -1202,14 +1213,14 @@ while True:
                         print str(datetime.datetime.now().strftime("%M:%S"))
                     except IndexError:
                         pass
-                elif "!scrowl" in firstStr:
+                elif "!scrowl" == firstStr:
                     try:
                         message(username + "grumpily scowls at " + text.split()[1])
                     except IndexError:
                         pass
                 elif "!discord" in firstStr:
                     try:
-                        message("Join the discord! https://discord.gg/yddBmCE")
+                        message("Join the Discord! https://discord.gg/yddBmCE")
                     except IndexError:
                         pass
                 elif "!java" in firstStr:
@@ -1228,7 +1239,7 @@ while True:
                         try:
                             message("Check out this awesome streamer over at Twitch.tv/" + text.split()[1])
                         except IndexError:
-                            message("This command is broadcaster onlys")
+                            message("This command is broadcaster only")
                             pass
                 elif "!breakdance" in firstStr:
                     if username.lower().rstrip() == broadcaster:
@@ -1314,7 +1325,7 @@ while True:
                     except Exception, e:
                         message("Pet failed")
                         message(str(e))
-                elif "!multiply" in firstStr:
+                elif "!multiply" == firstStr:
                     try:
                         message(multiply())
                     except IndexError:
@@ -1322,7 +1333,7 @@ while True:
                     except Exception, e:
                         message("Multiplication failed")
                         message(str(e))
-                elif "!divide" in text.lower().split()[0]:
+                elif "!divide" == text.lower().split()[0]:
                     try:
                         message(divide())
                     except IndexError:
@@ -1330,7 +1341,7 @@ while True:
                     except Exception, e:
                         message("Division failed")
                         message(str(e))
-                elif "!add" in firstStr:
+                elif "!add" == firstStr:
                     try:
                         message(add())
                     except IndexError:
@@ -1378,6 +1389,11 @@ while True:
                 elif "cobble" in text.lower().split()[:]:
                     try:
                         message("Eww not cobble!")
+                    except IndexError:
+                        pass
+                elif "69" in text.lower().split()[:]:
+                    try:
+                        message("Nice")
                     except IndexError:
                         pass
                 if "(╯°□°）╯︵ ┻━┻" in text.lower().encode("utf-8"):

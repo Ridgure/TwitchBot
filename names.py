@@ -105,7 +105,7 @@ topLevelDomains = ["www.", ".af", ".ax", ".al", ".dz", ".as", ".ad", ".ao", ".ai
                    ".tm", ".tc", ".tv", ".ug", ".ua", ".ae", ".uk", ".us", ".vi", ".uy", ".uz", ".vu", ".va", ".ve",
                    ".vn", ".wf", ".eh", ".ye", ".zm", ".zw", ".org", ".net", ".int", ".edu", ".gov", ".mil", ".arpa"]
 emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSalt", "Kreygasm", "SSSsss",
-          "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "PogChamp", "ResidentSleeper", "4Head",
+          "PunchTrees", "FunRun", "SMOrc", "FrankerZ", "BibleThump", "ResidentSleeper", "4Head",
           "FailFish", "Keepo", "ANELE", "BrokeBack", "EleGiggle", "BabyRage", "panicBasket", "WutFace", "HeyGuys",
           "KappaPride", "CoolCat", "NotLikeThis", "riPepperonis", "duDudu", "bleedPurple", "SeemsGood", "MingLee",
           "KappaRoss", "KappaClaus", "OhMyDog", "OPFrog", "SeriousSloth", "KomodoHype", "VoHiYo", "KappaWealth",
@@ -115,12 +115,12 @@ emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSal
 
 # Message severities
 # Timeout 1 second
-timeout1 = ["https://", "http://"]
+timeout1 = ["https://", "http://", "pogchamp"]
 # Timeout 10 minutes
-timeout10 = ["retard"]
+timeout10 = ["retard", "penis"]
 # Ban
 banReasons = [  "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
-              "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated", "Wanna become famous?"]
+              "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows.com"]
 
 disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]
 

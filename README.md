@@ -147,7 +147,7 @@ You will need to install these things to run the bot
 - [Python 2.7.x](https://www.python.org/downloads/)
 - Libraries:
   - [Requests](http://docs.python-requests.org/en/master/user/install/)
-  - [TinyUrl](https://pypi.org/project/TinyUrl/)
+  - [TinyUrl](https://www.dropbox.com/sh/zpduh8jopa21xsp/AACErpobU-vlQM9Q6zFeHrHca?dl=0)
   
 **Running the bot**
 

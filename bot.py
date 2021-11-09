@@ -24,7 +24,7 @@ s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
 s.send("CAP REQ :twitch.tv/membership\r\n")
 s.send("CAP REQ :twitch.tv/commands\r\n")
 s.send("CAP REQ :twitch.tv/tags\r\n")
-BugMessages = 0
+BugMessages = 5
 
 def randomEmote():
     randomNumber = random.randint(0, len(emotes))
@@ -84,8 +84,8 @@ def mess():
 #     tokenResponse = response.json()
 
 def subscribers():
-    url = "https://api.twitch.tv/kraken/channels/106586349/subscriptions"
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "OAuth " + SubscriberToken,
+    url = "https://api.twitch.tv/helix/subscriptions?broadcaster_id=" + User_ID_ridgure
+    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "Bearer " + SubscriberToken,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 429:
@@ -94,7 +94,7 @@ def subscribers():
     subscriberResponse = response.json()
     return subscriberResponse
 
-    # returns
+    # Kraken V5 returns
     # {u'_total': 3,
     # u'subscriptions': [
     #     {u'is_gift': False, u'sender': None, u'sub_plan_name': u'Channel Subscription (ridgure)', u'sub_plan': u'1000',
@@ -119,9 +119,29 @@ def subscribers():
     #                u'_id': u'31861174', u'type': u'user'}, u'_id': u'e7879cef043c356c6b99901f3c89d2e32f1d0543'}
     #  ]}
 
+    # Helix Returns
+    # {u'total': 12,
+    # u'pagination': {u'cursor': u'eyJiIjp7IkN1cnNvciI6ImV5SkpkR1Z0U1VRdFUzUmhjblJ6UVhRdFNVUWlPbnNpUWlJNmJuVnNiQ3dpUWs5UFRDSTZiblZzYkN3aVFsTWlPbTUxYkd3c0lrd2lPbTUxYkd3c0lrMGlPbTUxYkd3c0lrNGlPbTUxYkd3c0lrNVRJanB1ZFd4c0xDSk9WVXhNSWpwdWRXeHNMQ0pUSWpvaU1EQXdNREF3TURBd01Ua3lOREEzTFRJd01UY3RNRFl0TWpoVU1UazZNak02TkRSYUxUQXdNREF3TURBeU1qY3lNekUwT1NJc0lsTlRJanB1ZFd4c2ZTd2lTWFJsYlU5M2JtVnlTVVFpT25zaVFpSTZiblZzYkN3aVFrOVBUQ0k2Ym5Wc2JDd2lRbE1pT201MWJHd3NJa3dpT201MWJHd3NJazBpT201MWJHd3NJazRpT201MWJHd3NJazVUSWpwdWRXeHNMQ0pPVlV4TUlqcHVkV3hzTENKVElqb2lNVEEyTlRnMk16UTVJaXdpVTFNaU9tNTFiR3g5TENKSmRHVnRUM2R1WlhKSlJDMUpkR1Z0U1VRdFUzUmhjblJ6UVhRdFNVUWlPbnNpUWlJNmJuVnNiQ3dpUWs5UFRDSTZiblZzYkN3aVFsTWlPbTUxYkd3c0lrd2lPbTUxYkd3c0lrMGlPbTUxYkd3c0lrNGlPbTUxYkd3c0lrNVRJanB1ZFd4c0xDSk9WVXhNSWpwdWRXeHNMQ0pUSWpvaU1EQXdNREF3TVRBMk5UZzJNelE1TFRBd01EQXdNREF3TURFNU1qUXdOeTB5TURFM0xUQTJMVEk0VkRFNU9qSXpPalEwV2kwd01EQXdNREF3TWpJM01qTXhORGtpTENKVFV5STZiblZzYkgwc0lrOTNibVZ5U1VRaU9uc2lRaUk2Ym5Wc2JDd2lRazlQVENJNmJuVnNiQ3dpUWxNaU9tNTFiR3dzSWt3aU9tNTFiR3dzSWswaU9tNTFiR3dzSWs0aU9tNTFiR3dzSWs1VElqcHVkV3hzTENKT1ZVeE1JanB1ZFd4c0xDSlRJam9pTXpJMk56QTBNallpTENKVFV5STZiblZzYkgxOSJ9LCJhIjp7IkN1cnNvciI6ImV5SkpkR1Z0U1VRdFUzUmhjblJ6UVhRdFNVUWlPbnNpUWlJNmJuVnNiQ3dpUWs5UFRDSTZiblZzYkN3aVFsTWlPbTUxYkd3c0lrd2lPbTUxYkd3c0lrMGlPbTUxYkd3c0lrNGlPbTUxYkd3c0lrNVRJanB1ZFd4c0xDSk9WVXhNSWpwdWRXeHNMQ0pUSWpvaU1EQXdNREF3TURBd01Ua3lOREE1TFRJd01UY3RNRFl0TWpoVU1qQTZNVEU2TkRWYUxUQXdNREF3TURBeU1qYzFNekV6TWlJc0lsTlRJanB1ZFd4c2ZTd2lTWFJsYlU5M2JtVnlTVVFpT25zaVFpSTZiblZzYkN3aVFrOVBUQ0k2Ym5Wc2JDd2lRbE1pT201MWJHd3NJa3dpT201MWJHd3NJazBpT201MWJHd3NJazRpT201MWJHd3NJazVUSWpwdWRXeHNMQ0pPVlV4TUlqcHVkV3hzTENKVElqb2lNVEEyTlRnMk16UTVJaXdpVTFNaU9tNTFiR3g5TENKSmRHVnRUM2R1WlhKSlJDMUpkR1Z0U1VRdFUzUmhjblJ6UVhRdFNVUWlPbnNpUWlJNmJuVnNiQ3dpUWs5UFRDSTZiblZzYkN3aVFsTWlPbTUxYkd3c0lrd2lPbTUxYkd3c0lrMGlPbTUxYkd3c0lrNGlPbTUxYkd3c0lrNVRJanB1ZFd4c0xDSk9WVXhNSWpwdWRXeHNMQ0pUSWpvaU1EQXdNREF3TVRBMk5UZzJNelE1TFRBd01EQXdNREF3TURFNU1qUXdPUzB5TURFM0xUQTJMVEk0VkRJd09qRXhPalExV2kwd01EQXdNREF3TWpJM05UTXhNeklpTENKVFV5STZiblZzYkgwc0lrOTNibVZ5U1VRaU9uc2lRaUk2Ym5Wc2JDd2lRazlQVENJNmJuVnNiQ3dpUWxNaU9tNTFiR3dzSWt3aU9tNTFiR3dzSWswaU9tNTFiR3dzSWs0aU9tNTFiR3dzSWs1VElqcHVkV3hzTENKT1ZVeE1JanB1ZFd4c0xDSlRJam9pTVRBMk5UZzJNelE1SWl3aVUxTWlPbTUxYkd4OWZRPT0ifX0'},
+    # u'points': 12,
+    # u'data': [
+    #       {u'is_gift': False, u'gifter_id': u'', u'gifter_login': u'', u'broadcaster_id': u'106586349', u'gifter_name': u'', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'32670426', u'user_login': u'lilgamerhelle', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'LilGamerHelle'},
+    #       {u'is_gift': False, u'gifter_id': u'', u'gifter_login': u'', u'broadcaster_id': u'106586349', u'gifter_name': u'', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'127021182', u'user_login': u'bugmacgregor', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'BugMacgregor'},
+    #       {u'is_gift': False, u'gifter_id': u'', u'gifter_login': u'', u'broadcaster_id': u'106586349', u'gifter_name': u'', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'142573858', u'user_login': u'obscurenorwegiangamer', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'ObscureNorwegianGamer'},
+    #       {u'is_gift': True, u'gifter_id': u'142573858', u'gifter_login': u'obscurenorwegiangamer', u'broadcaster_id': u'106586349', u'gifter_name': u'ObscureNorwegianGamer', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'532293037', u'user_login': u'drageno01', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'DRAGEno01'},
+    #       {u'is_gift': True, u'gifter_id': u'142573858', u'gifter_login': u'obscurenorwegiangamer', u'broadcaster_id': u'106586349', u'gifter_name': u'ObscureNorwegianGamer', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'161023431', u'user_login': u'implied_slight', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'Implied_Slight'},
+    #       {u'is_gift': True, u'gifter_id': u'142573858', u'gifter_login': u'obscurenorwegiangamer', u'broadcaster_id': u'106586349', u'gifter_name': u'ObscureNorwegianGamer', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'139849169', u'user_login': u'quirkygeek17', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'QuirkyGeek17'},
+    #       {u'is_gift': True, u'gifter_id': u'142573858', u'gifter_login': u'obscurenorwegiangamer', u'broadcaster_id': u'106586349', u'gifter_name': u'ObscureNorwegianGamer', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'114849229', u'user_login': u'tarillthemad', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'TarilltheMad'},
+    #       {u'is_gift': True, u'gifter_id': u'142573858', u'gifter_login': u'obscurenorwegiangamer', u'broadcaster_id': u'106586349', u'gifter_name': u'ObscureNorwegianGamer', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'47576890', u'user_login': u'skysunna', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'Skysunna'},
+    #       {u'is_gift': True, u'gifter_id': u'127021182', u'gifter_login': u'bugmacgregor', u'broadcaster_id': u'106586349', u'gifter_name': u'BugMacgregor', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'60748299', u'user_login': u'lukestergaming', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'LukesterGaming'},
+    #       {u'is_gift': True, u'gifter_id': u'127021182', u'gifter_login': u'bugmacgregor', u'broadcaster_id': u'106586349', u'gifter_name': u'BugMacgregor', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'89499670', u'user_login': u'ivanabcroftin', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'IvanaBCroftin'},
+    #       {u'is_gift': False, u'gifter_id': u'', u'gifter_login': u'', u'broadcaster_id': u'106586349', u'gifter_name': u'', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'44974162', u'user_login': u'sailorscoutlua', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'sailorscoutlua'},
+    #       {u'is_gift': True, u'gifter_id': u'279385205', u'gifter_login': u'erawyn_', u'broadcaster_id': u'106586349', u'gifter_name': u'Erawyn_', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'1000', u'user_id': u'109949586', u'user_login': u'riboture', u'plan_name': u'Channel Subscription (ridgure)', u'user_name': u'Riboture'},
+    #       {u'is_gift': False, u'gifter_id': u'', u'gifter_login': u'', u'broadcaster_id': u'106586349', u'gifter_name': u'', u'broadcaster_name': u'Ridgure', u'broadcaster_login': u'ridgure', u'tier': u'3000', u'user_id': u'106586349', u'user_login': u'ridgure', u'plan_name': u'Channel Subscription (ridgure): $24.99 Sub', u'user_name': u'Ridgure'}]}
+
+
 def channelInfo():
-    url = "https://api.twitch.tv/kraken/channels/" + User_ID_ridgure
-    params = {"Client-ID" : ""+ ClientID +"", "Authorization": "oauth:" + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
+    url = "https://api.twitch.tv/helix/channels?broadcaster_id=" + User_ID_ridgure
+    params = {"Client-ID" : ""+ ClientID +"", "Authorization": "Bearer " + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
     response = requests.get(url, headers=params)
     if response.status_code == 429:
         print ("Too many stream info requests")
@@ -156,7 +176,7 @@ def channelInfo():
 def followers():
     try:
         url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-        params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
+        params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 429:
@@ -170,14 +190,21 @@ def followers():
 
         # making a list of all the followers
         for i9 in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
-            url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
-            params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
-            response = requests.get(url200, headers=params)
-            responseRest = response.json()
-            if response.status_code == 429:
-                print ("Too many follower requests")
-            pagination = responseRest['pagination']['cursor']
-            followerList = followerList + responseRest['data']
+            try:
+                url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
+                params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
+                response = requests.get(url200, headers=params)
+                responseRest = response.json()
+                if response.status_code == 429:
+                    print ("Too many follower requests")
+                pagination = responseRest['pagination']['cursor']
+                followerList = followerList + responseRest['data']
+            except Exception as e:
+                if str(e) == "'cursor'":
+                    pass
+                else:
+                    print (str(e))
+                    pass
 
         return followerList
     except Exception as e:
@@ -189,8 +216,17 @@ def followers():
     # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjoiMTUxNDI1NDE4NzA4NTAyMDAwMCJ9'},
     # u'total': 421,
     # u'data': [
-    # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T20:11:57Z', u'from_id': u'163393705'},
-    # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
+        # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T20:11:57Z', u'from_id': u'163393705'},
+        # {u'to_id': u'106586349', u'followed_at': u'2018-01-18T06:41:48Z', u'from_id': u'46728242'},
+
+    # Helix returns
+    # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjp7IkN1cnNvciI6ImV5SjBjQ0k2SW5WelpYSTZNVFl4TURJek5ETXhPbVp2Ykd4dmQzTWlMQ0owY3lJNkluVnpaWEk2TVRBMk5UZzJNelE1SWl3aWFYQWlPaUoxYzJWeU9qRXdOalU0TmpNME9UcG1iMnhzYjNkbFpGOWllU0lzSW1seklqb2lNVFl3TmpVNU1qRTJORE0yTmprek5EVXpPU0o5In19'},
+    # u'total': 1484,
+    # u'data': [
+        # {u'from_name': u'fritoy911', u'to_login': u'ridgure', u'followed_at': u'2021-11-08T11:00:59Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'fritoy911', u'from_id': u'123985105'},
+        # {u'from_name': u'AgentDaxon', u'to_login': u'ridgure', u'followed_at': u'2021-11-08T08:49:35Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'agentdaxon', u'from_id': u'45366409'},
+        # {u'from_name': u'FloodedVoyage45', u'to_login': u'ridgure', u'followed_at': u'2021-11-06T22:29:22Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'floodedvoyage45', u'from_id': u'587906627'},
+        # {u'from_name': u'SgtLegoTown', u'to_login': u'ridgure', u'followed_at': u'2021-11-06T16:45:57Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'sgtlegotown', u'from_id': u'210387514'}
 
 
 def followAgeAll():
@@ -293,11 +329,11 @@ def months_between(date1, date2):
 
 def subscribeAgeAll():
     global subscribeAgeList
-    subscribeAgeList = [[] for i in range(len(subscriberResponse['subscriptions']))]
+    subscribeAgeList = [[] for i in range(len(subscriberResponse['data']))]
 
-    for i in xrange(len(subscriberResponse['subscriptions'])):
+    for i in xrange(len(subscriberResponse['data'])):
         # Get subscribe Day Month Year
-        m = re.search('(.+?)T', subscriberResponse['subscriptions'][i]['created_at'])
+        m = re.search('(.+?)T', subscriberResponse['data'][i]['created_at'])
         subscribeDate = m.group(1).encode('ascii', 'ignore')
         m = re.search('(.+?)-', subscribeDate)
         subscribeYear = m.group(1).encode('ascii', 'ignore')
@@ -309,7 +345,7 @@ def subscribeAgeAll():
         subscribeDay = m.group(1).encode('ascii', 'ignore')
 
         # Get subscribe Hour Minute Second
-        m = re.search('T(.+?)Z', subscriberResponse['subscriptions'][i]['created_at'])
+        m = re.search('T(.+?)Z', subscriberResponse['data'][i]['created_at'])
         subscribeTime = m.group(1).encode('ascii', 'ignore')
         m = re.search('(.+?):', subscribeTime)
         subscribeHour = m.group(1).encode('ascii', 'ignore')
@@ -372,64 +408,72 @@ def subscribeAgeAll():
             str(currentYear) + "-" + str(currentMonth) + "-" + str(currentDay) + " " + str(currentHour) + ":" + str(
                 currentMinute) + ":" + str(currentSecond), '%Y-%m-%d %H:%M:%S')
         subscribeAgeList[i].append(months_between(date1, date2))
-        subscribeAgeList[i].append(subscriberResponse['subscriptions'][i]['user']['display_name'])
+        subscribeAgeList[i].append(subscriberResponse['data'][i]['user_name'])
     return subscribeAgeList
 
 
 def uptime():
-    url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
-    params = {"Client-ID": "" + ClientID + "", "Authorization": "oauth:" + FollowerToken}
-    response = requests.get(url, headers=params)
-    streamData = response.json()
-    if response.status_code == 429:
-        print ("Too many uptime requests")
-    if streamData['data'] == []:
-        message("Twitch has not realized stream is live")
-    StreamStart = streamData['data'][0]
+    try:
+        url = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure #from the config file
+        params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
+        response = requests.get(url, headers=params)
+        streamData = response.json()
+        if response.status_code == 429:
+            print ("Too many uptime requests")
+        if streamData['data'] == []:
+            message("Twitch has not realized stream is live")
+        StreamStart = streamData['data'][0]
 
-    m = re.search('T(.+?):', StreamStart['started_at'])
-    startHours = m.group(1)
-    m = re.search(':(.+?):', StreamStart['started_at'])
-    startMinutes = m.group(1)
-    finishTime = datetime.datetime.utcnow().strftime("%H:%M")
-    m = re.search('(.+?):', finishTime)
-    finishHours = m.group(1)
-    m = re.search(':(.*)', finishTime)
-    finishMinutes = m.group(1)
-    totalStartMinutes = (int(startHours) * 60) + int(startMinutes)
-    totalFinishMinutes = (int(finishHours) * 60) + int(finishMinutes)
-    m = re.search('(.+?)T', StreamStart['started_at'])
-    startDate = m.group(1).encode('ascii', 'ignore')
-    m = re.search('(.+?)-', startDate)
-    startYear = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.+?)-', startDate)
-    startMonth = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', startDate)
-    startDay = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', startDay)
-    startDay = m.group(1).encode('ascii', 'ignore')
-    finishDate = str(datetime.datetime.utcnow().strftime("%Y-%m-%d"))
-    m = re.search('(.+?)-', finishDate)
-    finishYear = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.+?)-', finishDate)
-    finishMonth = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', finishDate)
-    finishDay = m.group(1).encode('ascii', 'ignore')
-    m = re.search('-(.*)', finishDay)
-    finishDay = m.group(1).encode('ascii', 'ignore')
-    d1 = datetime.date(int(startYear), int(startMonth), int(startDay))
-    d2 = datetime.date(int(finishYear), int(finishMonth), int(finishDay))
-    delta = d2 - d1
-    totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (delta.days * 24 * 60)
-    uptimeHours = int(math.floor(totalUptimeMinutes / 60))
-    uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
-    return datetime.time(uptimeHours, uptimeMinutes, 0)
+        m = re.search('T(.+?):', StreamStart['started_at'])
+        startHours = m.group(1)
+        m = re.search(':(.+?):', StreamStart['started_at'])
+        startMinutes = m.group(1)
+        finishTime = datetime.datetime.utcnow().strftime("%H:%M")
+        m = re.search('(.+?):', finishTime)
+        finishHours = m.group(1)
+        m = re.search(':(.*)', finishTime)
+        finishMinutes = m.group(1)
+        totalStartMinutes = (int(startHours) * 60) + int(startMinutes)
+        totalFinishMinutes = (int(finishHours) * 60) + int(finishMinutes)
+        m = re.search('(.+?)T', StreamStart['started_at'])
+        startDate = m.group(1).encode('ascii', 'ignore')
+        m = re.search('(.+?)-', startDate)
+        startYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', startDate)
+        startMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', startDate)
+        startDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', startDay)
+        startDay = m.group(1).encode('ascii', 'ignore')
+        finishDate = str(datetime.datetime.utcnow().strftime("%Y-%m-%d"))
+        m = re.search('(.+?)-', finishDate)
+        finishYear = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.+?)-', finishDate)
+        finishMonth = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', finishDate)
+        finishDay = m.group(1).encode('ascii', 'ignore')
+        m = re.search('-(.*)', finishDay)
+        finishDay = m.group(1).encode('ascii', 'ignore')
+        d1 = datetime.date(int(startYear), int(startMonth), int(startDay))
+        d2 = datetime.date(int(finishYear), int(finishMonth), int(finishDay))
+        delta = d2 - d1
+        totalUptimeMinutes = int(totalFinishMinutes) - int(totalStartMinutes) + (delta.days * 24 * 60)
+        uptimeHours = int(math.floor(totalUptimeMinutes / 60))
+        uptimeMinutes = totalUptimeMinutes - (uptimeHours * 60)
+        return datetime.time(uptimeHours, uptimeMinutes, 0)
+    except Exception as e:
+        print (str(e))
+        pass
 
 def message(msg):
     try:
         if len(msg) > 450:
-            s.send("PRIVMSG " + Channel + " :Message too long\n")
-            print ("Riboture: Message too long")
+            s.send("PRIVMSG " + Channel + " :" + msg[0:450] + "\n")
+            s.send("PRIVMSG " + Channel + " :" + msg[450:900] + "\n")
+            s.send("PRIVMSG " + Channel + " :" + msg[900:1350] + "\n")
+            print (Nickname + ": " + msg[0:447])
+            print (Nickname + ": " + msg[450:900])
+            print (Nickname + ": " + msg[900:1350])
         else:
             s.send("PRIVMSG " + Channel + " :" + msg + "\n")
             print (Nickname + ": " + msg)
@@ -568,12 +612,16 @@ while True:
 
                 # Assign gender
                 for i in range(len(followerLines)):
-                    if followerLines[i][4] == "":
-                        maleFemale = random.randint(0, 1)
-                        if maleFemale == 1:
-                            followerLines[i][4] = 'female'
-                        else:
-                            followerLines[i][4] = 'male'
+                    try:
+                        if followerLines[i][4] == "":
+                            maleFemale = random.randint(0, 1)
+                            if maleFemale == 1:
+                                followerLines[i][4] = 'female'
+                            else:
+                                followerLines[i][4] = 'male'
+                    except IndexError:
+                        print 'Skipped adding gender. Will add next time this loops'
+                        pass
 
                 # Assign Name
                 for i in range(len(followerLines)):
@@ -588,7 +636,7 @@ while True:
                                 femaleName = batFemaleNames[randomNumber]
                                 followerLines[i][3] = femaleName
                     except IndexError:
-                        print 'Skipped adding gender. Will add next time this loops'
+                        print 'Skipped adding name. Will add next time this loops'
                         pass
 
                 # Refresh the total seconds followed per user
@@ -669,13 +717,12 @@ while True:
                 for i1 in range(len(followerLines)):
                     followerLines[i1][6] = 0
                 for i1 in range(len(followerLines)):
-                    for i2 in range(len(subscriberResponse['subscriptions'])):
-                        if followerLines[i1][0].lower() == subscriberResponse['subscriptions'][i2]['user'][
-                            'display_name'].lower():
-                                followerLines[i1][6] = 1
+                    for i2 in range(len(subscriberResponse['data'])):
+                        if followerLines[i1][0].lower() == subscriberResponse['data'][i2]['user_name'].lower():
+                            followerLines[i1][6] = 1
 
-                # After all the editing has been do
-                # ne write back all the followerLines
+                # After all the editing has been done
+                # write back all the followerLines
                 # I had to write back to a new file and rename it because of lack of memory
 
                 if not os.path.exists('followerDataNew.csv'):
@@ -699,24 +746,22 @@ while True:
                 # Thank for upgrading and set Subtier
                 try:
                     for i1 in range(len(subscriberLines)):
-                        for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                        for i2 in range(len(subscriberResponse['data'])):
+                            if subscriberResponse['data'][i2]['user_name'].encode('ascii',
                                                                                                       'ignore') == \
                                     subscriberLines[i1][0]:
                                 # Check for upgrades of existing subscriptions
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] > subscriberLines[i1][2]:
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'1000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii', 'ignore') + " for resubscribing! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'2000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
-                                    if subscriberResponse['subscriptions'][i2]['sub_plan'] == u'3000':
-                                        message("Thank you " + subscriberResponse['subscriptions'][i2]['user'][
-                                            'display_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                                if subscriberResponse['data'][i2]['tier'][0] > subscriberLines[i1][2]:
+                                    if subscriberResponse['data'][i2]['tier'] == u'1000':
+                                        message("Thank you " + subscriberResponse['data'][i2]['user_name'].encode('ascii', 'ignore') + " for resubscribing! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                                    if subscriberResponse['data'][i2]['tier'] == u'2000':
+                                        message("Thank you " + subscriberResponse['data'][i2]['user_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 2! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
+                                    if subscriberResponse['data'][i2]['tier'] == u'3000':
+                                        message("Thank you " + subscriberResponse['data'][i2]['user_name'].encode('ascii', 'ignore') + " for upgrading your subscription to tier 3! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
 
                                 # Set sub tier and set back to 0 if sub runs out
                                 subscriberLines[i1][2] = 0
-                                subPlan = subscriberResponse['subscriptions'][i2]['sub_plan'].encode('ascii', 'ignore')
+                                subPlan = subscriberResponse['data'][i2]['tier'].encode('ascii', 'ignore')
                                 subscriberLines[i1][2] = subPlan[0]
                 except Exception, e:
                     print "Subtier error"
@@ -724,8 +769,8 @@ while True:
 
                 # Find new subscribers
                 subscriberList = []
-                for i in range(len(subscriberResponse['subscriptions'])):
-                    subscriberList.insert(0, subscriberResponse['subscriptions'][i]['user']['display_name'].encode(
+                for i in range(len(subscriberResponse['data'])):
+                    subscriberList.insert(0, subscriberResponse['data'][i]['user_name'].encode(
                         'ascii', 'ignore'))
                 subscriberList = map(str.strip, subscriberList)
 
@@ -736,15 +781,15 @@ while True:
                 newSelfSubscribers = []
 
                 for i1 in range(len(newSubscribers)):
-                    for i2 in range(len(subscriberResponse['subscriptions'])):
-                        subscriberName = subscriberResponse['subscriptions'][i2]['user']['display_name'].lower()
+                    for i2 in range(len(subscriberResponse['data'])):
+                        subscriberName = subscriberResponse['data'][i2]['user_name'].lower()
                         if subscriberName == newSubscribers[i1].lower():
-                            if subscriberResponse['subscriptions'][i2]['is_gift'] == False:
+                            if subscriberResponse['data'][i2]['is_gift'] == False:
                                 newSelfSubscribers.append(newSubscribers[i1])
-                            if subscriberResponse['subscriptions'][i2]['is_gift'] == True:
+                            if subscriberResponse['data'][i2]['is_gift'] == True:
                                 newGiftedSubscribers.append(newSubscribers[i1])
                                 newGifters.append(
-                                    subscriberResponse['subscriptions'][i2]['sender'].encode('ascii', 'ignore'))
+                                    subscriberResponse['data'][i2]['gifter_name'].encode('ascii', 'ignore'))
 
                 unSubscribers = [item for item in [i[0] for i in subscriberLines[1:]] if item not in subscriberList]
 
@@ -762,21 +807,21 @@ while True:
                         message("Thank you for the subscriptions " + ", ".join(newSelfSubscribers[0:-1]) + " and " +
                                 newSelfSubscribers[-1] + "! Type !" + SubPet + "  to see your " + SubPet + "'s information ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
                     for i1 in range(len(newSubscribers)):
-                        for i2 in range(len(subscriberResponse['subscriptions'])):
-                            if subscriberResponse['subscriptions'][i2]['user']['display_name'].encode('ascii',
+                        for i2 in range(len(subscriberResponse['data'])):
+                            if subscriberResponse['data'][i2]['user_name'].encode('ascii',
                                                                                                       'ignore') == \
                                     newSubscribers[i1]:
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "1":
+                                if subscriberResponse['data'][i2]['tier'][0] == "1":
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                        subscriberResponse['data'][i2]['tier'][0]] + ([""] * 2) + [
                                                                "1"] + ([""] * 4))
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "2":
+                                if subscriberResponse['data'][i2]['tier'][0] == "2":
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                        subscriberResponse['data'][i2]['tier'][0]] + ([""] * 2) + [
                                                                "2"] + ([""] * 4))
-                                if subscriberResponse['subscriptions'][i2]['sub_plan'][0] == "3":
+                                if subscriberResponse['data'][i2]['tier'][0] == "3":
                                     subscriberLines.append([newSubscribers[i1]] + ["1"] + [
-                                        subscriberResponse['subscriptions'][i2]['sub_plan'][0]] + ([""] * 2) + [
+                                        subscriberResponse['data'][i2]['tier'][0]] + ([""] * 2) + [
                                                                "6"] + ([""] * 4))
                     if len(newGiftedSubscribers) == 1:
                         message(newGifters + " has given a subscription to " + " ".join(
@@ -868,13 +913,13 @@ while True:
                                     subscriberLines[i2][1] = subStreak
 
                 # Add length since subscription
-                subscribeAgeAll()
-                for i1 in range(len(subscriberLines)):
-                    for i2 in range(len(subscribeAgeList)):
-                        if not subscriberLines[i1][1] == "SubStreak":
-                            if subscriberLines[i1][0].lower() == subscribeAgeList[i2][8].lower().encode('ascii', 'ignore'):
-                                if subscriberLines[i1][1] < subscribeAgeList[i2][7]:
-                                    subscriberLines[i1][1] = subscribeAgeList[i2][7]
+                # subscribeAgeAll()
+                # for i1 in range(len(subscriberLines)):
+                #     for i2 in range(len(subscribeAgeList)):
+                #         if not subscriberLines[i1][1] == "SubStreak":
+                #             if subscriberLines[i1][0].lower() == subscribeAgeList[i2][8].lower().encode('ascii', 'ignore'):
+                #                 if subscriberLines[i1][1] < subscribeAgeList[i2][7]:
+                #                     subscriberLines[i1][1] = subscribeAgeList[i2][7]
 
                 # write back any changes to a the subscriber file
                 csvfile = open('subscriberDataNew.csv', "wb")
@@ -971,7 +1016,7 @@ while True:
                                 message("Next break is in " + str(50 - uptime().minute) + " minutes")
                     except IndexError:
                         pass
-                elif "!social" in firstStr:
+                elif "!social" in firstStr or "!link" in firstStr:
                     try:
                         message("Find me on Facebook: fb.com/Ridgure    ")
                         message("Find me on Twitter: Twitter.com/RigidStructure")
@@ -982,6 +1027,11 @@ while True:
                 elif "!facebook" in firstStr:
                     try:
                         message("Find me on Facebook: fb.com/Ridgure")
+                    except IndexError:
+                        pass
+                elif "!youtube" in firstStr or "!yt" in firstStr:
+                    try:
+                        message("Find me on Youtube: https://www.youtube.com/channel/UC6_7gjgcdGXsu0zIz42D6fA")
                     except IndexError:
                         pass
                 elif "!twitter" in firstStr:
@@ -1190,11 +1240,11 @@ while True:
                             "If you redeem the VIP/Discord ticket reward with your points you will be made VIP and get a special role in the discord")
                     except IndexError:
                         pass
-                elif "!pack" in firstStr == "!sevtech" in firstStr or "modpack" in firstStr or "sev" in firstStr:
+                elif "!pack" in firstStr or "modpack" in firstStr or "sev" in firstStr:
                     try:
                         message(
-                            "The modpack I am playing is called Sevtech: Ages. Minecraft version 1.12.2. It is available " +
-                            "through the twitch launcher, curse and the AT launcher")
+                            "The modpack I am playing is called Project Ozone 3. Minecraft version 1.12.2. It is available " +
+                            "through the curse and the AT launcher")
                     except IndexError:
                         pass
                 elif "!version" in firstStr or "!vanilla" in firstStr:
@@ -1228,10 +1278,20 @@ while True:
                         message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
                     except IndexError:
                         pass
-                elif "!oclock" in firstStr:
+                elif "!oclock" in firstStr or "!o'clock" in firstStr:
                     try:
                         message("The time for me right now is " + datetime.datetime.now().strftime(
                             "%H:%M") + " o'clock" + " CEST")
+                    except IndexError:
+                        pass
+                elif "!specs" in firstStr:
+                    try:
+                        message("i7-4790k, GTX970")
+                    except IndexError:
+                        pass
+                elif "!skin" in firstStr:
+                    try:
+                        message("mine.ly/Ridgure.1")
                     except IndexError:
                         pass
                 elif "!shout" in firstStr or "!so" in firstStr:
@@ -1250,6 +1310,11 @@ while True:
                 elif "!support" in firstStr:
                     try:
                         message("You can support the stream by hosting, tweeting out the stream -> !ctt")
+                    except IndexError:
+                        pass
+                elif "!newvid" in firstStr or "!audiobook" in firstStr:
+                    try:
+                        message("I made an audiobook! Go check it out -> https://youtu.be/lmpqw01Qs6kx")
                     except IndexError:
                         pass
                 elif "!asylumcraft" in firstStr:
@@ -1428,6 +1493,11 @@ while True:
                             pass
                     except IndexError:
                         pass
+                elif "!sub" in firstStr:
+                    try:
+                        message("twitch.tv/products/ridgure")
+                    except IndexError:
+                        pass
                 elif "!ruffle" in firstStr or "!ruffles" in firstStr:
                     try:
                         if username.lower() == 'ivanabcroftin' or username.lower() == 'ridgure':
@@ -1446,8 +1516,8 @@ while True:
                                 message("You cannot go back in time unless you are the doctor or Marty McFly")
                             else:
                                 message("TimeMeOut failed")
-                        if not username == "Kbigliar":
-                            message("Only Kbigliar can time himself out")
+                        if not username.lower() == "kbigliar":
+                            message("Only ") + username + (" can time himself out")
                     except IndexError:
                         message("Add amount of seconds you want to be timed out after command")
                         pass
@@ -1592,7 +1662,7 @@ while True:
                         print "elfnamechange failed"
         if "USERNOTICE" in data:
             try:
-                print "Response: " + response
+                print "Response: " + response.rstrip("/r/n")
                 username = re.search(r'(?<=display-name=)\w+', response).group(0)
                 msgId = re.search(r'(?<=msg-id=)(.*?);', response).group(1)
                 systemMsg = re.search(r'(?<=system-msg=)(.*?);', response).group(1)
@@ -1679,21 +1749,11 @@ while True:
         else:
             try:
                 if not "PRIVMSG" in data:
-                    print "Response: " + response  ### These are all the non message related responses
+                    print "Response: " + response.rstrip("\r\n")  ### These are all the non message related responses
                 if response == "PING :tmi.twitch.tv\r\n":
                     try:
                         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
                         print "Reply: PONG :tmi.twitch.tv"
-                        s.shutdown(1)
-                        s.close()
-                        s = socket.socket()
-                        s.connect((Host, Port))
-                        s.send("PASS {}\r\n".format("oauth:" + FollowerToken).encode("utf-8"))
-                        s.send("NICK {}\r\n".format(Nickname.lower()).encode("utf-8"))
-                        s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
-                        s.send("CAP REQ :twitch.tv/membership\r\n")
-                        s.send("CAP REQ :twitch.tv/commands\r\n")
-                        s.send("CAP REQ :twitch.tv/tags\r\n")
                     except IndexError:
                         pass
                     except Exception, e:
@@ -1729,3 +1789,14 @@ while True:
     except Exception, e:
         print "An error just occurred"
         print str(e)
+        s.shutdown(1)
+        s.close()
+        s = socket.socket()
+        s.connect((Host, Port))
+        s.send("PASS {}\r\n".format("oauth:" + FollowerToken).encode("utf-8"))
+        s.send("NICK {}\r\n".format(Nickname.lower()).encode("utf-8"))
+        s.send("JOIN {}\r\n".format(Channel).encode("utf-8"))
+        s.send("CAP REQ :twitch.tv/membership\r\n")
+        s.send("CAP REQ :twitch.tv/commands\r\n")
+        s.send("CAP REQ :twitch.tv/tags\r\n")
+        pass

@@ -115,12 +115,14 @@ emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSal
 
 # Message severities
 # Timeout 1 second
-timeout1 = ["https://", "http://", "pogchamp"]
+timeout1 = ["https://", "http://", "pogchamp", "stinky", "stank", "smelly"]
 # Timeout 10 minutes
 timeout10 = ["retard", "penis"]
 # Ban
 banReasons = [  "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
-              "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew", "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows.com"]
+              "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew",
+              "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows.com",
+              "bigfollows ", "dogehype"]
 
 disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]
 

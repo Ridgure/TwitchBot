@@ -26,6 +26,7 @@ s.send("CAP REQ :twitch.tv/commands\r\n")
 s.send("CAP REQ :twitch.tv/tags\r\n")
 BugMessages = 5
 
+
 def randomEmote():
     randomNumber = random.randint(0, len(emotes))
     randomEmote = emotes[randomNumber]
@@ -59,15 +60,18 @@ def divide():
     everythingTogether = ' / '.join(map(str, makingNumbers)) + ' = ' + str(total)
     return everythingTogether
 
+
 def bugCounter():
     global BugMessages
     BugMessages = BugMessages + 1
+
 
 def lick():
     over = " over and "
     randomNumber = random.randint(1, 30)
     licks = over * randomNumber + "over again (x" + str(randomNumber) + ")"
     return licks
+
 
 def mess():
     randomNumber = random.randint(0, len(messes))
@@ -79,15 +83,20 @@ def mess():
 #     tokenResponse = response.json()
 #     if response.status_code == 404:
 #         print "error"
+#     if response.status_code == 400:
+#         print ("Bad request")
 #     if response.status_code == 429:
 #         print "Too many subscriber requests"
 #     tokenResponse = response.json()
+
 
 def subscribers():
     url = "https://api.twitch.tv/helix/subscriptions?broadcaster_id=" + User_ID_ridgure
     params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "Bearer " + SubscriberToken,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
+    if response.status_code == 400:
+        print ("Bad request")
     if response.status_code == 429:
         print ("Too many subscriber requests")
     global subscriberResponse
@@ -143,6 +152,8 @@ def channelInfo():
     url = "https://api.twitch.tv/helix/channels?broadcaster_id=" + User_ID_ridgure
     params = {"Client-ID" : ""+ ClientID +"", "Authorization": "Bearer " + FollowerToken, "Accept": "application/vnd.twitchtv.v5+json"}
     response = requests.get(url, headers=params)
+    if response.status_code == 400:
+        print ("Bad request")
     if response.status_code == 429:
         print ("Too many stream info requests")
     channelInfoResponse = response.json()
@@ -179,6 +190,8 @@ def followers():
         params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
+        if response.status_code == 400:
+            print ("Bad request")
         if response.status_code == 429:
             print ("Too many follower requests")
 
@@ -195,6 +208,8 @@ def followers():
                 params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
                 response = requests.get(url200, headers=params)
                 responseRest = response.json()
+                if response.status_code == 400:
+                    print ("Bad request")
                 if response.status_code == 429:
                     print ("Too many follower requests")
                 pagination = responseRest['pagination']['cursor']
@@ -212,7 +227,7 @@ def followers():
         pass
 
     # print response
-    # returns
+    # Kraken returns
     # {u'pagination': {u'cursor': u'eyJiIjpudWxsLCJhIjoiMTUxNDI1NDE4NzA4NTAyMDAwMCJ9'},
     # u'total': 421,
     # u'data': [
@@ -327,6 +342,7 @@ def months_between(date1, date2):
 # date2 = dt.datetime.strptime('2012-02-15', '%Y-%m-%d')
 # print(months_between(date1,date2))
 
+
 def subscribeAgeAll():
     global subscribeAgeList
     subscribeAgeList = [[] for i in range(len(subscriberResponse['data']))]
@@ -418,6 +434,8 @@ def uptime():
         params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
         response = requests.get(url, headers=params)
         streamData = response.json()
+        if response.status_code == 400:
+            print ("Bad request")
         if response.status_code == 429:
             print ("Too many uptime requests")
         if streamData['data'] == []:
@@ -465,6 +483,7 @@ def uptime():
         print (str(e))
         pass
 
+
 def message(msg):
     try:
         if len(msg) > 450:
@@ -510,6 +529,7 @@ while True:
                                             try:
                                                 message("/timeout " + username + " 1")
                                                 print ("Timed out " + username + " for 1 second because of " + i2)
+                                                break
                                             except IndexError, e:
                                                 print str(e)
                                                 pass
@@ -518,6 +538,7 @@ while True:
                                     try:
                                         message("/timeout " + username + " 1")
                                         print ("Timed out " + username + " for 1 second because of " + i3)
+                                        break
                                     except IndexError, e:
                                         print str(e)
                                         pass
@@ -534,6 +555,16 @@ while True:
                                     try:
                                         message("/timeout " + username + " 600")
                                         print "Timed out " + username + " for 10 minutes because of " + i4
+                                        break
+                                    except IndexError as e:
+                                        print (str(e))
+                                        pass
+                            for i7 in timeout4Hours:
+                                if i7 in text.lower().encode('ascii', 'ignore'):
+                                    try:
+                                        message("/timeout " + username + " 1440")
+                                        print "Timed out " + username + " for 24 hours because of " + i7
+                                        break
                                     except IndexError as e:
                                         print (str(e))
                                         pass
@@ -542,6 +573,7 @@ while True:
                                 try:
                                     message("/ban " + username)
                                     print "Banned " + username + " because of " + i5
+                                    break
                                 except IndexError as e:
                                     print str(e)
                                     pass
@@ -693,6 +725,8 @@ while True:
                                         followerLines[i][5] = 'Red'
                                     if (blackBatScore == brownBatScore) and (brownBatScore == redBatScore):
                                         followerLines[i][5] = 'Black'
+                                    if (blackBatScore == brownBatScore):
+                                        followerLines[i][5] = 'Black'
                             except Exception, e:
                                 print "could not decide " + FolPet + " color"
                                 print(str(e))
@@ -707,6 +741,7 @@ while True:
                         totalColoredBats = totalBlackBats + totalBrownBats + totalRedBats
 
                 except IndexError:
+                    print "bat color indexerror"
                     pass
                 except Exception, e:
                     print "could not add " + FolPet + " color"
@@ -1007,13 +1042,13 @@ while True:
                 elif "!nextbreak" in firstStr:
                     try:
                         if uptime().hour % 2 == 0:
-                            message("Next break is in 1 hour and " + str(50 - uptime().minute) + " minutes")
+                            message("Next break is in 1 hour and " + str(55 - uptime().minute) + " minutes")
                             pass
                         else:
-                            if uptime().minute >= 50:
+                            if uptime().minute >= 55:
                                 message("Breaktime should be right now. If there is no break being taken something is severely wrong")
                             else:
-                                message("Next break is in " + str(50 - uptime().minute) + " minutes")
+                                message("Next break is in " + str(55 - uptime().minute) + " minutes")
                     except IndexError:
                         pass
                 elif "!social" in firstStr or "!link" in firstStr:
@@ -1024,7 +1059,7 @@ while True:
                         message("Join the discord! https://discord.gg/yddBmCE")
                     except IndexError:
                         pass
-                elif "!facebook" in firstStr:
+                elif "!facebook" in firstStr or "!face" in firstStr:
                     try:
                         message("Find me on Facebook: fb.com/Ridgure")
                     except IndexError:
@@ -1039,14 +1074,22 @@ while True:
                         message("Find me on Twitter: Twitter.com/RigidStructure")
                     except IndexError:
                         pass
-                elif "!instagram" in firstStr:
+                elif "!instagram" in firstStr or "!insta" in firstStr:
                     try:
                         message("Find me on Instagram: Instagram.com/RigidStructure")
                     except IndexError:
                         pass
+                elif "!sub" in firstStr:
+                    try:
+                        message("twitch.tv/products/ridgure")
+                    except IndexError:
+                        pass
                 elif "!insomniac" in firstStr:
                     try:
-                        message("/timeout " + text.split()[1] + "14400")
+                        if username.lower() == broadcaster.lower():
+                            message("/timeout " + text.split()[1] + "14400")
+                        else:
+                            message("this command is broadcaster only")
                     except IndexError:
                         pass
                 elif "!sr" in firstStr:
@@ -1056,7 +1099,106 @@ while True:
                         pass
                 elif "!lurk" in firstStr:
                     try:
-                        message(username + "'s " + FolPet + " is going in hybernation")
+                        isSubscriber = 0
+                        for i1 in range(len(badges)):
+                            if "subscriber" in badges[i1]:
+                                isSubscriber = 1
+                                pass
+                        if isSubscriber == 1:
+                            elfInfo = None
+                            for i in range(len(subscriberLines)):
+                                if subscriberLines[i][0].rstrip().lower().decode('utf-8') == username.lower():
+                                    elfInfo = subscriberLines[i]
+                            if elfInfo[6] == "1":
+                                message(username + "'s " + SubPet + " " + elfInfo[8] + " " + elfInfo[7] + " is going back inside the elf tree for the night")
+                            elif elfInfo[6] == "2":
+                                message(username + "'s " + SubPetPlural + " " + elfInfo[8] + " and " + elfInfo[10] + " " + elfInfo[7] + " are going back inside the elf tree for the night")
+                            elif int(elfInfo[6]) > 2:
+                                maxElf = (int(elfInfo[6]) * 2) + 6
+                                elfFirstNames = elfInfo[8:maxElf:2]
+                                message(username + "'s " + SubPetPlural + " " + ", ".join(elfFirstNames) + " and " + elfInfo[
+                                    maxElf] + " " + elfInfo[7] + " are going back inside the elf tree for the night")
+                        else:
+                            for i in range(len(followerLines)):
+                                if followerLines[i][0].lower().rstrip().decode('utf-8') == username.lower():
+                                    if followerLines[i][2] == "0":
+                                        message("User is not following the channel")
+                                    elif followerLines[i][2] == "1":
+                                        if followerLines[i][6] == 0:
+                                            message(username + "'s " + FolPet + " " + followerLines[i][3] + " is going into hybernation")
+                    except IndexError:
+                        pass
+                elif "!unlurk" in firstStr:
+                    try:
+                        anOrA = random.randint(0,1)
+                        anOrALetter = ""
+                        exclusivity = random.randint(0,3)
+                        rise = ""
+                        slumber = ""
+
+                        if anOrA == 0:
+                            anOrALetter = "an "
+                        else:
+                            anOrALetter = "a "
+                        if exclusivity == 0:
+                            #exclusive rise
+                            rise = exclusiveAdverb[random.randint(0, len(exclusiveAdverb) - 1)]
+                            if anOrA == 0:
+                                slumber = exclusiveAdjectiveAn[random.randint(0, len(exclusiveAdjectiveAn) - 1)]
+                            else:
+                                slumber = exclusiveAdjectiveA[random.randint(0, len(exclusiveAdjectiveA) - 1)]
+                            getUp = getUpType[random.randint(0, len(getUpType) - 1)]
+                        elif exclusivity == 1:
+                            #exclusive slumber
+                            rise = riseType[random.randint(0, len(riseType) - 1)]
+                            if anOrA == 0:
+                                slumber = exclusiveAdjectiveAn[random.randint(0, len(exclusiveAdjectiveAn) - 1)]
+                            else:
+                                slumber = exclusiveAdjectiveA[random.randint(0, len(exclusiveAdjectiveA) - 1)]
+                            getUp = getUpType[random.randint(0, len(getUpType) - 1)]
+                        elif exclusivity == 2:
+                            #exclusive getup
+                            rise = riseType[random.randint(0, len(riseType) - 1)]
+                            if anOrA == 0:
+                                slumber = slumberAn[random.randint(0, len(slumberAn) - 1)]
+                            else:
+                                slumber = slumberA[random.randint(0, len(slumberA) - 1)]
+                            getUp = exclusiveAdverb[random.randint(0, len(exclusiveAdverb) - 1)]
+                        else:
+                            #no exclusivity
+                            rise = riseType[random.randint(0, len(riseType) - 1)]
+                            if anOrA == 0:
+                                slumber = slumberAn[random.randint(0, len(slumberAn) - 1)]
+                            else:
+                                slumber = slumberA[random.randint(0, len(slumberA) - 1)]
+                            getUp = getUpType[random.randint(0, len(getUpType) - 1)]
+                        isSubscriber = 0
+                        for i1 in range(len(badges)):
+                            if "subscriber" in badges[i1]:
+                                isSubscriber = 1
+                                pass
+                        if isSubscriber == 1:
+                            elfInfo = None
+                            for i in range(len(subscriberLines)):
+                                if subscriberLines[i][0].rstrip().lower().decode('utf-8') == username.lower():
+                                    elfInfo = subscriberLines[i]
+                            if elfInfo[6] == "1":
+                                message(username + "'s " + SubPet + " " + elfInfo[8] + " " + elfInfo[7] + " " + rise + " rises from " + anOrALetter + slumber + " slumber and " + getUp + " gets up")
+                            elif elfInfo[6] == "2":
+                                message(username + "'s " + SubPetPlural + " " + elfInfo[8] + " and " + elfInfo[10] + " " + elfInfo[7] + " " + rise + " rise from " + anOrALetter + slumber + " slumber and " + getUp + " get up")
+                            elif int(elfInfo[6]) > 2:
+                                maxElf = (int(elfInfo[6]) * 2) + 6
+                                elfFirstNames = elfInfo[8:maxElf:2]
+                                message(username + "'s " + SubPetPlural + " " + ", ".join(elfFirstNames) + " and " + elfInfo[
+                                    maxElf] + " " + elfInfo[7] + " " + rise + " rise from " + anOrALetter + slumber + " slumber and " + getUp + " get up")
+                        else:
+                            for i in range(len(followerLines)):
+                                if followerLines[i][0].lower().rstrip().decode('utf-8') == username.lower():
+                                    if followerLines[i][2] == "0":
+                                        message("User is not following the channel")
+                                    if followerLines[i][2] == "1":
+                                        if followerLines[i][6] == 0:
+                                            message(username + "'s " + FolPet + " " + followerLines[i][3] + " " + rise + " rises from " + anOrALetter + slumber + " slumber and " + getUp + " gets up")
                     except IndexError:
                         pass
                 elif "!english" in firstStr:
@@ -1123,9 +1265,13 @@ while True:
                                         message("Follower not found")
                                 elif followerLines[i][0].lower().rstrip() == text.lower().split()[1]:
                                     message("User is not following the channel")
+                            # else:
+                            #     message("User is not following the channel")
                     except IndexError:
                         pass
+                        message(text.split()[1] + "'s bat could not be found")
                     except Exception, e:
+                        message(text.split()[1] + "'s bat could not be found")
                         pass
                 elif ("!" + SubPet) == firstStr or ("!" + SubPetPlural) == firstStr:
                     try:
@@ -1153,12 +1299,11 @@ while True:
                                         8] + " and " +
                                     elfInfo[10] + " " + elfInfo[7])
                             if int(elfInfo[6]) > 2:
-                                if int(elfInfo[6]) > 2:
-                                    maxElf = (int(elfInfo[6]) * 2) + 6
-                                    elfFirstNames = elfInfo[8:maxElf:2]
-                                    message(text.split()[1] + "'s " + FolPet + " morphed into " + elfInfo[
-                                        6] + " " + SubPetPlural + ". Their names are " + ", ".join(elfFirstNames) + " and " + elfInfo[
-                                                maxElf] + " " + elfInfo[7])
+                                maxElf = (int(elfInfo[6]) * 2) + 6
+                                elfFirstNames = elfInfo[8:maxElf:2]
+                                message(text.split()[1] + "'s " + FolPet + " morphed into " + elfInfo[
+                                    6] + " " + SubPetPlural + ". Their names are " + ", ".join(elfFirstNames) + " and " + elfInfo[
+                                            maxElf] + " " + elfInfo[7])
                         if len(text.lower().split()) == 1:
                             for i in range(len(subscriberLines)):
                                 if subscriberLines[i][0].lower() == username.lower().encode('ascii', 'ignore'):
@@ -1228,10 +1373,10 @@ while True:
                             message("This command is broadcaster only")
                     except IndexError:
                         pass
-                elif "!server" in firstStr or "!ip" in firstStr:
+                elif "!server" in firstStr or "!ip" == firstStr:
                     try:
                         message(
-                            "the Funneling server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP")
+                            "the Ri3D server is for VIP's in the stream and people in the asylumcraft community only. !VIP to see how to become a VIP or try !ipee")
                     except IndexError:
                         pass
                 elif "!vip" in firstStr or "!straitjacket" in firstStr or "!join" in firstStr:
@@ -1242,9 +1387,15 @@ while True:
                         pass
                 elif "!pack" in firstStr or "modpack" in firstStr or "sev" in firstStr:
                     try:
-                        message(
-                            "The modpack I am playing is called Project Ozone 3. Minecraft version 1.12.2. It is available " +
-                            "through the curse and the AT launcher")
+                        pack = "Reclaiming Our Home"
+                        mcVersion = "1.12.2"
+                        availability = False
+                        if availability:
+                            message(
+                                "The modpack I am playing is called " + pack + ". Minecraft version " + mcVersion + " It is available through the curse and the AT launcher")
+                        else:
+                            message(
+                                "The modpack I am playing is called " + pack + ". Minecraft version " + mcVersion + " This modpack made by xTrickShotProx is in closed beta and therefore not publicly available yet")
                     except IndexError:
                         pass
                 elif "!version" in firstStr or "!vanilla" in firstStr:
@@ -1268,9 +1419,28 @@ while True:
                         message(username + "grumpily scowls at " + text.split()[1])
                     except IndexError:
                         pass
+                elif "!shaders" == firstStr:
+                    try:
+                        shadersUsed = True
+                        if shadersUsed:
+                            message("I am using complimentary shaders")
+                        else:
+                            message("I am not using any shaders at the moment")
+                    except IndexError:
+                        pass
+                elif "!rules" == firstStr:
+                    try:
+                        message("Welcome to my chat! My current commands are !social, !discord, !pack, !tp, !shaders, !lurk, !java, !oclock, !lick, !bellyrub, !smile, !timemeout, !ctt, !multipy and !add Chat rules: 1. Please be respectful to others. 2. No all caps. 3. No offensive language. 4. No Links or self promotion. 5. No talking about age 6. Join the java vanilla server if you are VIP. You can be VIP with 3600 Channel poitns 7. I say what I want to say. I will not repeat anything you ask. 8. I play what I want to play. 9. Pease keep the chat in english so your fellow chatters will understand you. Enjoy the show!")
+                    except IndexError:
+                        pass
                 elif "!discord" in firstStr:
                     try:
                         message("Join the Discord! https://discord.gg/yddBmCE")
+                    except IndexError:
+                        pass
+                elif "!ri3d" in firstStr.lower():
+                    try:
+                        message("Join the Ri3D Discord! https://discord.gg/vvS66dK2n3")
                     except IndexError:
                         pass
                 elif "!java" in firstStr:
@@ -1281,7 +1451,7 @@ while True:
                 elif "!oclock" in firstStr or "!o'clock" in firstStr:
                     try:
                         message("The time for me right now is " + datetime.datetime.now().strftime(
-                            "%H:%M") + " o'clock" + " CEST")
+                            "%H:%M") + " o'clock" + " CET") 
                     except IndexError:
                         pass
                 elif "!specs" in firstStr:
@@ -1332,6 +1502,11 @@ while True:
                         message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
                     except IndexError:
                         pass
+                elif "!ipee" in firstStr or "!eyepee" in firstStr:
+                    try:
+                        message("Haha " + username + " peed!")
+                    except IndexError:
+                        pass
                 elif "!bellyrub" in firstStr:
                     try:
                         message(username + " rubs " + text.split()[1] + "'s belly " + lick())
@@ -1356,7 +1531,7 @@ while True:
                         for i1 in xrange(len(followerList)):
                             for i2 in xrange(len(followerList[i1])):
                                 # print i1, followerList[i1]['from_name']
-                                if followerList[i1]['from_name'].lower() == user:
+                                if followerList[i1]['from_name'] == user:
                                     followAge = followAgeAll()
                                     message("Last follow was on: " + str(
                                         followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
@@ -1372,8 +1547,8 @@ while True:
                     except IndexError:
                         pass
                     except Exception, e:
-                        message("followage failed")
-                        message(str(e))
+                        print message("followage failed")
+                        print(str(e))
                 elif "!smile" in firstStr:
                     try:
                         message(username + " smiles at " + text.split()[1] + " " + randomEmote())
@@ -1461,18 +1636,26 @@ while True:
                         message("Nice")
                     except IndexError:
                         pass
-                if "(╯°□°）╯︵ ┻━┻" in text.lower().encode("utf-8"):
+                elif "(╯°□°）╯︵ ┻━┻" in text.lower().encode("utf-8"):
                     message("┬─┬ノ( º _ ºノ)")
+                elif "!quote" in firstStr:
+                    try:
+                        message("You can redeem a quote with your channel points and I will bestow some ridgurWisdom upon you")
+                    except IndexError:
+                        pass
 
                 # User specific commands
                 elif "!jc747" in firstStr:
                     try:
-                        message("It's JSea474 you fool!")
+                        if username.lower() == 'jc747' or username.lower() == broadcaster.lower():
+                            message("It's JSea474 you fool!")
+                        else:
+                            message("This command is user specific")
                     except IndexError:
                         pass
                 elif "!octo" in firstStr:
                     try:
-                        message("Squid3 Squid3 Squid3 Squid3 Squid3")
+                        message("Squid1 Squid2 Squid3 Squid2 Squid4")
                     except IndexError:
                         pass
                 elif "!ras2709" in firstStr or "!ras" in firstStr:
@@ -1480,22 +1663,31 @@ while True:
                         message("its the Ras patas! LUL")
                     except IndexError:
                         pass
-                elif "!quote" in firstStr:
+                elif "!hayleyprimee" in firstStr.lower() or "!hayley" in firstStr.lower() or "!yoooohayley" in firstStr.lower():
                     try:
-                        message("You can redeem a quote with your channel points and I will bestow some r   idgurWisdom upon you")
+                        oAmount = random.randint(1, 149) * "o"
+                        print oAmount
+                        if username.lower() == 'yoooohayley' or username.lower() == broadcaster.lower():
+                            message("Y" + oAmount)
+                        else:
+                            message("This command is user specific")
                     except IndexError:
                         pass
                 elif "!lick" in firstStr:
                     try:
-                        if username.lower() == 'wolvesarecool24':
+                        if username.lower() == 'wolvesarecool24' or username.lower() == broadcaster.lower():
                             message(username + " licks " + text.split()[1] + lick())
                         else:
-                            pass
+                            message("only wolves can lick")
                     except IndexError:
                         pass
-                elif "!sub" in firstStr:
+                elif "!sgt" in firstStr:
                     try:
-                        message("twitch.tv/products/ridgure")
+                        if username.lower() == 'sgtlegotown':
+                            message("0900-sgtCare")
+                        else:
+                            message("This command is user specific")
+                            pass
                     except IndexError:
                         pass
                 elif "!ruffle" in firstStr or "!ruffles" in firstStr:

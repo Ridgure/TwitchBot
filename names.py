@@ -118,14 +118,29 @@ emotes = ["Kappa", "MrDestructoid", "BCWarrior", "DansGame", "SwiftRage", "PJSal
 timeout1 = ["https://", "http://", "pogchamp", "stinky", "stank", "smelly"]
 # Timeout 10 minutes
 timeout10 = ["retard", "penis"]
+# Timeout 4 hours
+timeout4Hours = ["you look tired"]
 # Ban
-banReasons = [  "nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
+banReasons = ["nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
               "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew",
               "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows.com",
-              "bigfollows ", "dogehype"]
+              "bigfollows ", "dogehype", "Want to become famous?", "bigfo"]
 
 disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]
 
 messes = ["thermal paste", "pink bows", "rainbow colored bows", "glitter"]
 
 bedTime = ["Go to bed Bug", "It is bedtime Bug", "Go to bed Bug! How many times do I have to tell you...", "Are you in bed yet Bug?", "Mr. Sandman is coming to get you Bug", "*Sings a lullaby for Bug*", "I think you are feeling sleepy Bug", "How long has it been since your last nap Bug?", "*Hands Bug a pillow*"]
+
+#only specifics
+slumberA = ["wet", "3D", "2D", "fitful", "fearful", "carefree", "worryful", "peaceful", "ruly", "sassy", "grueling", "dreamy", "comfortable", "uncomfortable", "comfy", "sleepless", "warm", "cold", "soft", "deep", "brief"]
+slumberAn = ["unholy", "imaginary", "undead", "undisturbed", "eternal", "unconscious"]
+riseType = ["weirdly", "cowardly", "reluctantly", "shakily"]
+getUpType = ["carefully", "energetically", "staggeringly", "haltingly"]
+
+#exclusive
+#if you can both slumber and rise or get up with its adverb
+exclusiveAdjectiveA = ["slow", "quick", "chaotic", "careful", "weird"]
+exclusiveAdjectiveAn = ["uncomfortable", "animalistic"]
+#if you can both rise and get up with it
+exclusiveAdverb = ["uncomfortably", "animalistically", "crankily", "sheepishly", "slowly", "quickly", "chaotically", "hungrily", "abruptly", "weirdly", "laughingly", "jumpingly", "sweatingly", "instinctively", "instantly"]

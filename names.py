@@ -123,8 +123,8 @@ timeout4Hours = ["you look tired"]
 # Ban
 banReasons = ["nigger", "n1gger", "n1gg3r", "nigg3r", "thank you for the donation", "knee_gurl",
               "going around leavin scars", "who do you think you are", "dixie rekt", "hitler", "dumb jew",
-              "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows.com",
-              "bigfollows ", "dogehype", "Want to become famous?", "bigfo"]
+              "has donated", "Wanna become famous?", "(only you can see this)", "StreamDetails", "bigfollows",
+              "bigfollows ", "dogehype", "Want to become famous?", "bigfo", "mountviewers"]
 
 disney = ["star wars", "diiiiisney", "diisney", "disney", "disknee", "disnee", "lion king", "frozen", "peter pan", "jungle book", "beauty and the beast", "aladdin", "mulan", "high school musical", "let it go", "disne", "disnae", "d1sney"]
 
@@ -136,7 +136,7 @@ bedTime = ["Go to bed Bug", "It is bedtime Bug", "Go to bed Bug! How many times 
 slumberA = ["wet", "3D", "2D", "fitful", "fearful", "carefree", "worryful", "peaceful", "ruly", "sassy", "grueling", "dreamy", "comfortable", "uncomfortable", "comfy", "sleepless", "warm", "cold", "soft", "deep", "brief"]
 slumberAn = ["unholy", "imaginary", "undead", "undisturbed", "eternal", "unconscious"]
 riseType = ["weirdly", "cowardly", "reluctantly", "shakily"]
-getUpType = ["carefully", "energetically", "staggeringly", "haltingly"]
+getUpType = ["carefully", "energetically", "staggeringly", "haltingly", "clumsily"]
 
 #exclusive
 #if you can both slumber and rise or get up with its adverb

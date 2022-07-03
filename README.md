@@ -1,4 +1,4 @@
-<a href="http://www.twitch.tv/ridgure"><img src="https://pbs.twimg.com/profile_banners/4144666635/1497981943/1500x500" title="FVCproductions" alt="FVCproductions"></a>
+<a href="http://www.twitch.tv/ridgure"><img src="https://pbs.twimg.com/profile_banners/4144666635/1656852039/1500x500" title="FVCproductions" alt="FVCproductions"></a>
 
 <h1 align="center">
   <br>
@@ -23,90 +23,90 @@
 
 ###### Commands for everyone:
 
-| General:      | 
+| General:      |
 | ------------- |
-| !commands     | 
-| !lurk         | 
-| !fc           | 
-| !followdate   | 
-| !oclock       | 
-| !uptime       | 
-| !asylumcraft  |  
-| !bot          | 
-| !support      | 
+| !commands     |
+| !lurk         |
+| !fc           |
+| !followdate   |
+| !oclock       |
+| !uptime       |
+| !asylumcraft  |
+| !bot          |
+| !support      |
 
 
-|Stating emotion:| 
-| ------------- | 
-| !bellyrub     | 
-| !scrowl       | 
-| !smile        | 
+|Stating emotion:|
+| ------------- |
+| !bellyrub     |
+| !scrowl       |
+| !smile        |
 
 
-| Minecraft related:|                        
+| Minecraft related:|
 | -------------   |
 | !pack           |
 | !sevtech        |
 | !tp             |
-| !java           | 
+| !java           |
 
 
-| Socials:      |Links to socials:|                  
+| Socials:      |Links to socials:|
 | ------------- |:-------------:|
-| !social       | Shows all Ridgure's social media accounts| 
+| !social       | Shows all Ridgure's social media accounts|
 | !instagram    | [link to Instagram](https://www.instagram.com/rigidstructure/?hl=en)|
-| !facebook     | [link to Facebook](https://www.facebook.com/ridgidstructure)|    
-| !twitter      | [link to Twitter](https://twitter.com/ridgure)|  
-| !discord      | [link to Discord](https://discord.com/invite/yddBmCE)|  
+| !facebook     | [link to Facebook](https://www.facebook.com/ridgidstructure)|
+| !twitter      | [link to Twitter](https://twitter.com/ridgure)|
+| !discord      | [link to Discord](https://discord.com/invite/yddBmCE)|
 | !ctt          | Generates a custom Click to Tweet link when sent in the twitch chat|
 
 
-| Calculator:   | 
+| Calculator:   |
 | ------------- |
-| !add          | 
-| !multipy      | 
-| !divide       | 
+| !add          |
+| !multipy      |
+| !divide       |
 
 
-| Bat cave:     | 
+| Bat cave:     |
 | ------------- |
-| !bat          | 
-| !batnamechange| 
-| !batgenderchange| 
+| !bat          |
+| !batnamechange|
+| !batgenderchange|
 
 ###### Subscriber commands:
 
 
-| Elf tree:     | 
+| Elf tree:     |
 | ------------- |
 | !elf           |
 | !elfnamechange  |
-| !elfgenderchange| 
+| !elfgenderchange|
 
 
 ###### Broadcaster commands:
 
-| Tables:       | 
+| Tables:       |
 | ------------- |
 | !raid         |
 | !shout        |
-| !breakdance   | 
+| !breakdance   |
 
 
 ###### User specific commands:
 
-| User specific:| 
+| User specific:|
 | ------------- |
 | !lick - Wolfpupgirl|
 | !timemeout - KbigLiar|
 | !jc747 - JC747|
 | !octo - Octostarx|
-| !ruffle - IvanabCroftin| 
+| !ruffle - IvanabCroftin|
 
 
 **Automated functions:**
 
-| Done by the bot automatically:| 
+| Done by the bot automatically:|
 | ------------- |
 |Follower notification|
 |Subscriber notification|

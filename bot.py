@@ -91,7 +91,9 @@ def mess():
 
 def subscribers():
     url = "https://api.twitch.tv/helix/subscriptions?broadcaster_id=" + User_ID_ridgure
-    params = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": ClientID, "Authorization": "Bearer " + SubscriberToken,
+    params = {"Accept": "application/vnd.twitchtv.v5+json",
+              "Client-ID": ClientID,
+              "Authorization": "Bearer " + SubscriberToken,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 400:
@@ -1389,6 +1391,311 @@ while True:
                             "If you redeem the VIP/Discord ticket reward with your points you will be made VIP and get a special role in the discord")
                     except IndexError:
                         pass
+                elif "!game" in firstStr:
+                    urlMore = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
+                    paramsMore = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
+                    r = requests.get(urlMore, headers=paramsMore).json()
+                    message("The current game is: " + r['data'][0]['game_name'])
+                elif "!title" in firstStr:
+                    urlMore = "https://api.twitch.tv/helix/streams?user_id=" + User_ID_ridgure
+                    paramsMore = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
+                    r = requests.get(urlMore, headers=paramsMore).json()
+                    message("The current title is: " + r['data'][0]['title'])
+                elif "!oscommands" in firstStr:
+                    message("Commands for OSRS are: !osrank <username> <skill>, !osirank, !oshirank, !osuirank, !osdmrank")
+                elif "!osrank" in firstStr:
+                    if text.split()[1]:
+                        urlMore = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + text.split()[1]
+                        r = requests.get(urlMore)
+                        rsdata = r.content.split("\n")
+                        for i in range(len(rsdata)):
+                            rsdata[i] = rsdata[i].split(",")
+                        if not text.split()[2]:
+                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        elif text.split()[2].lower() == 'attack':
+                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                        elif text.split()[2].lower() == 'defence':
+                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                        elif text.split()[2].lower() == 'strength':
+                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                        elif text.split()[2].lower() == 'hitpoints':
+                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                        elif text.split()[2].lower() == 'ranged':
+                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                        elif text.split()[2].lower() == 'prayer':
+                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                        elif text.split()[2].lower() == 'magic':
+                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                        elif text.split()[2].lower() == 'cooking':
+                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                        elif text.split()[2].lower() == 'woodcutting':
+                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                        elif text.split()[2].lower() == 'fletching':
+                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                        elif text.split()[2].lower() == 'fishing':
+                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                        elif text.split()[2].lower() == 'firemaking':
+                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                        elif text.split()[2].lower() == 'crafting':
+                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                        elif text.split()[2].lower() == 'smithing':
+                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                        elif text.split()[2].lower() == 'mining':
+                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                        elif text.split()[2].lower() == 'herblore':
+                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                        elif text.split()[2].lower() == 'agility':
+                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                        elif text.split()[2].lower() == 'thieving':
+                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                        elif text.split()[2].lower() == 'slayer':
+                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                        elif text.split()[2].lower() == 'farming':
+                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                        elif text.split()[2].lower() == 'runecrafting':
+                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                        elif text.split()[2].lower() == 'hunter':
+                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                        elif text.split()[2].lower() == 'construction':
+                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                        else:
+                            message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
+                    else:
+                        message('!osirank <username>')
+                elif "!osirank" in firstStr:
+                    if text.split()[1]:
+                        urlMore = "https://secure.runescape.com/m=hiscore_oldschool_ironman/index_lite.ws?player=" + text.split()[1]
+                        r = requests.get(urlMore)
+                        rsdata = r.content.split("\n")
+                        for i in range(len(rsdata)):
+                            rsdata[i] = rsdata[i].split(",")
+                        if not text.split()[2]:
+                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        elif text.split()[2].lower() == 'attack':
+                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                        elif text.split()[2].lower() == 'defence':
+                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                        elif text.split()[2].lower() == 'strength':
+                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                        elif text.split()[2].lower() == 'hitpoints':
+                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                        elif text.split()[2].lower() == 'ranged':
+                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                        elif text.split()[2].lower() == 'prayer':
+                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                        elif text.split()[2].lower() == 'magic':
+                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                        elif text.split()[2].lower() == 'cooking':
+                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                        elif text.split()[2].lower() == 'woodcutting':
+                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                        elif text.split()[2].lower() == 'fletching':
+                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                        elif text.split()[2].lower() == 'fishing':
+                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                        elif text.split()[2].lower() == 'firemaking':
+                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                        elif text.split()[2].lower() == 'crafting':
+                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                        elif text.split()[2].lower() == 'smithing':
+                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                        elif text.split()[2].lower() == 'mining':
+                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                        elif text.split()[2].lower() == 'herblore':
+                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                        elif text.split()[2].lower() == 'agility':
+                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                        elif text.split()[2].lower() == 'thieving':
+                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                        elif text.split()[2].lower() == 'slayer':
+                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                        elif text.split()[2].lower() == 'farming':
+                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                        elif text.split()[2].lower() == 'runecrafting':
+                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                        elif text.split()[2].lower() == 'hunter':
+                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                        elif text.split()[2].lower() == 'construction':
+                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                        else:
+                            message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
+                    else:
+                        message('!osirank <username>')
+                elif "!oshirank" in firstStr:
+                    if text.split()[1]:
+                        urlMore = "https://secure.runescape.com/m=hiscore_oldschool_hardcore_ironman/index_lite.ws?player=" + text.split()[1]
+                        r = requests.get(urlMore)
+                        rsdata = r.content.split("\n")
+                        for i in range(len(rsdata)):
+                            rsdata[i] = rsdata[i].split(",")
+                        if not text.split()[2]:
+                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        elif text.split()[2].lower() == 'attack':
+                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                        elif text.split()[2].lower() == 'defence':
+                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                        elif text.split()[2].lower() == 'strength':
+                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                        elif text.split()[2].lower() == 'hitpoints':
+                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                        elif text.split()[2].lower() == 'ranged':
+                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                        elif text.split()[2].lower() == 'prayer':
+                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                        elif text.split()[2].lower() == 'magic':
+                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                        elif text.split()[2].lower() == 'cooking':
+                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                        elif text.split()[2].lower() == 'woodcutting':
+                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                        elif text.split()[2].lower() == 'fletching':
+                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                        elif text.split()[2].lower() == 'fishing':
+                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                        elif text.split()[2].lower() == 'firemaking':
+                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                        elif text.split()[2].lower() == 'crafting':
+                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                        elif text.split()[2].lower() == 'smithing':
+                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                        elif text.split()[2].lower() == 'mining':
+                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                        elif text.split()[2].lower() == 'herblore':
+                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                        elif text.split()[2].lower() == 'agility':
+                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                        elif text.split()[2].lower() == 'thieving':
+                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                        elif text.split()[2].lower() == 'slayer':
+                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                        elif text.split()[2].lower() == 'farming':
+                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                        elif text.split()[2].lower() == 'runecrafting':
+                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                        elif text.split()[2].lower() == 'hunter':
+                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                        elif text.split()[2].lower() == 'construction':
+                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                        else:
+                            message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
+                    else:
+                        message('!osirank <username>')
+                elif "!osuirank" in firstStr:
+                    if text.split()[1]:
+                        urlMore = "https://secure.runescape.com/m=hiscore_oldschool_ultimate/index_lite.ws?player=" + text.split()[1]
+                        r = requests.get(urlMore)
+                        rsdata = r.content.split("\n")
+                        for i in range(len(rsdata)):
+                            rsdata[i] = rsdata[i].split(",")
+                        if not text.split()[2]:
+                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        elif text.split()[2].lower() == 'attack':
+                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                        elif text.split()[2].lower() == 'defence':
+                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                        elif text.split()[2].lower() == 'strength':
+                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                        elif text.split()[2].lower() == 'hitpoints':
+                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                        elif text.split()[2].lower() == 'ranged':
+                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                        elif text.split()[2].lower() == 'prayer':
+                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                        elif text.split()[2].lower() == 'magic':
+                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                        elif text.split()[2].lower() == 'cooking':
+                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                        elif text.split()[2].lower() == 'woodcutting':
+                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                        elif text.split()[2].lower() == 'fletching':
+                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                        elif text.split()[2].lower() == 'fishing':
+                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                        elif text.split()[2].lower() == 'firemaking':
+                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                        elif text.split()[2].lower() == 'crafting':
+                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                        elif text.split()[2].lower() == 'smithing':
+                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                        elif text.split()[2].lower() == 'mining':
+                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                        elif text.split()[2].lower() == 'herblore':
+                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                        elif text.split()[2].lower() == 'agility':
+                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                        elif text.split()[2].lower() == 'thieving':
+                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                        elif text.split()[2].lower() == 'slayer':
+                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                        elif text.split()[2].lower() == 'farming':
+                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                        elif text.split()[2].lower() == 'runecrafting':
+                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                        elif text.split()[2].lower() == 'hunter':
+                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                        elif text.split()[2].lower() == 'construction':
+                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                        else:
+                            message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
+                    else:
+                        message('!osirank <username>')
+                elif "!osdmrank" in firstStr:
+                    if text.split()[1]:
+                        urlMore = "https://secure.runescape.com/m=hiscore_oldschool_deadman/index_lite.ws?player=" + text.split()[1]
+                        r = requests.get(urlMore)
+                        rsdata = r.content.split("\n")
+                        for i in range(len(rsdata)):
+                            rsdata[i] = rsdata[i].split(",")
+                        if not text.split()[2]:
+                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        elif text.split()[2].lower() == 'attack':
+                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                        elif text.split()[2].lower() == 'defence':
+                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                        elif text.split()[2].lower() == 'strength':
+                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                        elif text.split()[2].lower() == 'hitpoints':
+                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                        elif text.split()[2].lower() == 'ranged':
+                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                        elif text.split()[2].lower() == 'prayer':
+                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                        elif text.split()[2].lower() == 'magic':
+                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                        elif text.split()[2].lower() == 'cooking':
+                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                        elif text.split()[2].lower() == 'woodcutting':
+                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                        elif text.split()[2].lower() == 'fletching':
+                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                        elif text.split()[2].lower() == 'fishing':
+                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                        elif text.split()[2].lower() == 'firemaking':
+                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                        elif text.split()[2].lower() == 'crafting':
+                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                        elif text.split()[2].lower() == 'smithing':
+                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                        elif text.split()[2].lower() == 'mining':
+                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                        elif text.split()[2].lower() == 'herblore':
+                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                        elif text.split()[2].lower() == 'agility':
+                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                        elif text.split()[2].lower() == 'thieving':
+                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                        elif text.split()[2].lower() == 'slayer':
+                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                        elif text.split()[2].lower() == 'farming':
+                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                        elif text.split()[2].lower() == 'runecrafting':
+                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                        elif text.split()[2].lower() == 'hunter':
+                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                        elif text.split()[2].lower() == 'construction':
+                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                        else:
+                            message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                 elif "!pack" in firstStr or "modpack" in firstStr or "sev" in firstStr:
                     try:
                         pack = "Reclaiming Our Home"
@@ -1622,7 +1929,7 @@ while True:
                         if owner == False:
                             message("You cannot change the name of other people's " + SubPetPlural)
                     except IndexError:
-                        message("Did you remember to write '!elfnamechange <old first Name> <new first name>'?")
+                        message("Did you remember to write '!elfnamechange <old first name> <new first name>'?")
                         print "elfgenderchange failed"
 
                 # Automatic responses

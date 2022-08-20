@@ -24,7 +24,7 @@
 ###### Commands for everyone:
 
 | General:      |
-| ------------- |
+|---------------|
 | !commands     |
 | !lurk         |
 | !fc           |
@@ -36,29 +36,37 @@
 | !support      |
 
 
-|Stating emotion:|
-| ------------- |
-| !bellyrub     |
-| !scrowl       |
-| !smile        |
+| Stating emotion:     |
+|----------------------|
+| !bellyrub <username> |
+| !scrowl <username>   |
+| !smile <username>    |
 
 
-| Minecraft related:|
-| -------------   |
-| !pack           |
-| !sevtech        |
-| !tp             |
-| !java           |
+| Minecraft related: |
+|--------------------|
+| !pack              |
+| !sevtech           |
+| !tp                |
+| !java              |
 
+| Runescape related:           |
+|------------------------------|
+| !oscommands                  |
+| !osrank <username> <skill>   |
+| !osirank <username> <skill>  |
+| !oshirank <username> <skill> |
+| !osuirank <username> <skill> |
+| !osdmrank <username> <skill> |
 
-| Socials:      |Links to socials:|
-| ------------- |:-------------:|
-| !social       | Shows all Ridgure's social media accounts|
-| !instagram    | [link to Instagram](https://www.instagram.com/rigidstructure/?hl=en)|
-| !facebook     | [link to Facebook](https://www.facebook.com/ridgidstructure)|
-| !twitter      | [link to Twitter](https://twitter.com/ridgure)|
-| !discord      | [link to Discord](https://discord.com/invite/yddBmCE)|
-| !ctt          | Generates a custom Click to Tweet link when sent in the twitch chat|
+| Socials:      |                           Links to socials:                           |
+| ------------- |:---------------------------------------------------------------------:|
+| !social       |               Shows all Ridgure's social media accounts               |
+| !instagram    | [link to Instagram](https://www.instagram.com/rigidstructure/?hl=en)  |
+| !facebook     |     [link to Facebook](https://www.facebook.com/ridgidstructure)      |
+| !twitter      |            [link to Twitter](https://twitter.com/ridgure)             |
+| !discord      |         [link to Discord](https://discord.com/invite/yddBmCE)         |
+| !ctt          |  Generates a custom Click to Tweet link when sent in the twitch chat  |
 
 
 | Calculator:   |
@@ -77,17 +85,17 @@
 ###### Subscriber commands:
 
 
-| Elf tree:     |
-| ------------- |
-| !elf           |
-| !elfnamechange  |
-| !elfgenderchange|
+| Elf tree:        |
+|------------------|
+| !elf             |
+| !elfnamechange   |
+| !elfgenderchange |
 
 
 ###### Broadcaster commands:
 
 | Tables:       |
-| ------------- |
+|---------------|
 | !raid         |
 | !shout        |
 | !breakdance   |
@@ -95,25 +103,25 @@
 
 ###### User specific commands:
 
-| User specific:|
-| ------------- |
-| !lick - Wolfpupgirl|
-| !timemeout - KbigLiar|
-| !jc747 - JC747|
-| !octo - Octostarx|
-| !ruffle - IvanabCroftin|
+| User specific:          |
+|-------------------------|
+| !lick - Wolfpupgirl     |
+| !timemeout - KbigLiar   |
+| !jc747 - JC747          |
+| !octo - Octostarx       |
+| !ruffle - IvanabCroftin |
 
 
 **Automated functions:**
 
-| Done by the bot automatically:|
-| ------------- |
-|Follower notification|
-|Subscriber notification|
-|Output last 20 messages in chat to a file|
-|`"Eww cobble"` every time cobble is mentioned|
-|Times out non vip/moderators if they post links|
-|Bans users that use bad language|
+| Done by the bot automatically:                  |
+|-------------------------------------------------|
+| Follower notification                           |
+| Subscriber notification                         |
+| Output last 20 messages in chat to a file       |
+| `"Eww cobble"` every time cobble is mentioned   |
+| Times out non vip/moderators if they post links |
+| Bans users that use bad language                |
 
 ## Getting started
 
@@ -183,7 +191,7 @@ This whole project started off with this [Instructables article](https://www.ins
 
 **Other interesting projects to check out:**
 
-[PythonBot](https://github.com/ZERG3R/PythonBot) by ZERG3R on Twitch as [ZERG3R](https//:twitch.tv/ZERG3R)
+[PythonBot](https://github.com/ZERG3R/PythonBot) by ZERG3R on Twitch as [ZERG3R](https://github.com/zrgstudios/twitchbot)
 
 Ponderier by DillonEA on Twitch as [DillonEA](https//:twitch.tv/DillonEA)
 

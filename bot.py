@@ -11,6 +11,7 @@ import datetime
 import math
 import csv
 import tinyurl
+import time
 from names import *
 from config import *
 from time import sleep
@@ -77,7 +78,31 @@ def mess():
     return messes[randomNumber]
 
 # def token():
-#     url = "https://id.twitch.tv/oauth2/token?client_id=" + ClientID + "&client_secret=" + ClientSecret + "&grant_type=client_credentials"
+#     scopes = [
+#         'analytics:read:extensions', 'analytics:read:games', 'bits:read', 'channel:manage:ads', 'channel:read:ads',
+#         'channel:manage:broadcast', 'channel:read:charity', 'channel:edit:commercial', 'channel:read:editors',
+#         'channel:manage:extensions', 'channel:read:goals', 'channel:read:guest_star', 'channel:manage:guest_star',
+#         'channel:read:hype_train', 'channel:manage:moderators', 'channel:read:polls', 'channel:manage:polls',
+#         'channel:read:predictions', 'channel:manage:predictions', 'channel:manage:raids', 'channel:read:redemptions',
+#         'channel:manage:redemptions', 'channel:manage:schedule', 'channel:read:stream_key',
+#         'channel:read:subscriptions', 'channel:manage:videos', 'channel:read:vips', 'channel:manage:vips', 'clips:edit',
+#         'moderation:read', 'moderator:manage:announcements', 'moderator:manage:automod',
+#         'moderator:read:automod_settings', 'moderator:manage:automod_settings', 'moderator:manage:banned_users',
+#         'moderator:read:blocked_terms', 'moderator:manage:blocked_terms', 'moderator:manage:chat_messages',
+#         'moderator:read:chat_settings', 'moderator:manage:chat_settings', 'moderator:read:chatters',
+#         'moderator:read:followers', 'moderator:read:guest_star', 'moderator:manage:guest_star',
+#         'moderator:read:shield_mode', 'moderator:manage:shield_mode', 'moderator:read:shoutouts',
+#         'moderator:manage:shoutouts', 'user:edit', 'user:edit:follows', 'user:read:blocked_users',
+#         'user:manage:blocked_users', 'user:read:broadcast', 'user:manage:chat_color', 'user:read:email',
+#         'user:read:follows', 'user:read:moderated_channels', 'user:read:subscriptions', 'user:manage:whispers'
+#     ]
+#     for scope in range(len(scopes)):
+#         scopes[scope] = scopes[scope].replace(":", "%3a")
+#     authorizationURL = 'https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=' + ClientID + '&redirect_uri=http://localhost&scope=' + "%20".join(scopes)
+#     print(authorizationURL)
+#     # get code from browser url
+#     accessCode = '70u8n8ej0cim6glfx5j9n05ulruxpj'
+#     url = "https://id.twitch.tv/oauth2/token?client_id=" + ClientID + "&client_secret=" + ClientSecret + "&code=" + accessCode + "&grant_type=authorization_code&redirect_uri=http://localhost"
 #     response = requests.post(url)
 #     tokenResponse = response.json()
 #     if response.status_code == 404:
@@ -87,13 +112,13 @@ def mess():
 #     if response.status_code == 429:
 #         print "Too many subscriber requests"
 #     tokenResponse = response.json()
-
-
+#     print(tokenResponse)
+# token()
 def subscribers():
     url = "https://api.twitch.tv/helix/subscriptions?broadcaster_id=" + User_ID_ridgure
     params = {"Accept": "application/vnd.twitchtv.v5+json",
               "Client-ID": ClientID,
-              "Authorization": "Bearer " + SubscriberToken,
+              "Authorization": "Bearer " + AppAccessToken,
               "limit": "100"}
     response = requests.get(url, headers=params, allow_redirects=True)
     if response.status_code == 400:
@@ -103,6 +128,7 @@ def subscribers():
     global subscriberResponse
     subscriberResponse = response.json()
     return subscriberResponse
+
 
     # Kraken V5 returns
     # {u'_total': 3,
@@ -189,8 +215,8 @@ def channelInfo():
 
 def followers():
     try:
-        url100 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100"
-        params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
+        url100 = "https://api.twitch.tv/helix/channels/followers?broadcaster_id=" + User_ID_ridgure + "&first=100"
+        params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + AppAccessToken}
         response = requests.get(url100, headers=params)
         responseFirst100 = response.json()
         if response.status_code == 200:
@@ -209,7 +235,7 @@ def followers():
         # making a list of all the followers
         for i9 in xrange(int(math.ceil(totalFollowers / float(100))) - 1):
             try:
-                url200 = "https://api.twitch.tv/helix/users/follows?to_id=" + User_ID_ridgure + "&first=100&after=" + pagination
+                url200 = "https://api.twitch.tv/helix/channels/followers?broadcaster_id=" + User_ID_ridgure + "&first=100&after=" + pagination
                 params = {"Client-ID": "" + ClientID + "", "Authorization": "Bearer " + FollowerToken}
                 response = requests.get(url200, headers=params)
                 responseRest = response.json()
@@ -219,9 +245,12 @@ def followers():
                     print ("Bad request")
                 elif response.status_code == 429:
                     print ("Too many follower requests")
-                pagination = responseRest['pagination']['cursor']
+                if responseRest['pagination']:
+                    pagination = responseRest['pagination']['cursor']
                 followerList = followerList + responseRest['data']
             except Exception as e:
+                if testing:
+                    raise
                 if str(e) == "'cursor'":
                     pass
                 else:
@@ -231,6 +260,8 @@ def followers():
         return followerList
     except Exception as e:
         print (str(e))
+        if testing:
+            raise
         pass
 
     # print response
@@ -250,6 +281,10 @@ def followers():
         # {u'from_name': u'FloodedVoyage45', u'to_login': u'ridgure', u'followed_at': u'2021-11-06T22:29:22Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'floodedvoyage45', u'from_id': u'587906627'},
         # {u'from_name': u'SgtLegoTown', u'to_login': u'ridgure', u'followed_at': u'2021-11-06T16:45:57Z', u'to_id': u'106586349', u'to_name': u'Ridgure', u'from_login': u'sgtlegotown', u'from_id': u'210387514'}
 
+        # They changed it?!
+        # {u'user_login': u'shabonny', u'followed_at': u'2024-02-14T23:51:25Z', u'user_id': u'415991551', u'user_name': u'shabonny'},
+        # {u'user_login': u'grumpygremlin321', u'followed_at': u'2024-02-14T23:09:32Z', u'user_id': u'1036595384', u'user_name': u'grumpygremlin321'},
+        # {u'user_login': u'emily_dorothy', u'followed_at': u'2024-02-14T23:05:14Z', u'user_id': u'1036019749', u'user_name': u'emily_dorothy'},
 
 def followAgeAll():
     global followAgeList
@@ -490,6 +525,8 @@ def uptime():
         return datetime.time(uptimeHours, uptimeMinutes, 0)
     except Exception as e:
         print (str(e))
+        if testing:
+            raise
         pass
 
 
@@ -550,6 +587,8 @@ while True:
                                         print ("Timed out " + username + " for 1 second because of " + i3)
                                         break
                                     except IndexError, e:
+                                        if testing:
+                                            raise
                                         print str(e)
                                         pass
                             # for i6 in disney:
@@ -568,6 +607,8 @@ while True:
                                         break
                                     except IndexError as e:
                                         print (str(e))
+                                        if testing:
+                                            raise
                                         pass
                             for i7 in timeout4Hours:
                                 if i7 in text.lower().encode('ascii', 'ignore'):
@@ -577,6 +618,8 @@ while True:
                                         break
                                     except IndexError as e:
                                         print (str(e))
+                                        if testing:
+                                            raise
                                         pass
                         for i5 in banReasons:
                             if i5 in text.lower().encode('ascii', 'ignore'):
@@ -585,6 +628,8 @@ while True:
                                     print "Banned " + username + " because of " + i5
                                     break
                                 except IndexError as e:
+                                    if testing:
+                                        raise
                                     print str(e)
                                     pass
 
@@ -602,7 +647,7 @@ while True:
 
                 test = []
                 for i in range(len(followerList)):
-                    test.insert(0, followerList[i]['from_name'].encode('ascii', 'ignore'))
+                    test.insert(0, followerList[i]['user_name'].encode('ascii', 'ignore'))
                 test = map(str.strip, test)
 
                 # Get existing follower list
@@ -642,7 +687,7 @@ while True:
                 # If someone is a follower set isFollower to 1
                 for i1 in range(len(followerList)):
                     for i2 in range(len(followerLines)):
-                        if followerList[i1]['from_name'].encode('ascii', 'ignore').lower().rstrip() == \
+                        if followerList[i1]['user_name'].encode('ascii', 'ignore').lower().rstrip() == \
                                 followerLines[i2][0].lower().rstrip():
                             followerLines[i2][2] = "1"
                 # If someone unfollows set isFollower to 0
@@ -685,7 +730,7 @@ while True:
                 followAgeAll()
                 for i in range(len(followerLines)):
                     for i2 in range(len(followerList)):
-                        if followerLines[i][0] == followerList[i2]['from_name'].rstrip():
+                        if followerLines[i][0] == followerList[i2]['user_name'].rstrip():
                             followerLines[i][1] = followAgeList[i2][5]
 
                 # Assign color
@@ -700,6 +745,8 @@ while True:
                     totalRedBats = 0.00
                 except Exception, e:
                     print str(e)
+                    if testing:
+                        raise
                 if followerLines[1][5] == "":
                     followerLines[1][5] = 'Black'
                 if followerLines[2][5] == "":
@@ -740,6 +787,8 @@ while True:
                             except Exception, e:
                                 print "could not decide " + FolPet + " color"
                                 print(str(e))
+                                if testing:
+                                    raise
 
                         # check for which " + FolPet + " to add next
                         if followerLines[i][5] == 'Black':
@@ -756,6 +805,8 @@ while True:
                 except Exception, e:
                     print "could not add " + FolPet + " color"
                     print (str(e))
+                    if testing:
+                        raise
 
                 # Check if subscriber or not.
                 subscribers()
@@ -809,6 +860,8 @@ while True:
                 except Exception, e:
                     print "Subtier error"
                     print str(e)
+                    if testing:
+                        raise
 
                 # Find new subscribers
                 subscriberList = []
@@ -868,7 +921,7 @@ while True:
                                                                "6"] + ([""] * 4))
                     #  thank gifter for giving sub to gifted
                     if len(newGiftedSubscribers) == 1:
-                        message("Thank you" + newGifters[0] + " for gifting a subscription to " + " ".join(newGiftedSubscribers) + "! Type !" + SubPet + " to see your " + SubPet + "'s information")
+                        message("Thank you " + newGifters[0] + " for gifting a subscription to " + " ".join(newGiftedSubscribers) + "! Type !" + SubPet + " to see your " + SubPet + "'s information")
                     elif len(newGiftedSubscribers) > 1:
                         if len(newGifters) == 1:
                                 message(" ".join(newGifters) + "Has gifted a sub to the lucky " + ", ".join(
@@ -977,6 +1030,8 @@ while True:
             except Exception, e:
                 print("PRIVMSG error")
                 print(str(e))
+                if testing:
+                    raise
             if "!" in text.lower().split()[0][0]:
                 firstStr = text.lower().split()[0]
                 if username.lower() == "bugmacgregor":
@@ -988,6 +1043,8 @@ while True:
                             message(bedTime[randomNumber])
                     except Exception, e:
                         print str(e)
+                        if testing:
+                            raise
                     except IndexError:
                         pass
                 if "!commands" in firstStr or "!cmds" in firstStr:
@@ -1034,17 +1091,19 @@ while True:
                         pass
                     except Exception, e:
                         print str(e)
+                        if testing:
+                            raise
                         pass
                 elif "!tp" in firstStr:
                     try:
                         message("The texture pack I am currently using is Soartex Fanver Modded Universal")
                     except IndexError:
                         pass
-                # elif "!multi" in firstStr or "kadgar" in firstStr:
-                #     try:
-                #         message("https://multistre.am/ridgure/lilgamerhelle/xman657483/")
-                #     except IndexError:
-                #         pass
+                elif "!multi" in firstStr or "kadgar" in firstStr:
+                    try:
+                        message("multistre.am/ridgure/JC747/lukestergaming/")
+                    except IndexError:
+                        pass
                 elif "!nextbreak" in firstStr:
                     try:
                         if uptime().hour % 2 == 0:
@@ -1062,7 +1121,7 @@ while True:
                         message("Find me on Facebook: fb.com/Ridgure    ")
                         message("Find me on Twitter: Twitter.com/RigidStructure")
                         message("Find me on Instagram: Instagram.com/Ridgure")
-                        message("Join the discord! https://discord.gg/yddBmCE")
+                        message("Join the discord! discord.gg/yddBmCE")
                     except IndexError:
                         pass
                 elif "!facebook" in firstStr or "!face" in firstStr:
@@ -1072,7 +1131,7 @@ while True:
                         pass
                 elif "!youtube" in firstStr or "!yt" in firstStr:
                     try:
-                        message("Find me on Youtube: https://www.youtube.com/channel/UC6_7gjgcdGXsu0zIz42D6fA")
+                        message("Find me on Youtube: youtube.com/channel/UC6_7gjgcdGXsu0zIz42D6fA")
                     except IndexError:
                         pass
                 elif "!twitter" in firstStr:
@@ -1087,7 +1146,7 @@ while True:
                         pass
                 elif "!sub" in firstStr:
                     try:
-                        message("twitch.tv/products/ridgure")
+                        message("Twitch.tv/products/ridgure")
                     except IndexError:
                         pass
                 elif "!insomniac" in firstStr:
@@ -1224,7 +1283,7 @@ while True:
                         pass
                 elif "!pokemon" in firstStr:
                     try:
-                        message("Here is my trainer code: 8164 5829 3574 Feel free to add me")
+                        message("Here are is my trainer codes: 8164 5829 3574 and 0372 8587 9004 Feel free to add me")
                     except IndexError:
                         pass
                 elif "!benefits" in firstStr:
@@ -1283,11 +1342,12 @@ while True:
                     try:
                         elfInfo = None
                         if len(text.lower().split()) == 2:
-                            for i in range(len(subscriberLines)):
-                                if subscriberLines[i][0].lower().rstrip() == text.lower().split()[1]:
-                                    elfInfo = subscriberLines[i]
+                            print(subscriberLines)
+                            for subsciber in range(len(subscriberLines)):
+                                if subscriberLines[subsciber][0].lower().rstrip() == text.lower().split()[1].encode('ascii', 'ignore'):
+                                    elfInfo = subscriberLines[subsciber]
                             if elfInfo == None:
-                                message(username + " is not a subscriber")
+                                message(text.lower().split()[1] + " is not a subscriber")
                             if elfInfo[9].lower() == 'male':
                                 gender = 'His'
                             elif elfInfo[9].lower() == 'female':
@@ -1312,7 +1372,7 @@ while True:
                                             maxElf] + " " + elfInfo[7])
                         if len(text.lower().split()) == 1:
                             for i in range(len(subscriberLines)):
-                                if subscriberLines[i][0].lower() == username.lower().encode('ascii', 'ignore'):
+                                if subscriberLines[i][0].decode("utf-8").lower() == username.lower().encode('ascii', 'ignore'):
                                     elfInfo = subscriberLines[i]
                             if elfInfo == None:
                                 message(username + " is not a subscriber")
@@ -1336,9 +1396,13 @@ while True:
                                         elfInfo[maxElf] + " " + elfInfo[7])
                     except IndexError, e:
                         print str(e)
+                        if testing:
+                            raise
                         pass
                     except Exception, e:
                         print str(e)
+                        if testing:
+                            raise
                         pass
                 elif "!raid" in text.lower().split()[0]:
                     try:
@@ -1404,296 +1468,326 @@ while True:
                 elif "!oscommands" in firstStr:
                     message("Commands for OSRS are: !osrank <username> <skill>, !osirank, !oshirank, !osuirank, !osdmrank")
                 elif "!osrank" in firstStr:
-                    if text.split()[1]:
+                    if len(text.split()) > 1:
                         urlMore = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + text.split()[1]
                         r = requests.get(urlMore)
                         rsdata = r.content.split("\n")
+                        strPart1 = " has "
+                        strPart2 = " levels with a rank of "
                         for i in range(len(rsdata)):
                             rsdata[i] = rsdata[i].split(",")
-                        if not text.split()[2]:
-                            message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
+                        if len(text.split()) == 2:
+                            message(text.split()[1] + ' has a total level of ' + rsdata[0][1] + " with a rank of " + rsdata[0][0])
                         elif text.split()[2].lower() == 'attack':
-                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                            message(text.split()[1] + strPart1 + rsdata[1][1] + ' attack' + strPart2 + rsdata[1][0])
                         elif text.split()[2].lower() == 'defence':
-                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                            message(text.split()[1] + strPart1 + rsdata[2][1] + ' defence' + strPart2 + rsdata[2][0])
                         elif text.split()[2].lower() == 'strength':
-                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                            message(text.split()[1] + strPart1 + rsdata[3][1] + ' strength' + strPart2 + rsdata[3][0])
                         elif text.split()[2].lower() == 'hitpoints':
-                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                            message(text.split()[1] + strPart1 + rsdata[4][1] + ' hitpoints' + strPart2 + rsdata[4][0])
                         elif text.split()[2].lower() == 'ranged':
-                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                            message(text.split()[1] + strPart1 + rsdata[5][1] + ' ranged' + strPart2 + rsdata[5][0])
                         elif text.split()[2].lower() == 'prayer':
-                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                            message(text.split()[1] + strPart1 + rsdata[6][1] + ' prayer' + strPart2 + rsdata[6][0])
                         elif text.split()[2].lower() == 'magic':
-                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                            message(text.split()[1] + strPart1 + rsdata[7][1] + ' magic' + strPart2 + rsdata[7][0])
                         elif text.split()[2].lower() == 'cooking':
-                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                            message(text.split()[1] + strPart1 + rsdata[8][1] + ' cooking' + strPart2 + rsdata[8][0])
                         elif text.split()[2].lower() == 'woodcutting':
-                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                            message(text.split()[1] + strPart1 + rsdata[9][1] + ' woodcutting' + strPart2 + rsdata[9][0])
                         elif text.split()[2].lower() == 'fletching':
-                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                            message(text.split()[1] + strPart1 + rsdata[10][1] + ' fletching' + strPart2 + rsdata[10][0])
                         elif text.split()[2].lower() == 'fishing':
-                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                            message(text.split()[1] + strPart1 + rsdata[11][1] + ' fishing' + strPart2 + rsdata[11][0])
                         elif text.split()[2].lower() == 'firemaking':
-                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                            message(text.split()[1] + strPart1 + rsdata[12][1] + ' firemaking' + strPart2 + rsdata[12][0])
                         elif text.split()[2].lower() == 'crafting':
-                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                            message(text.split()[1] + strPart1 + rsdata[13][1] + ' crafting' + strPart2 + rsdata[13][0])
                         elif text.split()[2].lower() == 'smithing':
-                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                            message(text.split()[1] + strPart1 + rsdata[14][1] + ' smithing' + strPart2 + rsdata[14][0])
                         elif text.split()[2].lower() == 'mining':
-                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                            message(text.split()[1] + strPart1 + rsdata[15][1] + ' mining' + strPart2 + rsdata[15][0])
                         elif text.split()[2].lower() == 'herblore':
-                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                            message(text.split()[1] + strPart1 + rsdata[16][1] + ' herblore' + strPart2 + rsdata[16][0])
                         elif text.split()[2].lower() == 'agility':
-                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                            message(text.split()[1] + strPart1 + rsdata[17][1] + ' agility' + strPart2 + rsdata[17][0])
                         elif text.split()[2].lower() == 'thieving':
-                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                            message(text.split()[1] + strPart1 + rsdata[18][1] + ' thieving' + strPart2 + rsdata[18][0])
                         elif text.split()[2].lower() == 'slayer':
-                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                            message(text.split()[1] + strPart1 + rsdata[19][1] + ' slayer' + strPart2 + rsdata[19][0])
                         elif text.split()[2].lower() == 'farming':
-                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                            message(text.split()[1] + strPart1 + rsdata[20][1] + ' farming' + strPart2 + rsdata[20][0])
                         elif text.split()[2].lower() == 'runecrafting':
-                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                            message(text.split()[1] + strPart1 + rsdata[21][1] + ' runecrafting' + strPart2 + rsdata[21][0])
                         elif text.split()[2].lower() == 'hunter':
-                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                            message(text.split()[1] + strPart1 + rsdata[22][1] + ' hunter' + strPart2 + rsdata[22][0])
                         elif text.split()[2].lower() == 'construction':
-                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                            message(text.split()[1] + strPart1 + rsdata[23][1] + ' construction' + strPart2 + rsdata[23][0])
                         else:
                             message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                     else:
                         message('!osirank <username>')
                 elif "!osirank" in firstStr:
-                    if text.split()[1]:
+                    if len(text.split()) > 1:
                         urlMore = "https://secure.runescape.com/m=hiscore_oldschool_ironman/index_lite.ws?player=" + text.split()[1]
                         r = requests.get(urlMore)
                         rsdata = r.content.split("\n")
+                        strPart1 = " has "
+                        strPart2 = " levels with a rank of "
                         for i in range(len(rsdata)):
                             rsdata[i] = rsdata[i].split(",")
-                        if not text.split()[2]:
+                        if len(text.split()) == 2:
                             message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
                         elif text.split()[2].lower() == 'attack':
-                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                            message(text.split()[1] + strPart1 + rsdata[1][1] + ' attack' + strPart2 + rsdata[1][0])
                         elif text.split()[2].lower() == 'defence':
-                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                            message(text.split()[1] + strPart1 + rsdata[2][1] + ' defence' + strPart2 + rsdata[2][0])
                         elif text.split()[2].lower() == 'strength':
-                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                            message(text.split()[1] + strPart1 + rsdata[3][1] + ' strength' + strPart2 + rsdata[3][0])
                         elif text.split()[2].lower() == 'hitpoints':
-                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                            message(text.split()[1] + strPart1 + rsdata[4][1] + ' hitpoints' + strPart2 + rsdata[4][0])
                         elif text.split()[2].lower() == 'ranged':
-                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                            message(text.split()[1] + strPart1 + rsdata[5][1] + ' ranged' + strPart2 + rsdata[5][0])
                         elif text.split()[2].lower() == 'prayer':
-                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                            message(text.split()[1] + strPart1 + rsdata[6][1] + ' prayer' + strPart2 + rsdata[6][0])
                         elif text.split()[2].lower() == 'magic':
-                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                            message(text.split()[1] + strPart1 + rsdata[7][1] + ' magic' + strPart2 + rsdata[7][0])
                         elif text.split()[2].lower() == 'cooking':
-                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                            message(text.split()[1] + strPart1 + rsdata[8][1] + ' cooking' + strPart2 + rsdata[8][0])
                         elif text.split()[2].lower() == 'woodcutting':
-                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[9][1] + ' woodcutting' + strPart2 + rsdata[9][0])
                         elif text.split()[2].lower() == 'fletching':
-                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[10][1] + ' fletching' + strPart2 + rsdata[10][0])
                         elif text.split()[2].lower() == 'fishing':
-                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                            message(text.split()[1] + strPart1 + rsdata[11][1] + ' fishing' + strPart2 + rsdata[11][0])
                         elif text.split()[2].lower() == 'firemaking':
-                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[12][1] + ' firemaking' + strPart2 + rsdata[12][0])
                         elif text.split()[2].lower() == 'crafting':
-                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                            message(text.split()[1] + strPart1 + rsdata[13][1] + ' crafting' + strPart2 + rsdata[13][0])
                         elif text.split()[2].lower() == 'smithing':
-                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                            message(text.split()[1] + strPart1 + rsdata[14][1] + ' smithing' + strPart2 + rsdata[14][0])
                         elif text.split()[2].lower() == 'mining':
-                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                            message(text.split()[1] + strPart1 + rsdata[15][1] + ' mining' + strPart2 + rsdata[15][0])
                         elif text.split()[2].lower() == 'herblore':
-                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                            message(text.split()[1] + strPart1 + rsdata[16][1] + ' herblore' + strPart2 + rsdata[16][0])
                         elif text.split()[2].lower() == 'agility':
-                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                            message(text.split()[1] + strPart1 + rsdata[17][1] + ' agility' + strPart2 + rsdata[17][0])
                         elif text.split()[2].lower() == 'thieving':
-                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                            message(text.split()[1] + strPart1 + rsdata[18][1] + ' thieving' + strPart2 + rsdata[18][0])
                         elif text.split()[2].lower() == 'slayer':
-                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                            message(text.split()[1] + strPart1 + rsdata[19][1] + ' slayer' + strPart2 + rsdata[19][0])
                         elif text.split()[2].lower() == 'farming':
-                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                            message(text.split()[1] + strPart1 + rsdata[20][1] + ' farming' + strPart2 + rsdata[20][0])
                         elif text.split()[2].lower() == 'runecrafting':
-                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[21][1] + ' runecrafting' + strPart2 + rsdata[21][0])
                         elif text.split()[2].lower() == 'hunter':
-                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                            message(text.split()[1] + strPart1 + rsdata[22][1] + ' hunter' + strPart2 + rsdata[22][0])
                         elif text.split()[2].lower() == 'construction':
-                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[23][1] + ' construction' + strPart2 + rsdata[23][0])
                         else:
                             message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                     else:
                         message('!osirank <username>')
                 elif "!oshirank" in firstStr:
-                    if text.split()[1]:
+                    if len(text.split()) > 1:
                         urlMore = "https://secure.runescape.com/m=hiscore_oldschool_hardcore_ironman/index_lite.ws?player=" + text.split()[1]
                         r = requests.get(urlMore)
                         rsdata = r.content.split("\n")
-                        for i in range(len(rsdata)):
+                        strPart1 = " has "
+                        strPart2 = " levels with a rank of "
+                        for i in range(len(rsdata)):    
                             rsdata[i] = rsdata[i].split(",")
-                        if not text.split()[2]:
+                        if len(text.split()) == 2:
                             message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
                         elif text.split()[2].lower() == 'attack':
-                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                            message(text.split()[1] + strPart1 + rsdata[1][1] + ' attack' + strPart2 + rsdata[1][0])
                         elif text.split()[2].lower() == 'defence':
-                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                            message(text.split()[1] + strPart1 + rsdata[2][1] + ' defence' + strPart2 + rsdata[2][0])
                         elif text.split()[2].lower() == 'strength':
-                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                            message(text.split()[1] + strPart1 + rsdata[3][1] + ' strength' + strPart2 + rsdata[3][0])
                         elif text.split()[2].lower() == 'hitpoints':
-                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                            message(text.split()[1] + strPart1 + rsdata[4][1] + ' hitpoints' + strPart2 + rsdata[4][0])
                         elif text.split()[2].lower() == 'ranged':
-                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                            message(text.split()[1] + strPart1 + rsdata[5][1] + ' ranged' + strPart2 + rsdata[5][0])
                         elif text.split()[2].lower() == 'prayer':
-                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                            message(text.split()[1] + strPart1 + rsdata[6][1] + ' prayer' + strPart2 + rsdata[6][0])
                         elif text.split()[2].lower() == 'magic':
-                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                            message(text.split()[1] + strPart1 + rsdata[7][1] + ' magic' + strPart2 + rsdata[7][0])
                         elif text.split()[2].lower() == 'cooking':
-                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                            message(text.split()[1] + strPart1 + rsdata[8][1] + ' cooking' + strPart2 + rsdata[8][0])
                         elif text.split()[2].lower() == 'woodcutting':
-                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[9][1] + ' woodcutting' + strPart2 + rsdata[9][0])
                         elif text.split()[2].lower() == 'fletching':
-                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[10][1] + ' fletching' + strPart2 + rsdata[10][0])
                         elif text.split()[2].lower() == 'fishing':
-                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                            message(text.split()[1] + strPart1 + rsdata[11][1] + ' fishing' + strPart2 + rsdata[11][0])
                         elif text.split()[2].lower() == 'firemaking':
-                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[12][1] + ' firemaking' + strPart2 + rsdata[12][0])
                         elif text.split()[2].lower() == 'crafting':
-                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                            message(text.split()[1] + strPart1 + rsdata[13][1] + ' crafting' + strPart2 + rsdata[13][0])
                         elif text.split()[2].lower() == 'smithing':
-                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                            message(text.split()[1] + strPart1 + rsdata[14][1] + ' smithing' + strPart2 + rsdata[14][0])
                         elif text.split()[2].lower() == 'mining':
-                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                            message(text.split()[1] + strPart1 + rsdata[15][1] + ' mining' + strPart2 + rsdata[15][0])
                         elif text.split()[2].lower() == 'herblore':
-                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                            message(text.split()[1] + strPart1 + rsdata[16][1] + ' herblore' + strPart2 + rsdata[16][0])
                         elif text.split()[2].lower() == 'agility':
-                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                            message(text.split()[1] + strPart1 + rsdata[17][1] + ' agility' + strPart2 + rsdata[17][0])
                         elif text.split()[2].lower() == 'thieving':
-                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                            message(text.split()[1] + strPart1 + rsdata[18][1] + ' thieving' + strPart2 + rsdata[18][0])
                         elif text.split()[2].lower() == 'slayer':
-                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                            message(text.split()[1] + strPart1 + rsdata[19][1] + ' slayer' + strPart2 + rsdata[19][0])
                         elif text.split()[2].lower() == 'farming':
-                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                            message(text.split()[1] + strPart1 + rsdata[20][1] + ' farming' + strPart2 + rsdata[20][0])
                         elif text.split()[2].lower() == 'runecrafting':
-                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[21][1] + ' runecrafting' + strPart2 + rsdata[21][0])
                         elif text.split()[2].lower() == 'hunter':
-                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                            message(text.split()[1] + strPart1 + rsdata[22][1] + ' hunter' + strPart2 + rsdata[22][0])
                         elif text.split()[2].lower() == 'construction':
-                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[23][1] + ' construction' + strPart2 + rsdata[23][0])
                         else:
                             message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                     else:
                         message('!osirank <username>')
                 elif "!osuirank" in firstStr:
-                    if text.split()[1]:
+                    if len(text.split()) > 1:
                         urlMore = "https://secure.runescape.com/m=hiscore_oldschool_ultimate/index_lite.ws?player=" + text.split()[1]
                         r = requests.get(urlMore)
                         rsdata = r.content.split("\n")
+                        strPart1 = " has "
+                        strPart2 = " levels with a rank of "
                         for i in range(len(rsdata)):
                             rsdata[i] = rsdata[i].split(",")
-                        if not text.split()[2]:
+                        if len(text.split()) == 2:
                             message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
                         elif text.split()[2].lower() == 'attack':
-                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                            message(text.split()[1] + strPart1 + rsdata[1][1] + ' attack' + strPart2 + rsdata[1][0])
                         elif text.split()[2].lower() == 'defence':
-                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                            message(text.split()[1] + strPart1 + rsdata[2][1] + ' defence' + strPart2 + rsdata[2][0])
                         elif text.split()[2].lower() == 'strength':
-                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                            message(text.split()[1] + strPart1 + rsdata[3][1] + ' strength' + strPart2 + rsdata[3][0])
                         elif text.split()[2].lower() == 'hitpoints':
-                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                            message(text.split()[1] + strPart1 + rsdata[4][1] + ' hitpoints' + strPart2 + rsdata[4][0])
                         elif text.split()[2].lower() == 'ranged':
-                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                            message(text.split()[1] + strPart1 + rsdata[5][1] + ' ranged' + strPart2 + rsdata[5][0])
                         elif text.split()[2].lower() == 'prayer':
-                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                            message(text.split()[1] + strPart1 + rsdata[6][1] + ' prayer' + strPart2 + rsdata[6][0])
                         elif text.split()[2].lower() == 'magic':
-                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                            message(text.split()[1] + strPart1 + rsdata[7][1] + ' magic' + strPart2 + rsdata[7][0])
                         elif text.split()[2].lower() == 'cooking':
-                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                            message(text.split()[1] + strPart1 + rsdata[8][1] + ' cooking' + strPart2 + rsdata[8][0])
                         elif text.split()[2].lower() == 'woodcutting':
-                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[9][1] + ' woodcutting' + strPart2 + rsdata[9][0])
                         elif text.split()[2].lower() == 'fletching':
-                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[10][1] + ' fletching' + strPart2 + rsdata[10][0])
                         elif text.split()[2].lower() == 'fishing':
-                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                            message(text.split()[1] + strPart1 + rsdata[11][1] + ' fishing' + strPart2 + rsdata[11][0])
                         elif text.split()[2].lower() == 'firemaking':
-                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[12][1] + ' firemaking' + strPart2 + rsdata[12][0])
                         elif text.split()[2].lower() == 'crafting':
-                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                            message(text.split()[1] + strPart1 + rsdata[13][1] + ' crafting' + strPart2 + rsdata[13][0])
                         elif text.split()[2].lower() == 'smithing':
-                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                            message(text.split()[1] + strPart1 + rsdata[14][1] + ' smithing' + strPart2 + rsdata[14][0])
                         elif text.split()[2].lower() == 'mining':
-                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                            message(text.split()[1] + strPart1 + rsdata[15][1] + ' mining' + strPart2 + rsdata[15][0])
                         elif text.split()[2].lower() == 'herblore':
-                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                            message(text.split()[1] + strPart1 + rsdata[16][1] + ' herblore' + strPart2 + rsdata[16][0])
                         elif text.split()[2].lower() == 'agility':
-                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                            message(text.split()[1] + strPart1 + rsdata[17][1] + ' agility' + strPart2 + rsdata[17][0])
                         elif text.split()[2].lower() == 'thieving':
-                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                            message(text.split()[1] + strPart1 + rsdata[18][1] + ' thieving' + strPart2 + rsdata[18][0])
                         elif text.split()[2].lower() == 'slayer':
-                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                            message(text.split()[1] + strPart1 + rsdata[19][1] + ' slayer' + strPart2 + rsdata[19][0])
                         elif text.split()[2].lower() == 'farming':
-                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                            message(text.split()[1] + strPart1 + rsdata[20][1] + ' farming' + strPart2 + rsdata[20][0])
                         elif text.split()[2].lower() == 'runecrafting':
-                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[21][1] + ' runecrafting' + strPart2 + rsdata[21][0])
                         elif text.split()[2].lower() == 'hunter':
-                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                            message(text.split()[1] + strPart1 + rsdata[22][1] + ' hunter' + strPart2 + rsdata[22][0])
                         elif text.split()[2].lower() == 'construction':
-                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[23][1] + ' construction' + strPart2 + rsdata[23][0])
                         else:
                             message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                     else:
                         message('!osirank <username>')
                 elif "!osdmrank" in firstStr:
-                    if text.split()[1]:
+                    if len(text.split()) > 1:
                         urlMore = "https://secure.runescape.com/m=hiscore_oldschool_deadman/index_lite.ws?player=" + text.split()[1]
                         r = requests.get(urlMore)
                         rsdata = r.content.split("\n")
+                        strPart1 = " has "
+                        strPart2 = " levels with a rank of "
                         for i in range(len(rsdata)):
                             rsdata[i] = rsdata[i].split(",")
-                        if not text.split()[2]:
+                        if len(text.split()) == 2:
                             message(text.split()[1] + " has a total level of " + rsdata[0][1] + " with a rank of " + rsdata[0][0])
                         elif text.split()[2].lower() == 'attack':
-                            message(text.split()[1] + " has a total attack level of " + rsdata[1][1] + " with a rank of " + rsdata[1][0])
+                            message(text.split()[1] + strPart1 + rsdata[1][1] + ' attack' + strPart2 + rsdata[1][0])
                         elif text.split()[2].lower() == 'defence':
-                            message(text.split()[1] + " has a total defence level of " + rsdata[2][1] + " with a rank of " + rsdata[2][0])
+                            message(text.split()[1] + strPart1 + rsdata[2][1] + ' defence' + strPart2 + rsdata[2][0])
                         elif text.split()[2].lower() == 'strength':
-                            message(text.split()[1] + " has a total strength level of " + rsdata[3][1] + " with a rank of " + rsdata[3][0])
+                            message(text.split()[1] + strPart1 + rsdata[3][1] + ' strength' + strPart2 + rsdata[3][0])
                         elif text.split()[2].lower() == 'hitpoints':
-                            message(text.split()[1] + " has a total hitpoints level of " + rsdata[4][1] + " with a rank of " + rsdata[4][0])
+                            message(text.split()[1] + strPart1 + rsdata[4][1] + ' hitpoints' + strPart2 + rsdata[4][0])
                         elif text.split()[2].lower() == 'ranged':
-                            message(text.split()[1] + " has a total ranged level of " + rsdata[5][1] + " with a rank of " + rsdata[5][0])
+                            message(text.split()[1] + strPart1 + rsdata[5][1] + ' ranged' + strPart2 + rsdata[5][0])
                         elif text.split()[2].lower() == 'prayer':
-                            message(text.split()[1] + " has a total prayer level of " + rsdata[6][1] + " with a rank of " + rsdata[6][0])
+                            message(text.split()[1] + strPart1 + rsdata[6][1] + ' prayer' + strPart2 + rsdata[6][0])
                         elif text.split()[2].lower() == 'magic':
-                            message(text.split()[1] + " has a total magic level of " + rsdata[7][1] + " with a rank of " + rsdata[7][0])
+                            message(text.split()[1] + strPart1 + rsdata[7][1] + ' magic' + strPart2 + rsdata[7][0])
                         elif text.split()[2].lower() == 'cooking':
-                            message(text.split()[1] + " has a total cooking level of " + rsdata[8][1] + " with a rank of " + rsdata[8][0])
+                            message(text.split()[1] + strPart1 + rsdata[8][1] + ' cooking' + strPart2 + rsdata[8][0])
                         elif text.split()[2].lower() == 'woodcutting':
-                            message(text.split()[1] + " has a total woodcutting level of " + rsdata[9][1] + " with a rank of " + rsdata[9][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[9][1] + ' woodcutting' + strPart2 + rsdata[9][0])
                         elif text.split()[2].lower() == 'fletching':
-                            message(text.split()[1] + " has a total fletching level of " + rsdata[10][1] + " with a rank of " + rsdata[10][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[10][1] + ' fletching' + strPart2 + rsdata[10][0])
                         elif text.split()[2].lower() == 'fishing':
-                            message(text.split()[1] + " has a total fishing level of " + rsdata[11][1] + " with a rank of " + rsdata[11][0])
+                            message(text.split()[1] + strPart1 + rsdata[11][1] + ' fishing' + strPart2 + rsdata[11][0])
                         elif text.split()[2].lower() == 'firemaking':
-                            message(text.split()[1] + " has a total firemaking level of " + rsdata[12][1] + " with a rank of " + rsdata[12][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[12][1] + ' firemaking' + strPart2 + rsdata[12][0])
                         elif text.split()[2].lower() == 'crafting':
-                            message(text.split()[1] + " has a total crafting level of " + rsdata[13][1] + " with a rank of " + rsdata[13][0])
+                            message(text.split()[1] + strPart1 + rsdata[13][1] + ' crafting' + strPart2 + rsdata[13][0])
                         elif text.split()[2].lower() == 'smithing':
-                            message(text.split()[1] + " has a total smithing level of " + rsdata[14][1] + " with a rank of " + rsdata[14][0])
+                            message(text.split()[1] + strPart1 + rsdata[14][1] + ' smithing' + strPart2 + rsdata[14][0])
                         elif text.split()[2].lower() == 'mining':
-                            message(text.split()[1] + " has a total mining level of " + rsdata[15][1] + " with a rank of " + rsdata[15][0])
+                            message(text.split()[1] + strPart1 + rsdata[15][1] + ' mining' + strPart2 + rsdata[15][0])
                         elif text.split()[2].lower() == 'herblore':
-                            message(text.split()[1] + " has a total herblore level of " + rsdata[16][1] + " with a rank of " + rsdata[16][0])
+                            message(text.split()[1] + strPart1 + rsdata[16][1] + ' herblore' + strPart2 + rsdata[16][0])
                         elif text.split()[2].lower() == 'agility':
-                            message(text.split()[1] + " has a total agility level of " + rsdata[17][1] + " with a rank of " + rsdata[17][0])
+                            message(text.split()[1] + strPart1 + rsdata[17][1] + ' agility' + strPart2 + rsdata[17][0])
                         elif text.split()[2].lower() == 'thieving':
-                            message(text.split()[1] + " has a total thieving level of " + rsdata[18][1] + " with a rank of " + rsdata[18][0])
+                            message(text.split()[1] + strPart1 + rsdata[18][1] + ' thieving' + strPart2 + rsdata[18][0])
                         elif text.split()[2].lower() == 'slayer':
-                            message(text.split()[1] + " has a total slayer level of " + rsdata[19][1] + " with a rank of " + rsdata[19][0])
+                            message(text.split()[1] + strPart1 + rsdata[19][1] + ' slayer' + strPart2 + rsdata[19][0])
                         elif text.split()[2].lower() == 'farming':
-                            message(text.split()[1] + " has a total farming level of " + rsdata[20][1] + " with a rank of " + rsdata[20][0])
+                            message(text.split()[1] + strPart1 + rsdata[20][1] + ' farming' + strPart2 + rsdata[20][0])
                         elif text.split()[2].lower() == 'runecrafting':
-                            message(text.split()[1] + " has a total runecrafting level of " + rsdata[21][1] + " with a rank of " + rsdata[21][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[21][1] + ' runecrafting' + strPart2 + rsdata[21][0])
                         elif text.split()[2].lower() == 'hunter':
-                            message(text.split()[1] + " has a total hunter level of " + rsdata[22][1] + " with a rank of " + rsdata[22][0])
+                            message(text.split()[1] + strPart1 + rsdata[22][1] + ' hunter' + strPart2 + rsdata[22][0])
                         elif text.split()[2].lower() == 'construction':
-                            message(text.split()[1] + " has a total construction level of " + rsdata[23][1] + " with a rank of " + rsdata[23][0])
+                            message(
+                                text.split()[1] + strPart1 + rsdata[23][1] + ' construction' + strPart2 + rsdata[23][0])
                         else:
                             message("Possible stats are Attack, Defence, Strength, Hitpoints, Ranged, Prayer, Magic, Cooking, Woodcutting, Fletching, Fishing, Firemaking, Crafting, Smithing, Mining, Herblore, Agility, Thieving, Slayer, Farming, Runecrafting, Hunter and Construction")
                 elif "!pack" in firstStr or "modpack" in firstStr or "sev" in firstStr:
@@ -1714,10 +1808,15 @@ while True:
                         message("The version of minecraft I am currently playing is 1.12.2")
                     except IndexError:
                         pass
+                elif "!cce" in firstStr or "!cce50" in firstStr:
+                    try:
+                        message("CCE50 stands for Change Category Every 50 minutes which is how I run my streams lately")
+                    except IndexError:
+                        pass
                 elif "!streamcaptain" in firstStr or "!streamraiders" in firstStr or "!arr" in firstStr or "!boss" in firstStr or "!sc" == firstStr:
                     try:
                         message(
-                            "Place your units over at https://www.streamcaptain.com/t/ridgure and help us win!")
+                            "Place your units over at streamcaptain.com/t/ridgure and help us win!")
                     except IndexError:
                         pass
                 elif "!test" in firstStr or "!t3st" in firstStr:
@@ -1725,9 +1824,29 @@ while True:
                         print str(datetime.datetime.now().strftime("%M:%S"))
                     except IndexError:
                         pass
+                elif "!gba" in firstStr or "!mgba" in firstStr:
+                    try:
+                        message("I use an emulator called VirtualBoyAssistant-M. You can find it here: vba-m.com")
+                    except IndexError:
+                        pass
                 elif "!scrowl" == firstStr:
                     try:
                         message(username + "grumpily scowls at " + text.split()[1])
+                    except IndexError:
+                        pass
+                elif "!ears" == firstStr:
+                    try:
+                        message("Why is so loud?!")
+                    except IndexError:
+                        pass
+                elif "!ironmon" == firstStr:
+                    try:
+                        message("KAIZO IronMON is a pokemon challenge that is like Nuzlocke but harder see the original rules here: ironmon.gg/")
+                    except IndexError:
+                        pass
+                elif "!ironcord" == firstStr:
+                    try:
+                        message("Here is a link to the IronMON discord: discord.gg/wsrUqEjX")
                     except IndexError:
                         pass
                 elif "!shaders" == firstStr:
@@ -1746,23 +1865,28 @@ while True:
                         pass
                 elif "!discord" in firstStr:
                     try:
-                        message("Join the Discord! https://discord.gg/yddBmCE")
+                        message("Join the Discord! discord.gg/yddBmCE")
                     except IndexError:
                         pass
                 elif "!ri3d" in firstStr.lower():
                     try:
-                        message("Join the Ri3D Discord! https://discord.gg/vvS66dK2n3")
+                        message("Join the Ri3D Discord! discord.gg/vvS66dK2n3")
                     except IndexError:
                         pass
                 elif "!java" in firstStr:
                     try:
-                        message("https://github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
+                        message("github.com/DarkPacks/SevTech-Ages/wiki/Recommended-Java-Args")
                     except IndexError:
                         pass
                 elif "!oclock" in firstStr or "!o'clock" in firstStr:
                     try:
-                        message("The time for me right now is " + datetime.datetime.now().strftime(
-                            "%H:%M") + " o'clock" + " CEST")
+                        now = datetime.datetime.now()
+                        changeToSummertime = datetime.datetime(int(now.strftime("%Y")), 3, 31)
+                        changeToWintertime = datetime.datetime(int(now.strftime("%Y")), 10, 27)
+                        if changeToSummertime < datetime.datetime.now() < changeToWintertime:
+                            message("The time for me right now is " + now.strftime("%H:%M") + " o'clock CEST")
+                        else:
+                            message("The time for me right now is " + now.strftime("%H:%M") + " o'clock CET")
                     except IndexError:
                         pass
                 elif "!specs" in firstStr:
@@ -1795,7 +1919,12 @@ while True:
                         pass
                 elif "!newvid" in firstStr or "!audiobook" in firstStr:
                     try:
-                        message("I made an audiobook! Go check it out -> https://youtu.be/lmpqw01Qs6kx")
+                        message("I made an audiobook! Go check it out -> youtu.be/lmpqw01Qs6kx")
+                    except IndexError:
+                        pass
+                elif "!calendar" in firstStr or "!schedule" in firstStr:
+                    try:
+                        message("I stream every Thursday and sometimes on weekends. Import my calendar with this link calendar.google.com/calendar/embed?src=ridgure%40gmail.com&ctz=Europe%2FBerlinq")
                     except IndexError:
                         pass
                 elif "!asylumcraft" in firstStr:
@@ -1805,12 +1934,22 @@ while True:
                         pass
                 elif "!bot" in firstStr:
                     try:
-                        message("I write my own chatbot. To figure out what commands can be used and how to install it check out this page: https://github.com/Ridgure/TwitchBot")
+                        message("I write my own chatbot. To figure out what commands can be used and how to install it check out this page: github.com/Ridgure/TwitchBot")
+                    except IndexError:
+                        pass
+                elif "!hostbot" in firstStr or "!autohostbot" in firststr:
+                    try:
+                        message("I made a host bot. Check it out on this page: github.com/Ridgure/AutoHostBot")
+                    except IndexError:
+                        pass
+                elif "!blacklist" in firstStr or "!whitelist" in firstStr:
+                    try:
+                        message("To see which games I have black/whitelisted: github.com/Ridgure/ViewerRatioBot/blob/master/blackWhitelist.md")
                     except IndexError:
                         pass
                 elif "!bug" in firstStr:
                     try:
-                        message("If you have encountered an issue with the bot or have found a bug please report it here: https://github.com/Ridgure/TwitchBot/issues")
+                        message("If you have encountered an issue with the bot or have found a bug please report it here: github.com/Ridgure/TwitchBot/issues")
                     except IndexError:
                         pass
                 elif "!ipee" in firstStr or "!eyepee" in firstStr:
@@ -1841,8 +1980,8 @@ while True:
                         # get user index and get their follow time and date and length
                         for i1 in xrange(len(followerList)):
                             for i2 in xrange(len(followerList[i1])):
-                                # print i1, followerList[i1]['from_name']
-                                if followerList[i1]['from_name'] == user:
+                                # print i1, followerList[i1]['user_name']
+                                if followerList[i1]['user_name'] == user:
                                     followAge = followAgeAll()
                                     message("Last follow was on: " + str(
                                         followAge[i1][6]) + " GMT-0 and has been following the channel for " + str(
@@ -1860,6 +1999,8 @@ while True:
                     except Exception, e:
                         print message("followage failed")
                         print(str(e))
+                        if testing:
+                            raise
                 elif "!smile" in firstStr:
                     try:
                         message(username + " smiles at " + text.split()[1] + " " + randomEmote())
@@ -1868,6 +2009,8 @@ while True:
                     except Exception, e:
                         message("Smile failed")
                         message(str(e))
+                        if testing:
+                            raise
                 elif "!pet" in firstStr:
                     try:
                         message(username + " pets " + text.split()[1])
@@ -1876,6 +2019,8 @@ while True:
                     except Exception, e:
                         message("Pet failed")
                         message(str(e))
+                        if testing:
+                            raise
                 elif "!multiply" == firstStr:
                     try:
                         message(multiply())
@@ -1884,6 +2029,8 @@ while True:
                     except Exception, e:
                         message("Multiplication failed")
                         message(str(e))
+                        if testing:
+                            raise
                 elif "!divide" == text.lower().split()[0]:
                     try:
                         message(divide())
@@ -1892,6 +2039,8 @@ while True:
                     except Exception, e:
                         message("Division failed")
                         message(str(e))
+                        if testing:
+                            raise
                 elif "!add" == firstStr:
                     try:
                         message(add())
@@ -1900,6 +2049,8 @@ while True:
                     except Exception, e:
                         message("Addition failed")
                         message(str(e))
+                        if testing:
+                            raise
                 elif "!elfnamechange" in firstStr:
                     try:
                         owner = False
@@ -2174,6 +2325,8 @@ while True:
                 except Exception, e:
                     print "text failed"
                     print str(e)
+                    if testing:
+                        raise
                 if msgId == "ritual":
                     message("Welcome " + username + "! " + text.encode('ascii', 'ignore'))
                 elif msgId == "raid":
@@ -2196,6 +2349,9 @@ while True:
                     csvfile.close()
                     subStreak = re.search(r'for\\s(\d+)', systemMsg).group(1)
                     for i in range(len(subscriberLines)):
+                        if testing:
+                            print(subscriberLines[i][0].rstrip().lower())
+                            print(username.rstrip().lower())
                         if subscriberLines[i][0].rstrip().lower() == username.rstrip().lower():
                             subscriberLines[i][1] = subStreak
                     message("Spam all the hearts you have!!! ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart ridgurHeart")
@@ -2248,6 +2404,8 @@ while True:
                 os.rename('subscriberDataNew.csv', 'subscriberData.csv')
             except Exception, e:
                 print str(e)
+                if testing:
+                    raise
         elif "JOIN" in data:
             username = re.search(r':(\w+)', response).group(1)
             if username == Nickname:
@@ -2268,10 +2426,13 @@ while True:
             except Exception, e:
                 print("Pong error")
                 print(str(e))
+                if testing:
+                    raise
         else:
             try:
                 if response == "":
                     print "lost connection"
+                    sleep(30)
                     exit()
                 else:
                     print "Response: " + response.rstrip("\r\n")  ### These are all the non message related responses
@@ -2297,12 +2458,15 @@ while True:
                 #         f.close()
             except:
                 pass
+        # if time more than 1 minute restart
         sleep(20/30)
     except IndexError:
         pass
     except Exception, e:
         print "An error just occurred"
         print str(e)
+        if testing:
+            raise
         s.shutdown(1)
         s.close()
         s = socket.socket()
